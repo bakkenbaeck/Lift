@@ -37,5 +37,8 @@ Pods
 # Carthage
 *.bcsymbolmap
 
+#AppCode 
+*.idea
+
 Checkouts
 <LIBRARY_NAME>.framework*
