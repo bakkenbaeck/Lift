@@ -26,6 +26,11 @@
 		149D81851DBD2E8000A9EB1A /* Lift.h in Headers */ = {isa = PBXBuildFile; fileRef = 149D81811DBD2E8000A9EB1A /* Lift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14A139B41AEFC72B00AD732F /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A139B31AEFC72B00AD732F /* Tests.swift */; };
 		14C47E0E1CD2AE5F004A48DF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14C47E0D1CD2AE5F004A48DF /* Info.plist */; };
+		E68A7D111E51BDF900BBA847 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68A7D101E51BDF900BBA847 /* AppDelegate.swift */; };
+		E68A7D131E51BDF900BBA847 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68A7D121E51BDF900BBA847 /* ViewController.swift */; };
+		E68A7D161E51BDF900BBA847 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E68A7D141E51BDF900BBA847 /* Main.storyboard */; };
+		E68A7D181E51BDF900BBA847 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E68A7D171E51BDF900BBA847 /* Assets.xcassets */; };
+		E68A7D1B1E51BDF900BBA847 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E68A7D191E51BDF900BBA847 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +64,13 @@
 		14C47E0D1CD2AE5F004A48DF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14F393951CC6512400616696 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		14F393961CC6517E00616696 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		E68A7D0E1E51BDF900BBA847 /* LiftDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiftDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E68A7D101E51BDF900BBA847 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E68A7D121E51BDF900BBA847 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E68A7D151E51BDF900BBA847 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E68A7D171E51BDF900BBA847 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E68A7D1A1E51BDF900BBA847 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E68A7D1C1E51BDF900BBA847 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +123,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E68A7D0B1E51BDF900BBA847 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -120,6 +139,7 @@
 				14C136501AB7849300B7B07A /* Metadata */,
 				14C31A8C1CD294C70056A33F /* Sources */,
 				146D72AF1AB782920058798C /* Tests */,
+				E68A7D0F1E51BDF900BBA847 /* LiftDemo */,
 				146D72941AB782920058798C /* Products */,
 			);
 			indentWidth = 4;
@@ -136,6 +156,7 @@
 				149D815F1DBD2AE500A9EB1A /* Lift.framework */,
 				149D816C1DBD2AFB00A9EB1A /* Lift.framework */,
 				149D81791DBD2B0800A9EB1A /* Lift.framework */,
+				E68A7D0E1E51BDF900BBA847 /* LiftDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,6 +199,19 @@
 				14034D281E0D4955001F0113 /* Lift.swift */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		E68A7D0F1E51BDF900BBA847 /* LiftDemo */ = {
+			isa = PBXGroup;
+			children = (
+				E68A7D101E51BDF900BBA847 /* AppDelegate.swift */,
+				E68A7D121E51BDF900BBA847 /* ViewController.swift */,
+				E68A7D141E51BDF900BBA847 /* Main.storyboard */,
+				E68A7D171E51BDF900BBA847 /* Assets.xcassets */,
+				E68A7D191E51BDF900BBA847 /* LaunchScreen.storyboard */,
+				E68A7D1C1E51BDF900BBA847 /* Info.plist */,
+			);
+			path = LiftDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,6 +380,23 @@
 			productReference = 149D81791DBD2B0800A9EB1A /* Lift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		E68A7D0D1E51BDF900BBA847 /* LiftDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E68A7D1F1E51BDF900BBA847 /* Build configuration list for PBXNativeTarget "LiftDemo" */;
+			buildPhases = (
+				E68A7D0A1E51BDF900BBA847 /* Sources */,
+				E68A7D0B1E51BDF900BBA847 /* Frameworks */,
+				E68A7D0C1E51BDF900BBA847 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiftDemo;
+			productName = LiftDemo;
+			productReference = E68A7D0E1E51BDF900BBA847 /* LiftDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -353,7 +404,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = "";
-				LastSwiftUpdateCheck = 0800;
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -389,6 +440,11 @@
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
+					E68A7D0D1E51BDF900BBA847 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 29X3GG489T;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 146D728E1AB782920058798C /* Build configuration list for PBXProject "Demo" */;
@@ -411,6 +467,7 @@
 				149D815E1DBD2AE500A9EB1A /* Lift-watchOS */,
 				149D816B1DBD2AFB00A9EB1A /* Lift-tvOS */,
 				149D81781DBD2B0800A9EB1A /* Lift-macOS */,
+				E68A7D0D1E51BDF900BBA847 /* LiftDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -463,6 +520,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E68A7D0C1E51BDF900BBA847 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E68A7D1B1E51BDF900BBA847 /* LaunchScreen.storyboard in Resources */,
+				E68A7D181E51BDF900BBA847 /* Assets.xcassets in Resources */,
+				E68A7D161E51BDF900BBA847 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +595,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E68A7D0A1E51BDF900BBA847 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E68A7D131E51BDF900BBA847 /* ViewController.swift in Sources */,
+				E68A7D111E51BDF900BBA847 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E68A7D141E51BDF900BBA847 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E68A7D151E51BDF900BBA847 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E68A7D191E51BDF900BBA847 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E68A7D1A1E51BDF900BBA847 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		146D72B41AB782920058798C /* Debug */ = {
@@ -964,6 +1059,42 @@
 			};
 			name = Release;
 		};
+		E68A7D1D1E51BDF900BBA847 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 29X3GG489T;
+				INFOPLIST_FILE = LiftDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bakkenbaeck.LiftDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		E68A7D1E1E51BDF900BBA847 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 29X3GG489T;
+				INFOPLIST_FILE = LiftDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bakkenbaeck.LiftDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1038,6 +1169,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		E68A7D1F1E51BDF900BBA847 /* Build configuration list for PBXNativeTarget "LiftDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E68A7D1D1E51BDF900BBA847 /* Debug */,
+				E68A7D1E1E51BDF900BBA847 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
