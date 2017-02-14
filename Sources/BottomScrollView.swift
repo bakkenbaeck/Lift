@@ -55,15 +55,20 @@ class BottomScrollView: UIScrollView {
 
 extension BottomScrollView: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        guard scrollView.contentOffset.x > 0 && scrollView.contentOffset.x < (scrollView.contentSize.width - UIScreen.main.bounds.width) else { return }
 
-        let isScrollingLeft = velocity.x < 0
-        let isScrollingRight = velocity.x > 0
+        if velocity.x == 0 {
+            self.currentIndex = Int((scrollView.contentOffset.x +  UIScreen.main.bounds.width*0.5) / UIScreen.main.bounds.width)
+        } else {
+            let isScrollingLeft = scrollView.contentOffset.x > targetContentOffset.pointee.x
+            let isScrollingRight = scrollView.contentOffset.x < targetContentOffset.pointee.x
 
-        if isScrollingLeft && self.currentIndex > 0 {
-            self.currentIndex = self.currentIndex - 1
-        }
-        if isScrollingRight && self.currentIndex < (self.bottomViewControllers?.count ?? 0) - 1 {
-            self.currentIndex = self.currentIndex + 1
+            if isScrollingLeft && self.currentIndex > 0 {
+                self.currentIndex = self.currentIndex - 1
+            }
+            if isScrollingRight && self.currentIndex < (self.bottomViewControllers?.count ?? 0) - 1 {
+                self.currentIndex = self.currentIndex + 1
+            }
         }
 
         let newX = CGFloat(self.currentIndex) *  UIScreen.main.bounds.width
