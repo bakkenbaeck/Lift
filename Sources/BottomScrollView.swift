@@ -1,6 +1,6 @@
 import UIKit
 
-class LiftBottomScrollView: UIScrollView {
+class BottomScrollView: UIScrollView {
 
     var bottomViewControllers: [UIViewController]? {
         didSet {
@@ -23,24 +23,24 @@ class LiftBottomScrollView: UIScrollView {
             viewController.view.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview(viewController.view)
 
-            let firstViewController = index == 0
-            let lastViewController = index == bottomViewControllers.count - 1
-            let middleViewController = !firstViewController && !lastViewController
+            let isFirstViewController = index == 0
+            let isLastViewController = index == bottomViewControllers.count - 1
+            let isMiddleViewController = !isFirstViewController && !isLastViewController
             
             viewController.view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
             viewController.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
             viewController.view.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
 
-            if firstViewController {
+            if isFirstViewController {
                 viewController.view.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
             }
 
-            if middleViewController {
+            if isMiddleViewController {
                 let priorViewController = bottomViewControllers[index - 1]
                 viewController.view.leftAnchor.constraint(equalTo: priorViewController.view.rightAnchor).isActive = true
             }
 
-            if lastViewController {
+            if isLastViewController {
                 let priorViewController = bottomViewControllers[index - 1]
                 viewController.view.leftAnchor.constraint(equalTo: priorViewController.view.rightAnchor).isActive = true
 

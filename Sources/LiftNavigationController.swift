@@ -15,8 +15,8 @@ public class LiftNavigationController: UIViewController {
         return recognizer
     }()
 
-    lazy var bottomScrollView: LiftBottomScrollView = {
-        let scrollView = LiftBottomScrollView()
+    lazy var bottomScrollView: BottomScrollView = {
+        let scrollView = BottomScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .white
 
@@ -92,7 +92,7 @@ public class LiftNavigationController: UIViewController {
                 self.gestureRecognizer.direction = .up
             }
         }
-        UIView.animate(withDuration: 0.2, delay: 0.0, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0.0, options: [.curveEaseOut, .allowUserInteraction, .beginFromCurrentState], animations: {
             self.view.layoutIfNeeded()
         }, completion: { bool in
         })
