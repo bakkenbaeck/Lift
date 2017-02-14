@@ -19,23 +19,23 @@ public extension UIColor {
         }
     }
 
-    class func kronBrightGreen() -> UIColor {
+    class func liftBrightGreen() -> UIColor {
         return UIColor(hex: "3EE68F")
     }
     
-    class func kronGreen() -> UIColor {
+    class func liftGreen() -> UIColor {
         return UIColor(hex: "58D0A8")
     }
 
-    class func kronBlue() -> UIColor {
+    class func liftBlue() -> UIColor {
         return UIColor(hex: "66A5FF")
     }
 
-    class func kronPink() -> UIColor {
+    class func liftPink() -> UIColor {
         return UIColor(hex: "FD87B6")
     }
 
-    class func kronRed() -> UIColor {
+    class func liftRed() -> UIColor {
         return UIColor(hex: "FC637D")
     }
 }
