@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0820"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "149D81781DBD2B0800A9EB1A"
-               BuildableName = "Lift.framework"
-               BlueprintName = "Lift-macOS"
+               BlueprintIdentifier = "14E5B1071E51F486003417C1"
+               BuildableName = "Demo.app"
+               BlueprintName = "Demo"
                ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,22 +42,24 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "14E5B1071E51F486003417C1"
+            BuildableName = "Demo.app"
+            BlueprintName = "Demo"
+            ReferencedContainer = "container:Demo.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "149D81781DBD2B0800A9EB1A"
+            BlueprintIdentifier = "14E5B13A1E51F49E003417C1"
             BuildableName = "Lift.framework"
-            BlueprintName = "Lift-macOS"
+            BlueprintName = "Lift"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "OS_ACTIVITY_MODE"
-            value = "disable"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -70,9 +72,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "149D81781DBD2B0800A9EB1A"
+            BlueprintIdentifier = "14E5B13A1E51F49E003417C1"
             BuildableName = "Lift.framework"
-            BlueprintName = "Lift-macOS"
+            BlueprintName = "Lift"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
