@@ -18,6 +18,7 @@
 		14E5B15F1E51F5C0003417C1 /* TopController.swift in Headers */ = {isa = PBXBuildFile; fileRef = E68A7D201E51BEBD00BBA847 /* TopController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		14E5B1601E51F5C0003417C1 /* LiftNavigationController.swift in Headers */ = {isa = PBXBuildFile; fileRef = E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		D197BD38969A2DFE125E1809 /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B886DC83940FC38E86DE /* Color+Helpers.swift */; };
+		E6779F1D1E5310EF0083B1A1 /* LiftBottomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6779F1C1E5310EF0083B1A1 /* LiftBottomScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		14F393951CC6512400616696 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		14F393961CC6517E00616696 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		D197B886DC83940FC38E86DE /* Color+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Helpers.swift"; sourceTree = "<group>"; };
+		E6779F1C1E5310EF0083B1A1 /* LiftBottomScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiftBottomScrollView.swift; sourceTree = "<group>"; };
 		E68A7D201E51BEBD00BBA847 /* TopController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopController.swift; sourceTree = "<group>"; };
 		E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiftNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,6 +126,7 @@
 				149D81811DBD2E8000A9EB1A /* Lift.h */,
 				E68A7D201E51BEBD00BBA847 /* TopController.swift */,
 				E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */,
+				E6779F1C1E5310EF0083B1A1 /* LiftBottomScrollView.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6779F1D1E5310EF0083B1A1 /* LiftBottomScrollView.swift in Sources */,
 				14E5B15D1E51F5AF003417C1 /* TopController.swift in Sources */,
 				14E5B15E1E51F5AF003417C1 /* LiftNavigationController.swift in Sources */,
 			);

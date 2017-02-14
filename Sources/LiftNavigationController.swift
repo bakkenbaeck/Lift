@@ -15,23 +15,13 @@ public class LiftNavigationController: UIViewController {
         return recognizer
     }()
 
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.bounces = false
-
-        return scrollView
-    }()
-
-    lazy var bottomScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
+    lazy var bottomScrollView: LiftBottomScrollView = {
+        let scrollView = LiftBottomScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .white
 
         return scrollView
     }()
-
-    var bottomViewControllers: [UIViewController]
 
     lazy var navigationBar: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -47,9 +37,10 @@ public class LiftNavigationController: UIViewController {
 
     public init(topViewController: UIViewController, bottomViewControllers: [UIViewController]) {
         self.topViewController = topViewController
-        self.bottomViewControllers = bottomViewControllers
 
         super.init(nibName: nil, bundle: nil)
+
+        self.bottomScrollView.bottomViewControllers = bottomViewControllers
 
         self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +78,7 @@ public class LiftNavigationController: UIViewController {
 
         self.bottomScrollView.topAnchor.constraint(equalTo: self.navigationBar.bottomAnchor).isActive = true
         self.bottomScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.bottomScrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.bottomScrollView.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
         self.bottomScrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
     }
 
