@@ -1,7 +1,7 @@
 import UIKit
 
 public class LiftNavigationController: UIViewController {
-    public static let navigationBarHeight = CGFloat(44.0)
+    public static let navigationBarHeight = CGFloat(64.0)
 
     public var topViewController: UIViewController
 
