@@ -50,7 +50,7 @@ public class LiftNavigationController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.addGestureRecognizer(self.gestureRecognizer)

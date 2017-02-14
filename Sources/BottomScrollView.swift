@@ -11,7 +11,6 @@ class BottomScrollView: UIScrollView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -26,7 +25,7 @@ class BottomScrollView: UIScrollView {
             let isFirstViewController = index == 0
             let isLastViewController = index == bottomViewControllers.count - 1
             let isMiddleViewController = !isFirstViewController && !isLastViewController
-            
+
             viewController.view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
             viewController.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
             viewController.view.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
@@ -46,7 +45,6 @@ class BottomScrollView: UIScrollView {
 
                 viewController.view.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
             }
-
         }
     }
 }

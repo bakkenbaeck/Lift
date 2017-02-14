@@ -23,5 +23,5 @@
 import PackageDescription
 
 let package = Package(
-  name: "<LIBRARY_NAME>"
+    name: "<LIBRARY_NAME>"
 )

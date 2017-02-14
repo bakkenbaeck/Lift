@@ -22,7 +22,7 @@ public extension UIColor {
     class func liftBrightGreen() -> UIColor {
         return UIColor(hex: "3EE68F")
     }
-    
+
     class func liftGreen() -> UIColor {
         return UIColor(hex: "58D0A8")
     }
