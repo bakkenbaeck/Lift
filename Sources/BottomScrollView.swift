@@ -3,6 +3,7 @@ import UIKit
 class BottomScrollView: UIScrollView {
 
     var targetOffset: CGPoint?
+    var currentIndex = 0
 
     var bottomViewControllers: [UIViewController]? {
         didSet {
@@ -54,12 +55,19 @@ class BottomScrollView: UIScrollView {
 
 extension BottomScrollView: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let targetViewControllerIndex = Int(targetContentOffset.pointee.x / UIScreen.main.bounds.width)
 
-        let newX = CGFloat(targetViewControllerIndex) *  UIScreen.main.bounds.width
+        let isScrollingLeft = velocity.x < 0
+        let isScrollingRight = velocity.x > 0
+
+        if isScrollingLeft && self.currentIndex > 0 {
+            self.currentIndex = self.currentIndex - 1
+        }
+        if isScrollingRight && self.currentIndex < (self.bottomViewControllers?.count ?? 0) - 1 {
+            self.currentIndex = self.currentIndex + 1
+        }
+
+        let newX = CGFloat(self.currentIndex) *  UIScreen.main.bounds.width
         self.targetOffset = CGPoint(x: newX, y: 0)
-
-
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
