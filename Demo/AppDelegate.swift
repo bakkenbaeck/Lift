@@ -7,9 +7,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-
-
         let topViewController = UIViewController()
         topViewController.view.backgroundColor = .white
         topViewController.view.layer.borderWidth = 1.0
@@ -23,9 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let secondViewController = UIViewController()
         secondViewController.view.backgroundColor = .white
         secondViewController.view.layer.borderWidth = 1.0
-        secondViewController.view.layer.borderColor = UIColor.kronPink().cgColor
+        secondViewController.view.layer.borderColor = UIColor.kronBlue().cgColor
 
-        let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController])
+        let thirdViewController = UIViewController()
+        thirdViewController.view.backgroundColor = .white
+        thirdViewController.view.layer.borderWidth = 1.0
+        thirdViewController.view.layer.borderColor = UIColor.kronPink().cgColor
+
+        let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController, thirdViewController])
 
         window = UIWindow(frame: UIScreen.main.bounds)
         guard let window = self.window else { fatalError("Window not found") }
