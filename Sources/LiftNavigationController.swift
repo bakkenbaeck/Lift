@@ -39,7 +39,7 @@ public class LiftNavigationController: UIViewController {
         layout.itemSize = CGSize(width: 100, height: LiftNavigationController.navigationBarHeight)
 
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         return collectionView

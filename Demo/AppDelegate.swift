@@ -11,13 +11,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
         let topViewController = UIViewController()
-        topViewController.view.backgroundColor = .darkGray
+        topViewController.view.backgroundColor = .white
+        topViewController.view.layer.borderWidth = 1.0
+        topViewController.view.layer.borderColor = UIColor.kronGreen().cgColor
 
         let firstViewController = UIViewController()
-        firstViewController.view.backgroundColor = .gray
+        firstViewController.view.backgroundColor = .white
+        firstViewController.view.layer.borderWidth = 1.0
+        firstViewController.view.layer.borderColor = UIColor.kronRed().cgColor
 
         let secondViewController = UIViewController()
-        secondViewController.view.backgroundColor = .lightGray
+        secondViewController.view.backgroundColor = .white
+        secondViewController.view.layer.borderWidth = 1.0
+        secondViewController.view.layer.borderColor = UIColor.kronPink().cgColor
 
         let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController])
 
