@@ -9,22 +9,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let topViewController = UIViewController()
         topViewController.view.backgroundColor = .white
-        topViewController.view.layer.borderWidth = 1.0
+        topViewController.view.layer.borderWidth = 5.0
         topViewController.view.layer.borderColor = UIColor.kronGreen().cgColor
 
         let firstViewController = UIViewController()
         firstViewController.view.backgroundColor = .white
-        firstViewController.view.layer.borderWidth = 1.0
+        firstViewController.view.layer.borderWidth = 5.0
         firstViewController.view.layer.borderColor = UIColor.kronRed().cgColor
 
         let secondViewController = UIViewController()
         secondViewController.view.backgroundColor = .white
-        secondViewController.view.layer.borderWidth = 1.0
+        secondViewController.view.layer.borderWidth = 5.0
         secondViewController.view.layer.borderColor = UIColor.kronBlue().cgColor
 
         let thirdViewController = UIViewController()
         thirdViewController.view.backgroundColor = .white
-        thirdViewController.view.layer.borderWidth = 1.0
+        thirdViewController.view.layer.borderWidth = 5.0
         thirdViewController.view.layer.borderColor = UIColor.kronPink().cgColor
 
         let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController, thirdViewController])
