@@ -2,6 +2,8 @@ import UIKit
 
 class BottomScrollView: UIScrollView {
 
+    var targetOffset: CGPoint?
+
     var bottomViewControllers: [UIViewController]? {
         didSet {
             guard let bottomViewControllers = self.bottomViewControllers else { return }
@@ -11,6 +13,7 @@ class BottomScrollView: UIScrollView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -46,5 +49,26 @@ class BottomScrollView: UIScrollView {
                 viewController.view.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
             }
         }
+    }
+}
+
+extension BottomScrollView: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let targetViewControllerIndex = Int(targetContentOffset.pointee.x / UIScreen.main.bounds.width)
+
+        let newX = CGFloat(targetViewControllerIndex) *  UIScreen.main.bounds.width
+        self.targetOffset = CGPoint(x: newX, y: 0)
+
+
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard let targetOffset = self.targetOffset,decelerate == false else { return }
+        scrollView.setContentOffset(targetOffset, animated: true)
+    }
+
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        guard let targetOffset = self.targetOffset else { return }
+        scrollView.setContentOffset(targetOffset, animated: true)
     }
 }
