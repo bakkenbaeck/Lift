@@ -38,6 +38,7 @@ public class LiftNavigationController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         self.bottomScrollView.bottomViewControllers = bottomViewControllers
+        self.navigationBar.titles = bottomViewControllers.map{ controller in controller.title ?? ""}
 
         self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.translatesAutoresizingMaskIntoConstraints = false

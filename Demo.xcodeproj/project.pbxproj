@@ -18,6 +18,7 @@
 		D197BD38969A2DFE125E1809 /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B886DC83940FC38E86DE /* Color+Helpers.swift */; };
 		E6779F1D1E5310EF0083B1A1 /* BottomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6779F1C1E5310EF0083B1A1 /* BottomScrollView.swift */; };
 		E685B5601E544650006A9CC3 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E685B55F1E544650006A9CC3 /* NavigationBar.swift */; };
+		E685B5621E5464B7006A9CC3 /* NavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E685B5611E5464B7006A9CC3 /* NavigationCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		D197B886DC83940FC38E86DE /* Color+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Helpers.swift"; sourceTree = "<group>"; };
 		E6779F1C1E5310EF0083B1A1 /* BottomScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomScrollView.swift; sourceTree = "<group>"; };
 		E685B55F1E544650006A9CC3 /* NavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
+		E685B5611E5464B7006A9CC3 /* NavigationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationCell.swift; sourceTree = "<group>"; };
 		E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiftNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,6 +128,7 @@
 				E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */,
 				E6779F1C1E5310EF0083B1A1 /* BottomScrollView.swift */,
 				E685B55F1E544650006A9CC3 /* NavigationBar.swift */,
+				E685B5611E5464B7006A9CC3 /* NavigationCell.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				E6779F1D1E5310EF0083B1A1 /* BottomScrollView.swift in Sources */,
 				E685B5601E544650006A9CC3 /* NavigationBar.swift in Sources */,
 				14E5B15E1E51F5AF003417C1 /* LiftNavigationController.swift in Sources */,
+				E685B5621E5464B7006A9CC3 /* NavigationCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
