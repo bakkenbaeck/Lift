@@ -66,15 +66,19 @@ class BottomScrollView: UIScrollView {
         }
     }
 
+    func showPage(at index: Int) {
+        self.goToPage(index, animated: true)
+    }
+
     fileprivate func goToPage(_ page: Int, animated: Bool) {
         self.loadScrollViewWithPage(page - 1)
         self.loadScrollViewWithPage(page)
         self.loadScrollViewWithPage(page + 1)
 
-        var bounds = self.bounds
-        bounds.origin.x = bounds.size.width * CGFloat(page)
-        bounds.origin.y = 0
-        self.scrollRectToVisible(bounds, animated: animated)
+        var contentOffset = self.bounds.origin
+        contentOffset.x = bounds.size.width * CGFloat(page)
+        contentOffset.y = 0
+        self.setContentOffset(contentOffset, animated: animated)
     }
 
     fileprivate func loadScrollViewWithPage(_ page: Int) {

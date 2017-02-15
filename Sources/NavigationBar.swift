@@ -1,6 +1,12 @@
 import UIKit
 
+protocol NavigationBarDelegate: class {
+   func selectItemAt(_ index: Int, onNavigationBar navigationBar: NavigationBar)
+}
+
 class NavigationBar: UICollectionView {
+    weak var barDelegate: NavigationBarDelegate?
+    
     var titles = [String]()
 
     init(){
@@ -39,4 +45,7 @@ extension NavigationBar: UICollectionViewDelegate, UICollectionViewDataSource {
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       self.barDelegate?.selectItemAt(indexPath.row, onNavigationBar: self)
+    }
 }

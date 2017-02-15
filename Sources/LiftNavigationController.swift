@@ -25,11 +25,12 @@ public class LiftNavigationController: UIViewController {
 
     lazy var navigationBar: NavigationBar = {
 
-        let collectionView = NavigationBar()
-        collectionView.backgroundColor = .white
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        let navigationBar = NavigationBar()
+        navigationBar.backgroundColor = .white
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.barDelegate = self
 
-        return collectionView
+        return navigationBar
     }()
 
     public init(topViewController: UIViewController, bottomViewControllers: [UIViewController]) {
@@ -94,5 +95,11 @@ public class LiftNavigationController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: { bool in
         })
+    }
+}
+
+extension LiftNavigationController: NavigationBarDelegate {
+    func selectItemAt(_ index: Int, onNavigationBar navigationBar: NavigationBar) {
+       self.bottomScrollView.showPage(at: index)
     }
 }
