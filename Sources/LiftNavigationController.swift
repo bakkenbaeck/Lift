@@ -23,12 +23,9 @@ public class LiftNavigationController: UIViewController {
         return scrollView
     }()
 
-    lazy var navigationBar: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 100, height: LiftNavigationController.navigationBarHeight)
+    lazy var navigationBar: NavigationBar = {
 
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        let collectionView = NavigationBar()
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
