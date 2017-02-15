@@ -1,22 +1,22 @@
 import UIKit
 
-protocol NavigationBarDelegate: class {
-   func selectItemAt(_ index: Int, onNavigationBar navigationBar: NavigationBar)
+protocol RoomIndicatorViewDelegate: class {
+   func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView)
 }
 
-class NavigationBar: UICollectionView {
+class RoomIndicatorView: UICollectionView {
     static let itemWidth = CGFloat(100.0)
-    static let leftMargin = (UIScreen.main.bounds.width - NavigationBar.itemWidth) * 0.5
+    static let leftMargin = (UIScreen.main.bounds.width - RoomIndicatorView.itemWidth) * 0.5
 
-    weak var barDelegate: NavigationBarDelegate?
+    weak var roomIndicatorDelegate: RoomIndicatorViewDelegate?
 
-    var selectedItemIndex = 0
-    var titles = [String]()
+    var selectedRoomIndex = 0
+    var roomTitles = [String]()
 
     init(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: NavigationBar.itemWidth, height: LiftNavigationController.navigationBarHeight)
+        layout.itemSize = CGSize(width: RoomIndicatorView.itemWidth, height: LiftNavigationController.navigationBarHeight)
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
         layout.minimumLineSpacing = 0.0
 
@@ -24,7 +24,7 @@ class NavigationBar: UICollectionView {
 
         self.delegate = self
         self.dataSource = self
-        self.register(NavigationCell.self, forCellWithReuseIdentifier: NavigationCell.identifier)
+        self.register(RoomIndicatorCell.self, forCellWithReuseIdentifier: RoomIndicatorCell.identifier)
 
         self.isScrollEnabled = false
         self.isPagingEnabled = true
@@ -32,7 +32,7 @@ class NavigationBar: UICollectionView {
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
         self.decelerationRate = UIScrollViewDecelerationRateFast
-        self.contentInset = UIEdgeInsetsMake(0, NavigationBar.leftMargin, 0, 0)
+        self.contentInset = UIEdgeInsetsMake(0, RoomIndicatorView.leftMargin, 0, 0)
         self.highLightIndex(index: 0)
     }
     
@@ -41,21 +41,21 @@ class NavigationBar: UICollectionView {
     }
 
     func highLightIndex(index: Int) {
-        self.selectedItemIndex = index
-        self.setContentOffset(CGPoint(x: (CGFloat(index) * NavigationBar.itemWidth) - NavigationBar.leftMargin, y:0), animated: true)
+        self.selectedRoomIndex = index
+        self.setContentOffset(CGPoint(x: (CGFloat(index) * RoomIndicatorView.itemWidth) - RoomIndicatorView.leftMargin, y:0), animated: true)
         self.reloadData()
     }
 }
 
-extension NavigationBar: UICollectionViewDelegate, UICollectionViewDataSource {
+extension RoomIndicatorView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       return titles.count
+       return roomTitles.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NavigationCell.identifier, for: indexPath) as! NavigationCell
-        cell.titleLabel.text = self.titles[indexPath.row]
-        if indexPath.row == self.selectedItemIndex {
+       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
+        cell.titleLabel.text = self.roomTitles[indexPath.row]
+        if indexPath.row == self.selectedRoomIndex {
             cell.titleLabel.textColor = .black
         } else {
             cell.titleLabel.textColor = .gray
@@ -65,6 +65,6 @@ extension NavigationBar: UICollectionViewDelegate, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       self.barDelegate?.selectItemAt(indexPath.row, onNavigationBar: self)
+       self.roomIndicatorDelegate?.selectItemAt(indexPath.row, onNavigationBar: self)
     }
 }

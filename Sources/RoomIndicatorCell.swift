@@ -1,7 +1,7 @@
 import UIKit
 
-class NavigationCell: UICollectionViewCell {
-    static let identifier = "navigationCellIdentifier"
+class RoomIndicatorCell: UICollectionViewCell {
+    static let identifier = "roomIndicatorCellIdentifier"
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()

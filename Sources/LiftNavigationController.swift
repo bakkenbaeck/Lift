@@ -24,12 +24,12 @@ public class LiftNavigationController: UIViewController {
         return scrollView
     }()
 
-    lazy var navigationBar: NavigationBar = {
+    lazy var navigationBar: RoomIndicatorView = {
 
-        let navigationBar = NavigationBar()
+        let navigationBar = RoomIndicatorView()
         navigationBar.backgroundColor = .white
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        navigationBar.barDelegate = self
+        navigationBar.roomIndicatorDelegate = self
 
         return navigationBar
     }()
@@ -40,7 +40,7 @@ public class LiftNavigationController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         self.bottomScrollView.bottomViewControllers = bottomViewControllers
-        self.navigationBar.titles = bottomViewControllers.map{ controller in controller.title ?? ""}
+        self.navigationBar.roomTitles = bottomViewControllers.map{ controller in controller.title ?? ""}
 
         self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -99,8 +99,8 @@ public class LiftNavigationController: UIViewController {
     }
 }
 
-extension LiftNavigationController: NavigationBarDelegate {
-    func selectItemAt(_ index: Int, onNavigationBar navigationBar: NavigationBar) {
+extension LiftNavigationController: RoomIndicatorViewDelegate {
+    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView) {
        self.bottomScrollView.showPage(at: index)
     }
 }
