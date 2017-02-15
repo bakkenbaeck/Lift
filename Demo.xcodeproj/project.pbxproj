@@ -50,7 +50,7 @@
 		14C0AF821BD6D4230009ECBE /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		14C0AF831BD6D4230009ECBE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		14C47E0D1CD2AE5F004A48DF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		14E5B1081E51F486003417C1 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14E5B1081E51F486003417C1 /* Lift demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lift demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14E5B10A1E51F486003417C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		14E5B1111E51F486003417C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14E5B1141E51F486003417C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -97,7 +97,7 @@
 		146D72941AB782920058798C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				14E5B1081E51F486003417C1 /* Demo.app */,
+				14E5B1081E51F486003417C1 /* Lift demo.app */,
 				14E5B13B1E51F49E003417C1 /* Lift.framework */,
 			);
 			name = Products;
@@ -154,9 +154,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		14E5B1071E51F486003417C1 /* Demo */ = {
+		14E5B1071E51F486003417C1 /* Lift demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 14E5B12D1E51F486003417C1 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildConfigurationList = 14E5B12D1E51F486003417C1 /* Build configuration list for PBXNativeTarget "Lift demo" */;
 			buildPhases = (
 				14E5B1041E51F486003417C1 /* Sources */,
 				14E5B1051E51F486003417C1 /* Frameworks */,
@@ -168,9 +168,9 @@
 			dependencies = (
 				14E5B14F1E51F49F003417C1 /* PBXTargetDependency */,
 			);
-			name = Demo;
+			name = "Lift demo";
 			productName = Demo;
-			productReference = 14E5B1081E51F486003417C1 /* Demo.app */;
+			productReference = 14E5B1081E51F486003417C1 /* Lift demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		14E5B13A1E51F49E003417C1 /* Lift */ = {
@@ -226,7 +226,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				14E5B1071E51F486003417C1 /* Demo */,
+				14E5B1071E51F486003417C1 /* Lift demo */,
 				14E5B13A1E51F49E003417C1 /* Lift */,
 			);
 		};
@@ -486,7 +486,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		14E5B12D1E51F486003417C1 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+		14E5B12D1E51F486003417C1 /* Build configuration list for PBXNativeTarget "Lift demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				14E5B12E1E51F486003417C1 /* Debug */,

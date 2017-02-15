@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "14E5B1071E51F486003417C1"
-               BuildableName = "Demo.app"
-               BlueprintName = "Demo"
+               BuildableName = "Lift demo.app"
+               BlueprintName = "Lift demo"
                ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,24 +42,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "14E5B1071E51F486003417C1"
-            BuildableName = "Demo.app"
-            BlueprintName = "Demo"
+            BuildableName = "Lift demo.app"
+            BlueprintName = "Lift demo"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "14E5B13A1E51F49E003417C1"
-            BuildableName = "Lift.framework"
-            BlueprintName = "Lift"
-            ReferencedContainer = "container:Demo.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
