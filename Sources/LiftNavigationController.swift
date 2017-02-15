@@ -19,20 +19,19 @@ public class LiftNavigationController: UIViewController {
         let scrollView = BottomScrollView(parentController: self)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .white
+        scrollView.viewDelegate = self
 
         return scrollView
     }()
 
-    lazy var navigationBar: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 100, height: LiftNavigationController.navigationBarHeight)
+    lazy var navigationBar: RoomIndicatorView = {
 
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        let navigationBar = RoomIndicatorView()
+        navigationBar.backgroundColor = .white
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.roomIndicatorDelegate = self
 
-        return collectionView
+        return navigationBar
     }()
 
     public init(topViewController: UIViewController, bottomViewControllers: [UIViewController]) {
@@ -41,6 +40,7 @@ public class LiftNavigationController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         self.bottomScrollView.bottomViewControllers = bottomViewControllers
+        self.navigationBar.roomTitles = bottomViewControllers.map{ controller in controller.title ?? ""}
 
         self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -96,5 +96,17 @@ public class LiftNavigationController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: { bool in
         })
+    }
+}
+
+extension LiftNavigationController: RoomIndicatorViewDelegate {
+    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView) {
+       self.bottomScrollView.showPage(at: index)
+    }
+}
+
+extension LiftNavigationController: PaginatedScrollViewDelegate {
+    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
+        self.navigationBar.highLightIndex(index: toIndex )
     }
 }
