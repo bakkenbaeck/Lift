@@ -13,6 +13,13 @@ class NavigationBar: UICollectionView {
         self.delegate = self
         self.dataSource = self
         self.register(NavigationCell.self, forCellWithReuseIdentifier: NavigationCell.identifier)
+
+        self.isScrollEnabled = false
+        self.isPagingEnabled = true
+        self.scrollsToTop = false
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
+        self.decelerationRate = UIScrollViewDecelerationRateFast
     }
     
     required init?(coder aDecoder: NSCoder) {
