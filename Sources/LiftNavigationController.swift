@@ -16,7 +16,7 @@ public class LiftNavigationController: UIViewController {
     }()
 
     lazy var bottomScrollView: BottomScrollView = {
-        let scrollView = BottomScrollView()
+        let scrollView = BottomScrollView(parentController: self)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .white
 

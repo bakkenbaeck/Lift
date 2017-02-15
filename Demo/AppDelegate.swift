@@ -27,7 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         thirdViewController.view.layer.borderWidth = 5.0
         thirdViewController.view.layer.borderColor = UIColor.liftPink().cgColor
 
-        let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController, thirdViewController])
+        let fourthViewController = UIViewController()
+        fourthViewController.view.backgroundColor = .white
+        fourthViewController.view.layer.borderWidth = 5.0
+        fourthViewController.view.layer.borderColor = UIColor.liftBrightGreen().cgColor
+
+        let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController, thirdViewController, fourthViewController])
 
         window = UIWindow(frame: UIScreen.main.bounds)
         guard let window = self.window else { fatalError("Window not found") }
