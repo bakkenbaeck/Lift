@@ -19,6 +19,7 @@ public class LiftNavigationController: UIViewController {
         let scrollView = BottomScrollView(parentController: self)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .white
+        scrollView.viewDelegate = self
 
         return scrollView
     }()
@@ -101,5 +102,11 @@ public class LiftNavigationController: UIViewController {
 extension LiftNavigationController: NavigationBarDelegate {
     func selectItemAt(_ index: Int, onNavigationBar navigationBar: NavigationBar) {
        self.bottomScrollView.showPage(at: index)
+    }
+}
+
+extension LiftNavigationController: PaginatedScrollViewDelegate {
+    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
+        self.navigationBar.highLightIndex(index: toIndex )
     }
 }

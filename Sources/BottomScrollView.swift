@@ -1,8 +1,7 @@
 import UIKit
 
 protocol PaginatedScrollViewDelegate: class {
-    func bottomScrollView(_ bottomScrollView: BottomScrollView, didMoveToIndex index: Int)
-    func bottomScrollView(_ bottomScrollView: BottomScrollView, didMoveFromIndex index: Int)
+    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView)
 }
 
 class BottomScrollView: UIScrollView {
@@ -10,7 +9,6 @@ class BottomScrollView: UIScrollView {
     fileprivate unowned var parentController: UIViewController
 
     fileprivate var currentPage = 0
-    fileprivate var shouldEvaluatePageChange = false
 
     var bottomViewControllers: [UIViewController]? {
         didSet {
@@ -78,6 +76,7 @@ class BottomScrollView: UIScrollView {
         var contentOffset = self.bounds.origin
         contentOffset.x = bounds.size.width * CGFloat(page)
         contentOffset.y = 0
+
         self.setContentOffset(contentOffset, animated: animated)
     }
 
@@ -96,24 +95,19 @@ class BottomScrollView: UIScrollView {
 }
 
 extension BottomScrollView: UIScrollViewDelegate {
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.shouldEvaluatePageChange = true
-    }
-
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.shouldEvaluatePageChange = false
-    }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if shouldEvaluatePageChange {
-            let pageWidth = UIScreen.main.bounds.width
-            let page = Int(floor((contentOffset.x - pageWidth / 2) / pageWidth) + 1)
-     
-            self.currentPage = page
+        let pageWidth = UIScreen.main.bounds.width
+        let page = Int(floor((contentOffset.x - pageWidth / 2) / pageWidth) + 1)
 
-            self.loadScrollViewWithPage(page - 1)
-            self.loadScrollViewWithPage(page)
-            self.loadScrollViewWithPage(page + 1)
+        if page != currentPage {
+            self.viewDelegate?.didMove(from: currentPage, to: page, on: self)
         }
+
+        self.currentPage = page
+
+        self.loadScrollViewWithPage(page - 1)
+        self.loadScrollViewWithPage(page)
+        self.loadScrollViewWithPage(page + 1)
     }
 }
