@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         fourthViewController.title = "4th"
         fourthViewController.view.backgroundColor = .white
         fourthViewController.view.layer.borderWidth = 5.0
-        fourthViewController.view.layer.borderColor = UIColor.liftPink().cgColor
+        fourthViewController.view.layer.borderColor = UIColor.liftBrightGreen().cgColor
 
         let controller = LiftNavigationController(topViewController: topViewController, bottomViewControllers: [firstViewController, secondViewController, thirdViewController, fourthViewController])
 
