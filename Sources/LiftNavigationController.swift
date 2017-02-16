@@ -46,7 +46,6 @@ public class LiftNavigationController: UIViewController {
         return scrollView
     }()
 
-
     lazy var switchButton: UIButton = {
         let button = UIButton(type: .contactAdd)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -143,6 +142,18 @@ extension LiftNavigationController: UIScrollViewDelegate {
             let index = Int(floor((scrollView.contentOffset.y - pageHeight / 2) / pageHeight) + 1)
             self.currentFloor = Floor(rawValue: index) ?? self.currentFloor
         }
+    }
+}
+
+extension LiftNavigationController: RoomIndicatorViewDelegate {
+    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView) {
+       self.bottomScrollView.showPage(at: index)
+    }
+}
+
+extension LiftNavigationController: PaginatedScrollViewDelegate {
+    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
+        self.navigationBar.highLightIndex(index: toIndex )
     }
 }
 
