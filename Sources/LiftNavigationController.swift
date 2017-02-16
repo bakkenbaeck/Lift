@@ -156,15 +156,3 @@ extension LiftNavigationController: PaginatedScrollViewDelegate {
         self.navigationBar.highLightIndex(index: toIndex )
     }
 }
-
-extension LiftNavigationController: RoomIndicatorViewDelegate {
-    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView) {
-       self.bottomScrollView.showPage(at: index)
-    }
-}
-
-extension LiftNavigationController: PaginatedScrollViewDelegate {
-    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
-        self.navigationBar.highLightIndex(index: toIndex )
-    }
-}
