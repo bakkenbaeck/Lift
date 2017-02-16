@@ -3,16 +3,38 @@ import UIKit
 public class LiftNavigationController: UIViewController {
     public static let navigationBarHeight = CGFloat(64.0)
 
+    enum Floor: Int {
+        case top
+        case bottom
+    }
     public var topViewController: UIViewController
 
-    var heightAnchor: NSLayoutConstraint?
+    var shouldEvaluatePageChange = false
+    var currentFloor = Floor.top {
+        didSet {
+            var origin = self.view.bounds.origin
+            switch self.currentFloor {
+            case .top:
+                origin.y = 0
+            case .bottom:
+                origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
+            }
 
-    lazy var gestureRecognizer: UISwipeGestureRecognizer = {
-        let recognizer = UISwipeGestureRecognizer()
-        recognizer.direction = .up
-        recognizer.addTarget(self, action: #selector(self.didSwipe(_:)))
+            scrollView.setContentOffset(origin, animated: true)
+        }
+    }
 
-        return recognizer
+    lazy var scrollView: UIScrollView = {
+       let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.isPagingEnabled = true
+        scrollView.scrollsToTop = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.bounces = false
+
+        return scrollView
     }()
 
     lazy var bottomScrollView: BottomScrollView = {
@@ -24,6 +46,14 @@ public class LiftNavigationController: UIViewController {
         return scrollView
     }()
 
+    lazy var switchButton: UIButton = {
+        let button = UIButton(type: .contactAdd)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
+
+        return button
+    }()
+    
     lazy var navigationBar: RoomIndicatorView = {
 
         let navigationBar = RoomIndicatorView()
@@ -53,20 +83,24 @@ public class LiftNavigationController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.addGestureRecognizer(self.gestureRecognizer)
         self.addSubviewsAndConstraints()
     }
 
     func addSubviewsAndConstraints() {
         self.addChildViewController(self.topViewController)
 
-        self.view.addSubview(self.topViewController.view)
-        self.view.addSubview(self.navigationBar)
-        self.view.addSubview(self.bottomScrollView)
+        self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.topViewController.view)
+        self.scrollView.addSubview(self.navigationBar)
+        self.scrollView.addSubview(self.switchButton)
+        self.scrollView.addSubview(self.bottomScrollView)
 
-        self.heightAnchor = self.topViewController.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0)
-        self.heightAnchor?.isActive = true
+        self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.scrollView.heightAnchor.constraint(greaterThanOrEqualTo: self.view.heightAnchor).isActive = true
 
+        self.topViewController.view.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
         self.topViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
@@ -76,26 +110,38 @@ public class LiftNavigationController: UIViewController {
         self.navigationBar.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.navigationBar.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
+        self.switchButton.bottomAnchor.constraint(equalTo: self.navigationBar.bottomAnchor).isActive = true
+        self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.switchButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        self.switchButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+
         self.bottomScrollView.topAnchor.constraint(equalTo: self.navigationBar.bottomAnchor).isActive = true
         self.bottomScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.bottomScrollView.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
         self.bottomScrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
+        self.bottomScrollView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
     }
 
-    func didSwipe(_ recognizer: UISwipeGestureRecognizer) {
-        if recognizer.direction == .up {
-            self.heightAnchor?.constant = -(self.view.bounds.height - LiftNavigationController.navigationBarHeight)
-            self.gestureRecognizer.direction = .down
-        } else {
-            if recognizer.direction == .down {
-                self.heightAnchor?.constant = 0.0
-                self.gestureRecognizer.direction = .up
-            }
+    func didSelectSwitchButton() {
+        self.currentFloor = self.currentFloor == .top ? .bottom : .top
+    }
+}
+
+extension LiftNavigationController: UIScrollViewDelegate {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.shouldEvaluatePageChange = true
+    }
+
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.shouldEvaluatePageChange = false
+    }
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if shouldEvaluatePageChange {
+            let pageHeight = self.view.bounds.height
+            let index = Int(floor((scrollView.contentOffset.y - pageHeight / 2) / pageHeight) + 1)
+            self.currentFloor = Floor(rawValue: index) ?? self.currentFloor
         }
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: [.curveEaseOut, .allowUserInteraction, .beginFromCurrentState], animations: {
-            self.view.layoutIfNeeded()
-        }, completion: { bool in
-        })
     }
 }
 
