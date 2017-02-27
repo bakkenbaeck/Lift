@@ -1,0 +1,10 @@
+framework module Lift {
+  umbrella header "Lift.h"
+
+  export *
+  module * { export * }
+}
+
+module Lift.Swift {
+    header "Lift-Swift.h"
+}

@@ -1,24 +1,13 @@
 import UIKit
 
-open class LiftNavigationController: UIViewController {
+public class LiftNavigationController: UIViewController {
     public static let navigationBarHeight = CGFloat(64.0)
 
     enum Floor: Int {
         case top
         case bottom
     }
-
-    open var topViewController = UIViewController() {
-        didSet {
-            self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        }
-    }
-    open var bottomViewControllers = [UIViewController]() {
-        didSet {
-            self.bottomScrollView.bottomViewControllers = bottomViewControllers
-            self.navigationBar.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? ""}
-        }
-    }
+    public var topViewController: UIViewController
 
     var shouldEvaluatePageChange = false
     var currentFloor = Floor.top {
@@ -75,25 +64,30 @@ open class LiftNavigationController: UIViewController {
         return navigationBar
     }()
 
-    public init() {
+    public init(topViewController: UIViewController, bottomViewControllers: [UIViewController]) {
+        self.topViewController = topViewController
+
         super.init(nibName: nil, bundle: nil)
+
+        self.bottomScrollView.bottomViewControllers = bottomViewControllers
+        self.navigationBar.roomTitles = bottomViewControllers.map{ controller in controller.title ?? ""}
+
+        self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    open override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         self.addSubviewsAndConstraints()
     }
 
     func addSubviewsAndConstraints() {
-        self.view.translatesAutoresizingMaskIntoConstraints = false
-
-        self.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        self.view.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
+        self.addChildViewController(self.topViewController)
 
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.topViewController.view)
