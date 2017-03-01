@@ -10,6 +10,17 @@ class RoomIndicatorView: UICollectionView {
 
     weak var roomIndicatorDelegate: RoomIndicatorViewDelegate?
 
+    var currentFloor = Floor.top {
+        didSet {
+            switch self.currentFloor {
+            case .top:
+                print("top")
+            case .bottom:
+                print("bottom")
+            }
+        }
+    }
+
     var selectedRoomIndex = 0
     var roomTitles = [String]()
 
