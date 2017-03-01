@@ -1,14 +1,10 @@
 import UIKit
 
-protocol RoomIndicatorViewDelegate: class {
-   func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorController)
-}
-
 class RoomIndicatorController: UIViewController {
     static let itemWidth = CGFloat(100.0)
     static let leftMargin = (UIScreen.main.bounds.width - RoomIndicatorController.itemWidth) * 0.5
 
-    weak var roomIndicatorDelegate: RoomIndicatorViewDelegate?
+    weak var switchableFloorDelegate: SwitchableFloorDelegate?
 
     lazy var switchButton: UIButton = {
         let button = UIButton(type: .contactAdd)
@@ -91,7 +87,7 @@ class RoomIndicatorController: UIViewController {
     }
 
     func didSelectSwitchButton() {
-        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top, onViewController: self)
+        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top)
     }
 }
 
@@ -113,16 +109,16 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       self.roomIndicatorDelegate?.selectItemAt(indexPath.row, onNavigationBar: self)
+//       self.roomIndicatorDelegate?.selectItemAt(indexPath.row)
     }
 }
 
-extension RoomIndicatorController: Switchable {
-    func didMoveToTop(on viewController: UIViewController) {
-
+extension RoomIndicatorController: SwitchableFloor {
+    func didMoveToTop() {
+        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
     }
 
-    func didMoveToBottom(on viewController: UIViewController) {
-
+    func didMoveToBottom() {
+        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
     }
 }

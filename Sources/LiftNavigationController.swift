@@ -1,7 +1,8 @@
 import UIKit
 
-open class LiftNavigationController: UIViewController {
+open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
     public static let navigationBarHeight = CGFloat(64.0)
+    weak var switchableFloorDelegate: SwitchableFloorDelegate?
 
     open var topViewController = UIViewController() {
         didSet {
@@ -43,7 +44,7 @@ open class LiftNavigationController: UIViewController {
 
     lazy var roomIndicatorView: RoomIndicatorController = {
         let roomIndicatorView = RoomIndicatorController()
-        roomIndicatorView.roomIndicatorDelegate = self
+        roomIndicatorView.switchableFloorDelegate = self
 
         return roomIndicatorView
     }()
@@ -115,11 +116,11 @@ extension LiftNavigationController: UIScrollViewDelegate {
     }
 }
 
-extension LiftNavigationController: RoomIndicatorViewDelegate {
-    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorController) {
-       self.bottomScrollView.showPage(at: index)
-    }
-}
+//extension LiftNavigationController: RoomIndicatorViewDelegate {
+//    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorController) {
+//       self.bottomScrollView.showPage(at: index)
+//    }
+//}
 
 extension LiftNavigationController: PaginatedScrollViewDelegate {
     func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
@@ -127,14 +128,14 @@ extension LiftNavigationController: PaginatedScrollViewDelegate {
     }
 }
 
-extension LiftNavigationController: Switchable {
-    func didMoveToTop(on viewController: UIViewController) {
+extension LiftNavigationController: SwitchableFloor {
+    func didMoveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
         scrollView.setContentOffset(origin, animated: true)
     }
 
-    func didMoveToBottom(on viewController: UIViewController) {
+    func didMoveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
         scrollView.setContentOffset(origin, animated: true)

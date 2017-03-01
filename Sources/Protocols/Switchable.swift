@@ -5,21 +5,33 @@ enum Floor: Int {
     case bottom
 }
 
-protocol Switchable: class {
-    var currentFloor: Floor { get set }
-    func setCurrentFloor(_ floor: Floor, onViewController viewController: UIViewController)
-
-    func didMoveToTop(on viewController: UIViewController)
-    func didMoveToBottom(on viewController: UIViewController)
+protocol SwitchableFloorDelegate: class {
+    func selectFloor(_ floor: Floor)
 }
 
-extension Switchable where Self: UIViewController {
-    func setCurrentFloor(_ floor: Floor, onViewController viewController: UIViewController) {
+extension SwitchableFloorDelegate where Self: SwitchableFloor {
+    func selectFloor(_ floor: Floor) {
+      self.setCurrentFloor(floor)
+    }
+}
+protocol SwitchableFloor: class {
+   weak var switchableFloorDelegate: SwitchableFloorDelegate? { get  set }
+
+    var currentFloor: Floor { get set }
+    func setCurrentFloor(_ floor: Floor)
+
+    func didMoveToTop()
+    func didMoveToBottom()
+}
+
+extension SwitchableFloor {
+    func setCurrentFloor(_ floor: Floor) {
         if floor == .top {
-            self.didMoveToTop(on: self)
+            self.didMoveToTop()
         } else if floor == .bottom {
-            self.didMoveToBottom(on: self)
+            self.didMoveToBottom()
         }
         self.currentFloor = floor
+        self.switchableFloorDelegate?.selectFloor(floor)
     }
 }
