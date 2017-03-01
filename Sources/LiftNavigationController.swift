@@ -11,13 +11,12 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
     }
     open var bottomViewControllers = [UIViewController]() {
         didSet {
-            self.bottomScrollView.bottomViewControllers = bottomViewControllers
-            self.roomIndicatorView.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? ""}
+            self.bottomController.bottomViewControllers = bottomViewControllers
+            self.roomIndicatorController.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? ""}
         }
     }
 
     var currentFloor: Floor = .top
-
     var shouldEvaluatePageChange = false
 
     lazy var scrollView: UIScrollView = {
@@ -33,24 +32,25 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
         return scrollView
     }()
 
-    lazy var bottomScrollView: BottomScrollView = {
-        let scrollView = BottomScrollView(parentController: self)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .white
-        scrollView.viewDelegate = self
+    lazy var bottomController: BottomController = {
+        let controller = BottomController(parentController: self)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        controller.view.backgroundColor = .white
 
-        return scrollView
+        return controller
     }()
 
-    lazy var roomIndicatorView: RoomIndicatorController = {
+    lazy var roomIndicatorController: RoomIndicatorController = {
         let roomIndicatorView = RoomIndicatorController()
-        roomIndicatorView.switchableFloorDelegate = self
 
         return roomIndicatorView
     }()
 
     public init() {
         super.init(nibName: nil, bundle: nil)
+
+        self.roomIndicatorController.switchableRoomDelegate = self.bottomController
+        self.bottomController.switchableRoomDelegate = self.roomIndicatorController
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -71,8 +71,8 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
 
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.topViewController.view)
-        self.scrollView.addSubview(self.roomIndicatorView.view)
-        self.scrollView.addSubview(self.bottomScrollView)
+        self.scrollView.addSubview(self.roomIndicatorController.view)
+        self.scrollView.addSubview(self.bottomController.view)
 
         self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -84,16 +84,16 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.roomIndicatorView.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
-        self.roomIndicatorView.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.roomIndicatorView.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.roomIndicatorView.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
+        self.roomIndicatorController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
+        self.roomIndicatorController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.roomIndicatorController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.roomIndicatorController.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.bottomScrollView.topAnchor.constraint(equalTo: self.roomIndicatorView.roomCollectionView.bottomAnchor).isActive = true
-        self.bottomScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.bottomScrollView.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
-        self.bottomScrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
-        self.bottomScrollView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+        self.bottomController.view.topAnchor.constraint(equalTo: self.roomIndicatorController.roomCollectionView.bottomAnchor).isActive = true
+        self.bottomController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.bottomController.view.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
+        self.bottomController.view.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
+        self.bottomController.view.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
     }
 }
 
@@ -111,20 +111,8 @@ extension LiftNavigationController: UIScrollViewDelegate {
             let pageHeight = self.view.bounds.height
             let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
 
-            self.currentFloor = Floor(rawValue: index) ?? self.currentFloor
+            self.setCurrentFloor(Floor(rawValue: index) ?? self.currentFloor)
         }
-    }
-}
-
-//extension LiftNavigationController: RoomIndicatorViewDelegate {
-//    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorController) {
-//       self.bottomScrollView.showPage(at: index)
-//    }
-//}
-
-extension LiftNavigationController: PaginatedScrollViewDelegate {
-    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
-        self.roomIndicatorView.setCurrentRoomNumber(toIndex)
     }
 }
 

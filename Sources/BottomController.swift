@@ -1,14 +1,10 @@
 import UIKit
 
-protocol PaginatedScrollViewDelegate: class {
-    func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView)
-}
+class BottomController: UIViewController {
+    weak var switchableRoomDelegate: SwitchableRoomDelegate?
+    var currentRoom = 0
 
-class BottomScrollView: UIScrollView {
-    open weak var viewDelegate: PaginatedScrollViewDelegate?
     fileprivate unowned var parentController: UIViewController
-
-    fileprivate var currentPage = 0
 
     var bottomViewControllers: [UIViewController]? {
         didSet {
@@ -17,16 +13,21 @@ class BottomScrollView: UIScrollView {
         }
     }
 
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView(withAutoLayout: true)
+        scrollView.isPagingEnabled = true
+        scrollView.scrollsToTop = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.decelerationRate = UIScrollViewDecelerationRateFast
+
+        return scrollView
+    }()
+
     init(parentController: UIViewController) {
         self.parentController = parentController
-        super.init(frame: CGRect.zero)
-
-        self.isPagingEnabled = true
-        self.scrollsToTop = false
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
-        self.delegate = self
-        self.decelerationRate = UIScrollViewDecelerationRateFast
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,20 +35,27 @@ class BottomScrollView: UIScrollView {
     }
 
     func addBottomViewControllersAndConstraints(_ bottomViewControllers: [UIViewController]) {
+        self.view.addSubview(self.scrollView)
+
+        self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.scrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+
         for (index, viewController) in bottomViewControllers.enumerated() {
             viewController.view.translatesAutoresizingMaskIntoConstraints = false
-            self.addSubview(viewController.view)
+            self.scrollView.addSubview(viewController.view)
 
             let isFirstViewController = index == 0
             let isLastViewController = index == bottomViewControllers.count - 1
             let isMiddleViewController = !isFirstViewController && !isLastViewController
 
-            viewController.view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+            viewController.view.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
             viewController.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-            viewController.view.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+            viewController.view.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor).isActive = true
 
             if isFirstViewController {
-                viewController.view.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+                viewController.view.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor).isActive = true
             }
 
             if isMiddleViewController {
@@ -59,7 +67,7 @@ class BottomScrollView: UIScrollView {
                 let priorViewController = bottomViewControllers[index - 1]
                 viewController.view.leftAnchor.constraint(equalTo: priorViewController.view.rightAnchor).isActive = true
 
-                viewController.view.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+                viewController.view.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor).isActive = true
             }
         }
     }
@@ -73,11 +81,11 @@ class BottomScrollView: UIScrollView {
         self.loadScrollViewWithPage(page)
         self.loadScrollViewWithPage(page + 1)
 
-        var contentOffset = self.bounds.origin
-        contentOffset.x = bounds.size.width * CGFloat(page)
+        var contentOffset = self.scrollView.bounds.origin
+        contentOffset.x = self.scrollView.bounds.size.width * CGFloat(page)
         contentOffset.y = 0
 
-        self.setContentOffset(contentOffset, animated: animated)
+        self.scrollView.setContentOffset(contentOffset, animated: animated)
     }
 
     fileprivate func loadScrollViewWithPage(_ page: Int) {
@@ -88,26 +96,38 @@ class BottomScrollView: UIScrollView {
 
         if let controller = self.bottomViewControllers?[page], controller.view.superview == nil {
             self.parentController.addChildViewController(controller)
-            self.addSubview(controller.view)
+            self.scrollView.addSubview(controller.view)
             controller.didMove(toParentViewController: parentController)
         }
     }
 }
 
-extension BottomScrollView: UIScrollViewDelegate {
+extension BottomController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let pageWidth = UIScreen.main.bounds.width
-        let page = Int(floor((contentOffset.x - pageWidth / 2) / pageWidth) + 1)
+        let room = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
 
-        if page != currentPage {
-            self.viewDelegate?.didMove(from: currentPage, to: page, on: self)
+        if room != self.currentRoom {
+            self.setCurrentRoomAndCallDelegate(room)
+
+            self.loadScrollViewWithPage(room - 1)
+            self.loadScrollViewWithPage(room)
+            self.loadScrollViewWithPage(room + 1)
         }
+    }
 
-        self.currentPage = page
-
-        self.loadScrollViewWithPage(page - 1)
-        self.loadScrollViewWithPage(page)
-        self.loadScrollViewWithPage(page + 1)
+    func setCurrentRoomAndCallDelegate(_ room: Int) {
+        self.switchableRoomDelegate?.selectRoomNumber(room)
+        self.setCurrentRoomNumber(room)
     }
 }
+
+extension BottomController: SwitchableRoom, SwitchableRoomDelegate {
+    func setCurrentRoomNumber(_ room: Int) {
+        self.currentRoom = room
+        
+        self.goToPage(room, animated: true)
+    }
+}
+
