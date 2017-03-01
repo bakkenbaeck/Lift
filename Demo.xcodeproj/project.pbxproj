@@ -19,7 +19,7 @@
 		D197BD38969A2DFE125E1809 /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B886DC83940FC38E86DE /* Color+Helpers.swift */; };
 		E655F27C1E6464B200F165C7 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E655F27B1E6464B200F165C7 /* RootViewController.swift */; };
 		E6779F1D1E5310EF0083B1A1 /* BottomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6779F1C1E5310EF0083B1A1 /* BottomScrollView.swift */; };
-		E685B5601E544650006A9CC3 /* RoomIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E685B55F1E544650006A9CC3 /* RoomIndicatorView.swift */; };
+		E685B5601E544650006A9CC3 /* RoomIndicatorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E685B55F1E544650006A9CC3 /* RoomIndicatorController.swift */; };
 		E685B5621E5464B7006A9CC3 /* RoomIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E685B5611E5464B7006A9CC3 /* RoomIndicatorCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,7 +66,7 @@
 		D197BD2E2F0CCFAB91ECE8AC /* Switchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		E655F27B1E6464B200F165C7 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		E6779F1C1E5310EF0083B1A1 /* BottomScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomScrollView.swift; sourceTree = "<group>"; };
-		E685B55F1E544650006A9CC3 /* RoomIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomIndicatorView.swift; sourceTree = "<group>"; };
+		E685B55F1E544650006A9CC3 /* RoomIndicatorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomIndicatorController.swift; sourceTree = "<group>"; };
 		E685B5611E5464B7006A9CC3 /* RoomIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomIndicatorCell.swift; sourceTree = "<group>"; };
 		E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiftNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -131,7 +131,7 @@
 				149D81811DBD2E8000A9EB1A /* Lift.h */,
 				E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */,
 				E6779F1C1E5310EF0083B1A1 /* BottomScrollView.swift */,
-				E685B55F1E544650006A9CC3 /* RoomIndicatorView.swift */,
+				E685B55F1E544650006A9CC3 /* RoomIndicatorController.swift */,
 				E685B5611E5464B7006A9CC3 /* RoomIndicatorCell.swift */,
 				D197BDD88A7252417D0F1F1C /* Protocols */,
 			);
@@ -287,7 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6779F1D1E5310EF0083B1A1 /* BottomScrollView.swift in Sources */,
-				E685B5601E544650006A9CC3 /* RoomIndicatorView.swift in Sources */,
+				E685B5601E544650006A9CC3 /* RoomIndicatorController.swift in Sources */,
 				14E5B15E1E51F5AF003417C1 /* LiftNavigationController.swift in Sources */,
 				E685B5621E5464B7006A9CC3 /* RoomIndicatorCell.swift in Sources */,
 				D197B671F34B9B9F5753F4F6 /* Switchable.swift in Sources */,

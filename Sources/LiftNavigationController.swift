@@ -49,10 +49,8 @@ open class LiftNavigationController: UIViewController {
         return button
     }()
     
-    lazy var roomIndicatorView: RoomIndicatorView = {
-        let roomIndicatorView = RoomIndicatorView()
-        roomIndicatorView.backgroundColor = .white
-        roomIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+    lazy var roomIndicatorView: RoomIndicatorController = {
+        let roomIndicatorView = RoomIndicatorController()
         roomIndicatorView.roomIndicatorDelegate = self
 
         return roomIndicatorView
@@ -80,7 +78,7 @@ open class LiftNavigationController: UIViewController {
 
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.topViewController.view)
-        self.scrollView.addSubview(self.roomIndicatorView)
+        self.scrollView.addSubview(self.roomIndicatorView.roomCollectionView)
         self.scrollView.addSubview(self.switchButton)
         self.scrollView.addSubview(self.bottomScrollView)
 
@@ -94,17 +92,17 @@ open class LiftNavigationController: UIViewController {
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.roomIndicatorView.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
-        self.roomIndicatorView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.roomIndicatorView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.roomIndicatorView.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
+        self.roomIndicatorView.roomCollectionView.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
+        self.roomIndicatorView.roomCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.roomIndicatorView.roomCollectionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.roomIndicatorView.roomCollectionView.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.switchButton.bottomAnchor.constraint(equalTo: self.roomIndicatorView.bottomAnchor).isActive = true
+        self.switchButton.bottomAnchor.constraint(equalTo: self.roomIndicatorView.roomCollectionView.bottomAnchor).isActive = true
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.switchButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
         self.switchButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
 
-        self.bottomScrollView.topAnchor.constraint(equalTo: self.roomIndicatorView.bottomAnchor).isActive = true
+        self.bottomScrollView.topAnchor.constraint(equalTo: self.roomIndicatorView.roomCollectionView.bottomAnchor).isActive = true
         self.bottomScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.bottomScrollView.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
         self.bottomScrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
@@ -136,7 +134,7 @@ extension LiftNavigationController: UIScrollViewDelegate {
 }
 
 extension LiftNavigationController: RoomIndicatorViewDelegate {
-    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView) {
+    func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorController) {
        self.bottomScrollView.showPage(at: index)
     }
 }
