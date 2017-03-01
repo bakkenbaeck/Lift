@@ -41,14 +41,6 @@ open class LiftNavigationController: UIViewController {
         return scrollView
     }()
 
-    lazy var switchButton: UIButton = {
-        let button = UIButton(type: .contactAdd)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
-
-        return button
-    }()
-    
     lazy var roomIndicatorView: RoomIndicatorController = {
         let roomIndicatorView = RoomIndicatorController()
         roomIndicatorView.roomIndicatorDelegate = self
@@ -78,8 +70,7 @@ open class LiftNavigationController: UIViewController {
 
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.topViewController.view)
-        self.scrollView.addSubview(self.roomIndicatorView.roomCollectionView)
-        self.scrollView.addSubview(self.switchButton)
+        self.scrollView.addSubview(self.roomIndicatorView.view)
         self.scrollView.addSubview(self.bottomScrollView)
 
         self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
@@ -92,25 +83,16 @@ open class LiftNavigationController: UIViewController {
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.roomIndicatorView.roomCollectionView.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
-        self.roomIndicatorView.roomCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.roomIndicatorView.roomCollectionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.roomIndicatorView.roomCollectionView.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
-
-        self.switchButton.bottomAnchor.constraint(equalTo: self.roomIndicatorView.roomCollectionView.bottomAnchor).isActive = true
-        self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.switchButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        self.switchButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        self.roomIndicatorView.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
+        self.roomIndicatorView.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.roomIndicatorView.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.roomIndicatorView.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
         self.bottomScrollView.topAnchor.constraint(equalTo: self.roomIndicatorView.roomCollectionView.bottomAnchor).isActive = true
         self.bottomScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.bottomScrollView.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
         self.bottomScrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
         self.bottomScrollView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
-    }
-
-    func didSelectSwitchButton() {
-        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top, onViewController: self)
     }
 }
 

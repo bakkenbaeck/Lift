@@ -10,6 +10,14 @@ class RoomIndicatorController: UIViewController {
 
     weak var roomIndicatorDelegate: RoomIndicatorViewDelegate?
 
+    lazy var switchButton: UIButton = {
+        let button = UIButton(type: .contactAdd)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
+
+        return button
+    }()
+
     lazy var roomCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -52,10 +60,38 @@ class RoomIndicatorController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.backgroundColor = .white
+
+        self.addSubViewsAndConstraints()
+    }
+
+    func addSubViewsAndConstraints() {
+        self.view.addSubview(self.switchButton)
+        self.view.addSubview(self.roomCollectionView)
+
+        self.switchButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.switchButton.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        self.switchButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+
+        self.roomCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.roomCollectionView.leftAnchor.constraint(equalTo: self.switchButton.rightAnchor).isActive = true
+        self.roomCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - 44).isActive = true
+        self.roomCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+    }
+
     func highLightIndex(index: Int) {
         self.selectedRoomIndex = index
         self.roomCollectionView.setContentOffset(CGPoint(x: (CGFloat(index) * RoomIndicatorController.itemWidth) - RoomIndicatorController.leftMargin, y:0), animated: true)
         self.roomCollectionView.reloadData()
+    }
+
+    func didSelectSwitchButton() {
+        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top, onViewController: self)
     }
 }
 
