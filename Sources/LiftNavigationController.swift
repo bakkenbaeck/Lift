@@ -124,7 +124,7 @@ extension LiftNavigationController: UIScrollViewDelegate {
 
 extension LiftNavigationController: PaginatedScrollViewDelegate {
     func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
-        self.roomIndicatorView.highLightIndex(index: toIndex )
+        self.roomIndicatorView.setCurrentRoomNumber(toIndex)
     }
 }
 

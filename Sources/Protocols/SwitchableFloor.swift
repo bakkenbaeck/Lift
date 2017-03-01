@@ -14,6 +14,7 @@ extension SwitchableFloorDelegate where Self: SwitchableFloor {
       self.setCurrentFloor(floor)
     }
 }
+
 protocol SwitchableFloor: class {
    weak var switchableFloorDelegate: SwitchableFloorDelegate? { get  set }
 
