@@ -122,32 +122,30 @@ extension BottomController: UIScrollViewDelegate {
 
 extension BottomController: SwitchableRoomDelegate {
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
-        if let roomIndicatorController = viewController as? RoomIndicatorController {
+        guard let roomIndicatorController = viewController as? RoomIndicatorController else { return }
+        guard contentOffset.x >= 0 else { return }
 
-            let xOffset = contentOffset.x
-            guard xOffset >= 0 else { return }
-            let scrollPercentage = roomIndicatorController.roomCollectionView.contentSize.width / xOffset
-            let xOffsetForBottomScrollView = self.scrollView.contentSize.width / scrollPercentage
-            let newContentOffset = CGPoint(x: xOffsetForBottomScrollView, y: 0)
+        let scrollPercentage = roomIndicatorController.roomCollectionView.contentSize.width / contentOffset.x
+        let xOffsetForBottomScrollView = self.scrollView.contentSize.width / scrollPercentage
+        let newContentOffset = CGPoint(x: xOffsetForBottomScrollView, y: 0)
 
-            var scrollBounds = scrollView.bounds
-            scrollBounds.origin = newContentOffset
+        var scrollBounds = self.scrollView.bounds
+        scrollBounds.origin = newContentOffset
 
-            UIView.animate(withDuration: 0.2, animations: {
-                self.scrollView.bounds = scrollBounds
-            }, completion: { b in
-                let pageWidth = UIScreen.main.bounds.width
-                let room = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
+        UIView.animate(withDuration: 0.2, animations: {
+            self.scrollView.bounds = scrollBounds
+        }, completion: { b in
+            let pageWidth = UIScreen.main.bounds.width
+            let room = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
 
-                if room != self.currentRoom {
-                    self.currentRoom = room
+            if room != self.currentRoom {
+                self.currentRoom = room
 
-                    self.loadScrollViewWithPage(room - 1)
-                    self.loadScrollViewWithPage(room)
-                    self.loadScrollViewWithPage(room + 1)
-                }
-            })
-        }
+                self.loadScrollViewWithPage(room - 1)
+                self.loadScrollViewWithPage(room)
+                self.loadScrollViewWithPage(room + 1)
+            }
+        })
     }
 }
 

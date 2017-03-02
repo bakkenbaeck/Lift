@@ -2,7 +2,7 @@ import UIKit
 
 class RoomIndicatorController: UIViewController {
     static let itemWidth = CGFloat(100.0)
-    static let leftMargin = (UIScreen.main.bounds.width - RoomIndicatorController.itemWidth) * 0.5
+    static let buttonWidth = CGFloat(44.0)
 
     weak var switchableFloorDelegate: SwitchableFloorDelegate?
     weak var switchableRoomDelegate: SwitchableRoomDelegate?
@@ -21,7 +21,7 @@ class RoomIndicatorController: UIViewController {
     }()
 
     lazy var roomCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = RoomCollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: RoomIndicatorController.itemWidth, height: LiftNavigationController.navigationBarHeight)
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -92,6 +92,7 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
+
         cell.titleLabel.text = self.roomTitles[indexPath.row]
         if indexPath.row == self.currentRoom {
             cell.titleLabel.textColor = .black
@@ -103,7 +104,7 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       self.currentRoom = indexPath.row
+       self.setCurrentRoomNumber(indexPath.row)
     }
 }
 
@@ -118,7 +119,7 @@ extension RoomIndicatorController: SwitchableFloor {
 
     func setCurrentRoomNumber(_ room: Int) {
         self.currentRoom = room
-        self.roomCollectionView.setContentOffset(CGPoint(x: (CGFloat(room) * RoomIndicatorController.itemWidth) - RoomIndicatorController.leftMargin, y:0), animated: true)
+        self.roomCollectionView.setContentOffset(, animated: true)
         self.roomCollectionView.reloadData()
     }
 }
@@ -127,27 +128,25 @@ extension RoomIndicatorController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.switchableRoomDelegate?.viewController(self, didScrollTo: scrollView.contentOffset)
-
-        self.currentRoom = self.roomCollectionView.indexPathForItem(at: scrollView.contentOffset)?.row ?? self.currentRoom
     }
 }
 
 extension RoomIndicatorController: SwitchableRoomDelegate {
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
-        if let bottomController = viewController as? BottomController {
-            let xOffset = contentOffset.x
-            let scrollPercentage = bottomController.scrollView.contentSize.width / xOffset
-            let xOffsetForRoomIndicatorController = self.roomCollectionView.contentSize.width / scrollPercentage
-            let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController, y: 0)
+        guard let bottomController = viewController as? BottomController else { return }
+        guard contentOffset.x >= 0 else { return }
 
-            var scrollBounds = self.roomCollectionView.bounds
-            scrollBounds.origin = newContentOffset
+        let scrollPercentage = bottomController.scrollView.contentSize.width / contentOffset.x
+        let xOffsetForRoomIndicatorController = self.roomCollectionView.contentSize.width / scrollPercentage
+        let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController, y: 0)
 
-            UIView.animate(withDuration: 0.2, animations: {
-                self.roomCollectionView.bounds = scrollBounds
-            }, completion: { b in
-                self.currentRoom = self.roomCollectionView.indexPathForItem(at: contentOffset)?.row ?? self.currentRoom
-            })
-        }
+        var scrollBounds = self.roomCollectionView.bounds
+        scrollBounds.origin = newContentOffset
+
+        UIView.animate(withDuration: 0.2, animations: {
+            self.roomCollectionView.bounds = scrollBounds
+        }, completion: { b in
+            self.currentRoom = self.roomCollectionView.indexPathForItem(at: contentOffset)?.row ?? self.currentRoom
+        })
     }
 }
