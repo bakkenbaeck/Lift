@@ -113,7 +113,8 @@ extension LiftNavigationController: UIScrollViewDelegate {
             let pageHeight = self.view.bounds.height
             let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
 
-            self.setCurrentFloor(Floor(rawValue: index) ?? self.currentFloor)
+            guard let floorType = Floor(rawValue: index), floorType != self.currentFloor else { return }
+            self.setCurrentFloor(floorType)
         }
     }
 }

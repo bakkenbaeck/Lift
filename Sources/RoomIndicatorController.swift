@@ -141,23 +141,22 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.setCurrentRoomNumber(indexPath.row)
     }
-}
-
-extension RoomIndicatorController: SwitchableFloor {
-
-    func didMoveToTop() {
-        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
-    }
-
-    func didMoveToBottom() {
-        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
-    }
-
     func setCurrentRoomNumber(_ room: Int) {
         self.currentRoom = room
         self.roomCollectionView.setContentOffset(CGPoint(x: RoomIndicatorController.itemWidth * CGFloat(room), y: 0), animated: true)
         self.roomCollectionView.reloadData()
         self.switchableRoomDelegate?.viewController(self, didSelectRoom: room)
+    }
+}
+
+extension RoomIndicatorController: SwitchableFloor {
+
+    func moveToTop() {
+        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
+    }
+
+    func moveToBottom() {
+        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
     }
 }
 
