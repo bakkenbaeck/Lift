@@ -126,17 +126,22 @@ extension RoomIndicatorController: SwitchableFloor {
 extension RoomIndicatorController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.switchableRoomDelegate?.viewController(self, requestToScrollTo: scrollView.contentOffset)
+        self.switchableRoomDelegate?.viewController(self, didScrollTo: scrollView.contentOffset)
 
         self.currentRoom = self.roomCollectionView.indexPathForItem(at: scrollView.contentOffset)?.row ?? self.currentRoom
     }
 }
 
 extension RoomIndicatorController: SwitchableRoomDelegate {
-    func viewController(_ viewController: UIViewController, requestToScrollTo contentOffset: CGPoint) {
-        if let _ = viewController as? BottomController {
+    func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
+        if let bottomController = viewController as? BottomController {
+            let xOffset = contentOffset.x
+            let scrollPercentage = bottomController.scrollView.contentSize.width / xOffset
+            let xOffsetForRoomIndicatorController = self.roomCollectionView.contentSize.width / scrollPercentage
+            let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController, y: 0)
+
             var scrollBounds = self.roomCollectionView.bounds
-            scrollBounds.origin = contentOffset
+            scrollBounds.origin = newContentOffset
 
             UIView.animate(withDuration: 0.2, animations: {
                 self.roomCollectionView.bounds = scrollBounds

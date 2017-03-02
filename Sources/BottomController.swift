@@ -105,7 +105,7 @@ class BottomController: UIViewController {
 extension BottomController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.switchableRoomDelegate?.viewController(self, requestToScrollTo: scrollView.contentOffset)
+        self.switchableRoomDelegate?.viewController(self, didScrollTo: scrollView.contentOffset)
 
         let pageWidth = UIScreen.main.bounds.width
         let room = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
@@ -121,10 +121,17 @@ extension BottomController: UIScrollViewDelegate {
 }
 
 extension BottomController: SwitchableRoomDelegate {
-    func viewController(_ viewController: UIViewController, requestToScrollTo contentOffset: CGPoint) {
-        if let _ = viewController as? RoomIndicatorController {
+    func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
+        if let roomIndicatorController = viewController as? RoomIndicatorController {
+
+            let xOffset = contentOffset.x
+            guard xOffset >= 0 else { return }
+            let scrollPercentage = roomIndicatorController.roomCollectionView.contentSize.width / xOffset
+            let xOffsetForBottomScrollView = self.scrollView.contentSize.width / scrollPercentage
+            let newContentOffset = CGPoint(x: xOffsetForBottomScrollView, y: 0)
+
             var scrollBounds = scrollView.bounds
-            scrollBounds.origin = contentOffset
+            scrollBounds.origin = newContentOffset
 
             UIView.animate(withDuration: 0.2, animations: {
                 self.scrollView.bounds = scrollBounds

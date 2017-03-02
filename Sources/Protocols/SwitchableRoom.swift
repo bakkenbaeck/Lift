@@ -1,7 +1,7 @@
 import UIKit
 
 protocol SwitchableRoomDelegate: class {
-    func viewController(_ viewController: UIViewController, requestToScrollTo contentOffset: CGPoint)
+    func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint)
 }
 
 //protocol SwitchableRoom: class {
