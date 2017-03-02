@@ -1,6 +1,7 @@
 import UIKit
 
 public extension UIColor {
+
     public convenience init(hex: String) {
         let noHashString = hex.replacingOccurrences(of: "#", with: "")
         let scanner = Scanner(string: noHashString)

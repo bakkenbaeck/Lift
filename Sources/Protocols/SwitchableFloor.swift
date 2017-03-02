@@ -10,27 +10,29 @@ protocol SwitchableFloorDelegate: class {
 }
 
 extension SwitchableFloorDelegate where Self: SwitchableFloor {
+
     func selectFloor(_ floor: Floor) {
-      self.setCurrentFloor(floor)
+        self.setCurrentFloor(floor)
     }
 }
 
 protocol SwitchableFloor: class {
-   weak var switchableFloorDelegate: SwitchableFloorDelegate? { get  set }
+    weak var switchableFloorDelegate: SwitchableFloorDelegate? { get set }
 
     var currentFloor: Floor { get set }
     func setCurrentFloor(_ floor: Floor)
 
-    func didMoveToTop()
-    func didMoveToBottom()
+    func moveToTop()
+    func moveToBottom()
 }
 
 extension SwitchableFloor {
+
     func setCurrentFloor(_ floor: Floor) {
         if floor == .top {
-            self.didMoveToTop()
+            self.moveToTop()
         } else if floor == .bottom {
-            self.didMoveToBottom()
+            self.moveToBottom()
         }
         self.currentFloor = floor
         self.switchableFloorDelegate?.selectFloor(floor)

@@ -2,7 +2,8 @@ import UIKit
 import Lift
 
 class RootViewController: LiftNavigationController {
-    override public init() {
+
+    public override init() {
         super.init()
 
         let topViewController = UIViewController()

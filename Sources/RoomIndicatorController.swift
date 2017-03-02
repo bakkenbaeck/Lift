@@ -63,7 +63,7 @@ class RoomIndicatorController: UIViewController {
         return gestureRecognizer
     }()
 
-    init(){
+    init() {
         super.init(nibName: nil, bundle: nil)
 
         self.roomCollectionView.delegate = self
@@ -72,7 +72,7 @@ class RoomIndicatorController: UIViewController {
 
         self.setCurrentRoomNumber(0)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -90,7 +90,6 @@ class RoomIndicatorController: UIViewController {
         self.view.addSubview(self.switchButton)
         self.view.addSubview(self.roomCollectionView)
 
-
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
 
@@ -104,7 +103,7 @@ class RoomIndicatorController: UIViewController {
         self.roomCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - 44).isActive = true
         self.roomCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
     }
-    
+
     func didSelectSwitchButton() {
         self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top)
     }
@@ -121,12 +120,13 @@ class RoomIndicatorController: UIViewController {
 }
 
 extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       return roomTitles.count
+        return roomTitles.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
 
         cell.titleLabel.text = self.roomTitles[indexPath.row]
         if indexPath.row == self.currentRoom {
@@ -134,16 +134,17 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
         } else {
             cell.titleLabel.textColor = .gray
         }
-        
+
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       self.setCurrentRoomNumber(indexPath.row)
+        self.setCurrentRoomNumber(indexPath.row)
     }
 }
 
 extension RoomIndicatorController: SwitchableFloor {
+
     func didMoveToTop() {
         self.switchableFloorDelegate?.selectFloor(self.currentFloor)
     }
@@ -161,6 +162,7 @@ extension RoomIndicatorController: SwitchableFloor {
 }
 
 extension RoomIndicatorController: ScrollableRoomDelegate {
+
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
         guard let bottomController = viewController as? BottomController else { return }
         guard contentOffset.x >= 0 else { return }

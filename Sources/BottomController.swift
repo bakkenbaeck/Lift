@@ -121,6 +121,7 @@ extension BottomController: UIScrollViewDelegate {
 }
 
 extension BottomController: SwitchableRoomDelegate {
+
     func viewController(_ viewController: UIViewController, didSelectRoom room: Int) {
         guard let roomIndicatorController = viewController as? RoomIndicatorController else { return }
 
@@ -143,4 +144,3 @@ extension BottomController: SwitchableRoomDelegate {
         })
     }
 }
-

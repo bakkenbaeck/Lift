@@ -12,7 +12,7 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
     open var bottomViewControllers = [UIViewController]() {
         didSet {
             self.bottomController.bottomViewControllers = bottomViewControllers
-            self.roomIndicatorController.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? ""}
+            self.roomIndicatorController.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? "" }
         }
     }
 
@@ -20,7 +20,7 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
     var shouldEvaluatePageChange = false
 
     lazy var scrollView: UIScrollView = {
-       let scrollView = UIScrollView()
+        let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true
         scrollView.scrollsToTop = false
@@ -99,6 +99,7 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
 }
 
 extension LiftNavigationController: UIScrollViewDelegate {
+
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.shouldEvaluatePageChange = true
     }
@@ -118,13 +119,14 @@ extension LiftNavigationController: UIScrollViewDelegate {
 }
 
 extension LiftNavigationController: SwitchableFloor {
-    func didMoveToTop() {
+
+    func moveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
         scrollView.setContentOffset(origin, animated: true)
     }
 
-    func didMoveToBottom() {
+    func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
         scrollView.setContentOffset(origin, animated: true)
