@@ -17,7 +17,6 @@
 		14E5B1601E51F5C0003417C1 /* LiftNavigationController.swift in Headers */ = {isa = PBXBuildFile; fileRef = E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		D197B4443D4CC7303FBFFD7F /* SwitchableRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B0A4F9D93326F970C515 /* SwitchableRoom.swift */; };
 		D197B671F34B9B9F5753F4F6 /* SwitchableFloor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197BD2E2F0CCFAB91ECE8AC /* SwitchableFloor.swift */; };
-		D197B8586CA860DDA5272276 /* RoomCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B361F95F4EED426CC450 /* RoomCollectionViewFlowLayout.swift */; };
 		D197B958C5E53B406D21A911 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B100E69B6BD2E61A4B12 /* UIView+Helpers.swift */; };
 		D197BD38969A2DFE125E1809 /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B886DC83940FC38E86DE /* Color+Helpers.swift */; };
 		E655F27C1E6464B200F165C7 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E655F27B1E6464B200F165C7 /* RootViewController.swift */; };
@@ -67,7 +66,6 @@
 		14F393961CC6517E00616696 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		D197B0A4F9D93326F970C515 /* SwitchableRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchableRoom.swift; sourceTree = "<group>"; };
 		D197B100E69B6BD2E61A4B12 /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
-		D197B361F95F4EED426CC450 /* RoomCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		D197B886DC83940FC38E86DE /* Color+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Helpers.swift"; sourceTree = "<group>"; };
 		D197BD2E2F0CCFAB91ECE8AC /* SwitchableFloor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchableFloor.swift; sourceTree = "<group>"; };
 		E655F27B1E6464B200F165C7 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -141,7 +139,6 @@
 				E685B5611E5464B7006A9CC3 /* RoomIndicatorCell.swift */,
 				D197BDD88A7252417D0F1F1C /* Protocols */,
 				D197BE879B6CD014D6EB9A80 /* Extensions */,
-				D197B361F95F4EED426CC450 /* RoomCollectionViewFlowLayout.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -310,7 +307,6 @@
 				D197B671F34B9B9F5753F4F6 /* SwitchableFloor.swift in Sources */,
 				D197B958C5E53B406D21A911 /* UIView+Helpers.swift in Sources */,
 				D197B4443D4CC7303FBFFD7F /* SwitchableRoom.swift in Sources */,
-				D197B8586CA860DDA5272276 /* RoomCollectionViewFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

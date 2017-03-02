@@ -21,7 +21,7 @@ class RoomIndicatorController: UIViewController {
     }()
 
     lazy var roomCollectionView: UICollectionView = {
-        let layout = RoomCollectionViewFlowLayout()
+        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: RoomIndicatorController.itemWidth, height: LiftNavigationController.navigationBarHeight)
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -32,12 +32,13 @@ class RoomIndicatorController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
+        collectionView.isScrollEnabled = false
         collectionView.isPagingEnabled = true
         collectionView.scrollsToTop = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
-        collectionView.contentInset = UIEdgeInsetsMake(0, RoomIndicatorController.leftMargin, 0, 0)
+        collectionView.contentInset = UIEdgeInsetsMake(0, RoomIndicatorController.buttonWidth, 0, 0)
 
         return collectionView
     }()
@@ -119,19 +120,13 @@ extension RoomIndicatorController: SwitchableFloor {
 
     func setCurrentRoomNumber(_ room: Int) {
         self.currentRoom = room
-        self.roomCollectionView.setContentOffset(, animated: true)
+        self.roomCollectionView.setContentOffset(CGPoint(x: RoomIndicatorController.itemWidth * CGFloat(room), y: 0), animated: true)
         self.roomCollectionView.reloadData()
+        self.switchableRoomDelegate?.viewController(self, didSelectRoom: room)
     }
 }
 
-extension RoomIndicatorController: UIScrollViewDelegate {
-
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.switchableRoomDelegate?.viewController(self, didScrollTo: scrollView.contentOffset)
-    }
-}
-
-extension RoomIndicatorController: SwitchableRoomDelegate {
+extension RoomIndicatorController: ScrollableRoomDelegate {
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
         guard let bottomController = viewController as? BottomController else { return }
         guard contentOffset.x >= 0 else { return }

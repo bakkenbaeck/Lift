@@ -50,7 +50,7 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
         super.init(nibName: nil, bundle: nil)
 
         self.roomIndicatorController.switchableRoomDelegate = self.bottomController
-        self.bottomController.switchableRoomDelegate = self.roomIndicatorController
+        self.bottomController.scrollableRoomDelegate = self.roomIndicatorController
     }
 
     public required init?(coder aDecoder: NSCoder) {
