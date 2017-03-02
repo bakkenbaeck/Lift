@@ -41,9 +41,10 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
     }()
 
     lazy var roomIndicatorController: RoomIndicatorController = {
-        let roomIndicatorView = RoomIndicatorController()
+        let roomIndicatorController = RoomIndicatorController()
+        roomIndicatorController.switchableFloorDelegate = self
 
-        return roomIndicatorView
+        return roomIndicatorController
     }()
 
     public init() {
