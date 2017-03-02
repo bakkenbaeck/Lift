@@ -105,29 +105,42 @@ class BottomController: UIViewController {
 extension BottomController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.switchableRoomDelegate?.viewController(self, requestToScrollTo: scrollView.contentOffset)
+
         let pageWidth = UIScreen.main.bounds.width
         let room = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
 
         if room != self.currentRoom {
-            self.setCurrentRoomAndCallDelegate(room)
+            self.currentRoom = room
 
             self.loadScrollViewWithPage(room - 1)
             self.loadScrollViewWithPage(room)
             self.loadScrollViewWithPage(room + 1)
         }
     }
-
-    func setCurrentRoomAndCallDelegate(_ room: Int) {
-        self.switchableRoomDelegate?.selectRoomNumber(room)
-        self.setCurrentRoomNumber(room)
-    }
 }
 
-extension BottomController: SwitchableRoom, SwitchableRoomDelegate {
-    func setCurrentRoomNumber(_ room: Int) {
-        self.currentRoom = room
-        
-        self.goToPage(room, animated: true)
+extension BottomController: SwitchableRoomDelegate {
+    func viewController(_ viewController: UIViewController, requestToScrollTo contentOffset: CGPoint) {
+        if let _ = viewController as? RoomIndicatorController {
+            var scrollBounds = scrollView.bounds
+            scrollBounds.origin = contentOffset
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.scrollView.bounds = scrollBounds
+            }, completion: { b in
+                let pageWidth = UIScreen.main.bounds.width
+                let room = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
+
+                if room != self.currentRoom {
+                    self.currentRoom = room
+
+                    self.loadScrollViewWithPage(room - 1)
+                    self.loadScrollViewWithPage(room)
+                    self.loadScrollViewWithPage(room + 1)
+                }
+            })
+        }
     }
 }
 
