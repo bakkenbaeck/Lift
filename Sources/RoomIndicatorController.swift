@@ -94,13 +94,14 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
 
+        cell.delegate = self
         cell.titleLabel.text = self.roomTitles[indexPath.row]
         if indexPath.row == self.currentRoom {
             cell.titleLabel.textColor = .black
         } else {
             cell.titleLabel.textColor = .gray
         }
-
+        
         return cell
     }
 
@@ -143,5 +144,17 @@ extension RoomIndicatorController: ScrollableRoomDelegate {
         }, completion: { b in
             self.currentRoom = self.roomCollectionView.indexPathForItem(at: contentOffset)?.row ?? self.currentRoom
         })
+    }
+}
+
+extension RoomIndicatorController: RoomIndicatorCellDelegate {
+    func didSwipeRight(on cell: RoomIndicatorCell) {
+       guard let roomNumberForCell = self.roomCollectionView.indexPath(for: cell)?.row, roomNumberForCell > 0 else { return }
+        self.setCurrentRoomNumber(roomNumberForCell - 1)
+    }
+
+    func didSwipeLeft(on cell: RoomIndicatorCell) {
+        guard let roomNumberForCell = self.roomCollectionView.indexPath(for: cell)?.row, roomNumberForCell < (self.roomTitles.count - 1) else { return }
+        self.setCurrentRoomNumber(roomNumberForCell + 1)
     }
 }
