@@ -141,6 +141,7 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.setCurrentRoomNumber(indexPath.row)
     }
+    
     func setCurrentRoomNumber(_ room: Int) {
         self.currentRoom = room
         self.roomCollectionView.setContentOffset(CGPoint(x: RoomIndicatorController.itemWidth * CGFloat(room), y: 0), animated: true)
@@ -173,10 +174,11 @@ extension RoomIndicatorController: ScrollableRoomDelegate {
         var scrollBounds = self.roomCollectionView.bounds
         scrollBounds.origin = newContentOffset
 
+        self.currentRoom = self.roomCollectionView.indexPathForItem(at: newContentOffset)?.row ?? self.currentRoom
         UIView.animate(withDuration: 0.2, animations: {
             self.roomCollectionView.bounds = scrollBounds
         }, completion: { b in
-            self.currentRoom = self.roomCollectionView.indexPathForItem(at: contentOffset)?.row ?? self.currentRoom
+            self.roomCollectionView.reloadData()
         })
     }
 }
