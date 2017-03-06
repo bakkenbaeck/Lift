@@ -47,6 +47,13 @@ open class LiftNavigationController: UIViewController {
         return roomIndicatorController
     }()
 
+    lazy var contentView: UIView = {
+        let view = UIView(withAutoLayout: true)
+        view.backgroundColor = .clear
+
+        return view
+    }()
+
     public init() {
         super.init(nibName: nil, bundle: nil)
 
@@ -73,16 +80,25 @@ open class LiftNavigationController: UIViewController {
         self.view.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
 
         self.view.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.topViewController.view)
-        self.scrollView.addSubview(self.roomIndicatorController.view)
-        self.scrollView.addSubview(self.bottomController.view)
+        self.scrollView.addSubview(self.contentView)
+
+        self.contentView.addSubview(self.topViewController.view)
+        self.contentView.addSubview(self.roomIndicatorController.view)
+        self.contentView.addSubview(self.bottomController.view)
 
         self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.scrollView.heightAnchor.constraint(greaterThanOrEqualTo: self.view.heightAnchor).isActive = true
+        self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
-        self.topViewController.view.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+        self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+        self.contentView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor).isActive = true
+        self.contentView.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor).isActive = true
+        self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+
+        self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor).isActive = true
+
+        self.topViewController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         self.topViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
@@ -96,7 +112,7 @@ open class LiftNavigationController: UIViewController {
         self.bottomController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.bottomController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.bottomController.view.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
-        self.bottomController.view.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+        self.bottomController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
     }
 }
 
