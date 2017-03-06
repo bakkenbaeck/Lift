@@ -117,6 +117,7 @@ extension LiftNavigationController: UIScrollViewDelegate {
 
             guard let floorType = Floor(rawValue: index), floorType != self.currentFloor else { return }
             self.setCurrentFloor(floorType)
+            self.switchableFloorDelegate?.didSwipeToFloor(floorType, on: self)
         }
     }
 }

@@ -112,7 +112,8 @@ class RoomIndicatorController: UIViewController {
     }
 
     func didSelectSwitchButton() {
-        self.selectFloor(self.currentFloor == .top ? .bottom : .top)
+        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top)
+        self.switchableFloorDelegate?.didNavigateToFloor(self.currentFloor, on: self)
     }
 
     func didSwipeRight() {
@@ -177,8 +178,7 @@ extension RoomIndicatorController: SwitchableFloor, SwitchableFloorDelegate {
         self.view.setNeedsLayout()
     }
 
-    func selectFloor(_ floor: Floor) {
-        self.switchableFloorDelegate?.didNavigateToFloor(floor, on: self)
+    func didSwipeToFloor(_ floor: Floor, on viewController: LiftNavigationController){
         self.setCurrentFloor(floor)
     }
 }
