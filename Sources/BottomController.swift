@@ -47,13 +47,15 @@ class BottomController: UIViewController {
 
         self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: self.view.bounds.width).isActive = true
-        self.scrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
         self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
         self.contentView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor).isActive = true
-        self.contentView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        self.contentView.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor).isActive = true
+        self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+
+        self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor).isActive = true
 
         for (index, viewController) in bottomViewControllers.enumerated() {
             viewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -63,12 +65,12 @@ class BottomController: UIViewController {
             let isLastViewController = index == bottomViewControllers.count - 1
             let isMiddleViewController = !isFirstViewController && !isLastViewController
 
-            viewController.view.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+            viewController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
             viewController.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-            viewController.view.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor).isActive = true
+            viewController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 
             if isFirstViewController {
-                viewController.view.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor).isActive = true
+                viewController.view.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
             }
 
             if isMiddleViewController {
@@ -80,7 +82,7 @@ class BottomController: UIViewController {
                 let priorViewController = bottomViewControllers[index - 1]
                 viewController.view.leftAnchor.constraint(equalTo: priorViewController.view.rightAnchor).isActive = true
 
-                viewController.view.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor).isActive = true
+                viewController.view.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
             }
         }
     }
