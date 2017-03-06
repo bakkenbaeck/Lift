@@ -152,7 +152,7 @@ extension LiftNavigationController: SwitchableFloor, SwitchableFloorDelegate {
         scrollView.setContentOffset(origin, animated: true)
     }
 
-    func didNavigateToFloor(_ floor: Floor, on viewController: RoomIndicatorController) {
+    func didNavigateToFloor(_ floor: Floor, on viewController: UIViewController) {
         self.setCurrentFloor(floor)
     }
 }

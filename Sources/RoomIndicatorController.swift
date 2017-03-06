@@ -181,7 +181,7 @@ extension RoomIndicatorController: SwitchableFloor, SwitchableFloorDelegate {
         self.view.setNeedsLayout()
     }
 
-    func didSwipeToFloor(_ floor: Floor, on viewController: LiftNavigationController) {
+    func didSwipeToFloor(_ floor: Floor, on viewController: UIViewController) {
         self.setCurrentFloor(floor)
     }
 }

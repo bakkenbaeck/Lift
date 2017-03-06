@@ -2,6 +2,8 @@ import UIKit
 
 class BottomController: UIViewController {
     weak var scrollableRoomDelegate: ScrollableRoomDelegate?
+    weak var switchableFloorDelegate: SwitchableFloorDelegate?
+
     var currentRoom = 0
 
     fileprivate unowned var parentController: UIViewController
@@ -58,6 +60,7 @@ class BottomController: UIViewController {
         self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor).isActive = true
 
         for (index, viewController) in bottomViewControllers.enumerated() {
+            viewController.bottomContentViewControllerDelegate = self
             viewController.view.translatesAutoresizingMaskIntoConstraints = false
             self.contentView.addSubview(viewController.view)
 
@@ -157,5 +160,12 @@ extension BottomController: SwitchableRoomDelegate {
                 self.loadScrollViewWithPage(room + 1)
             }
         })
+    }
+}
+
+
+extension BottomController: BottomContentViewControllerDelegate {
+    func requestToSwitchToTop(from bottomContentViewController: BottomContentViewController) {
+      self.switchableFloorDelegate?.didNavigateToFloor(.top, on: self)
     }
 }
