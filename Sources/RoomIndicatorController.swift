@@ -22,6 +22,9 @@ class RoomIndicatorController: UIViewController {
         let button = UIButton(type: .contactAdd)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
+        button.contentHorizontalAlignment = .left
+        button.backgroundColor = .clear
+        button.contentEdgeInsets = UIEdgeInsetsMake(10, 20, 0, 0)
 
         return button
     }()
@@ -106,7 +109,7 @@ class RoomIndicatorController: UIViewController {
         self.switchButtonWidthAnchor?.isActive = true
 
         self.roomCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.roomCollectionView.leftAnchor.constraint(equalTo: self.switchButton.rightAnchor).isActive = true
+        self.roomCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: RoomIndicatorController.buttonWidth).isActive = true
         self.roomCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - RoomIndicatorController.buttonWidth).isActive = true
         self.roomCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
     }
