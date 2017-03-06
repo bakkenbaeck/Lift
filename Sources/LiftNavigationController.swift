@@ -9,7 +9,7 @@ open class LiftNavigationController: UIViewController {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    open var bottomViewControllers = [UIViewController]() {
+    open var bottomViewControllers = [BottomContentViewController]() {
         didSet {
             self.bottomController.bottomViewControllers = bottomViewControllers
             self.roomIndicatorController.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? "" }

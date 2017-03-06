@@ -6,7 +6,7 @@ class BottomController: UIViewController {
 
     fileprivate unowned var parentController: UIViewController
 
-    var bottomViewControllers: [UIViewController]? {
+    var bottomViewControllers: [BottomContentViewController]? {
         didSet {
             guard let bottomViewControllers = self.bottomViewControllers else { return }
             self.addBottomViewControllersAndConstraints(bottomViewControllers)
@@ -41,7 +41,7 @@ class BottomController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addBottomViewControllersAndConstraints(_ bottomViewControllers: [UIViewController]) {
+    func addBottomViewControllersAndConstraints(_ bottomViewControllers: [BottomContentViewController]) {
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
 
