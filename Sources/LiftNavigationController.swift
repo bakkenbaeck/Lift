@@ -36,6 +36,7 @@ open class LiftNavigationController: UIViewController {
         let controller = BottomController(parentController: self)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         controller.view.backgroundColor = .white
+        controller.switchableFloorDelegate = self
 
         return controller
     }()
