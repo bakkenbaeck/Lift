@@ -138,7 +138,7 @@ extension BottomController: UIScrollViewDelegate {
 extension BottomController: SwitchableRoomDelegate {
 
     func viewController(_ viewController: UIViewController, didSelectRoom room: Int) {
-        guard let roomIndicatorController = viewController as? RoomIndicatorController else { return }
+        guard let _ = viewController as? RoomIndicatorController else { return }
 
         var scrollBounds = self.scrollView.bounds
         scrollBounds.origin.x = self.view.bounds.width * CGFloat(room)
