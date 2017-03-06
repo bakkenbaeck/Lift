@@ -16,6 +16,8 @@ class RoomIndicatorController: UIViewController {
 
     var roomTitles = [String]()
 
+    var switchButtonWidthAnchor: NSLayoutConstraint?
+
     lazy var switchButton: UIButton = {
         let button = UIButton(type: .contactAdd)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -44,6 +46,8 @@ class RoomIndicatorController: UIViewController {
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         collectionView.contentInset = UIEdgeInsetsMake(0, RoomIndicatorController.buttonWidth, 0, 0)
 
+        collectionView.isUserInteractionEnabled = false
+
         return collectionView
     }()
 
@@ -51,6 +55,7 @@ class RoomIndicatorController: UIViewController {
         let gestureRecognizer = UISwipeGestureRecognizer()
         gestureRecognizer.direction = .left
         gestureRecognizer.addTarget(self, action: #selector(didSwipeLeft))
+        gestureRecognizer.isEnabled = false
 
         return gestureRecognizer
     }()
@@ -59,6 +64,7 @@ class RoomIndicatorController: UIViewController {
         let gestureRecognizer = UISwipeGestureRecognizer()
         gestureRecognizer.direction = .right
         gestureRecognizer.addTarget(self, action: #selector(didSwipeRight))
+        gestureRecognizer.isEnabled = false
 
         return gestureRecognizer
     }()
@@ -96,16 +102,17 @@ class RoomIndicatorController: UIViewController {
         self.switchButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.switchButton.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
-        self.switchButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        self.switchButtonWidthAnchor = self.switchButton.widthAnchor.constraint(equalToConstant: self.view.bounds.width)
+        self.switchButtonWidthAnchor?.isActive = true
 
         self.roomCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.roomCollectionView.leftAnchor.constraint(equalTo: self.switchButton.rightAnchor).isActive = true
-        self.roomCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - 44).isActive = true
+        self.roomCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - RoomIndicatorController.buttonWidth).isActive = true
         self.roomCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
     }
 
     func didSelectSwitchButton() {
-        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top)
+        self.selectFloor(self.currentFloor == .top ? .bottom : .top)
     }
 
     func didSwipeRight() {
@@ -150,14 +157,29 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     }
 }
 
-extension RoomIndicatorController: SwitchableFloor {
+extension RoomIndicatorController: SwitchableFloor, SwitchableFloorDelegate {
 
     func moveToTop() {
-        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
+        self.roomCollectionView.isUserInteractionEnabled = false
+        self.swipeLeftRecognizer.isEnabled = false
+        self.swipeRightRecognizer.isEnabled = false
+
+        self.switchButtonWidthAnchor?.constant = self.view.bounds.width
+        self.view.setNeedsLayout()
     }
 
     func moveToBottom() {
-        self.switchableFloorDelegate?.selectFloor(self.currentFloor)
+        self.roomCollectionView.isUserInteractionEnabled = true
+        self.swipeLeftRecognizer.isEnabled = true
+        self.swipeRightRecognizer.isEnabled = true
+
+        self.switchButtonWidthAnchor?.constant = RoomIndicatorController.buttonWidth
+        self.view.setNeedsLayout()
+    }
+
+    func selectFloor(_ floor: Floor) {
+        self.switchableFloorDelegate?.didNavigateToFloor(floor, on: self)
+        self.setCurrentFloor(floor)
     }
 }
 

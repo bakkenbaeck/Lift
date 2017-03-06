@@ -1,6 +1,6 @@
 import UIKit
 
-open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
+open class LiftNavigationController: UIViewController {
     public static let navigationBarHeight = CGFloat(64.0)
     weak var switchableFloorDelegate: SwitchableFloorDelegate?
 
@@ -49,6 +49,8 @@ open class LiftNavigationController: UIViewController, SwitchableFloorDelegate {
 
     public init() {
         super.init(nibName: nil, bundle: nil)
+
+        self.switchableFloorDelegate = self.roomIndicatorController
 
         self.roomIndicatorController.switchableRoomDelegate = self.bottomController
         self.bottomController.scrollableRoomDelegate = self.roomIndicatorController
@@ -119,7 +121,7 @@ extension LiftNavigationController: UIScrollViewDelegate {
     }
 }
 
-extension LiftNavigationController: SwitchableFloor {
+extension LiftNavigationController: SwitchableFloor, SwitchableFloorDelegate {
 
     func moveToTop() {
         var origin = self.view.bounds.origin
@@ -131,5 +133,9 @@ extension LiftNavigationController: SwitchableFloor {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
         scrollView.setContentOffset(origin, animated: true)
+    }
+
+    func didNavigateToFloor(_ floor: Floor, on viewController: RoomIndicatorController) {
+        self.setCurrentFloor(floor)
     }
 }

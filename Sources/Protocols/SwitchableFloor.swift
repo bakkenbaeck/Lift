@@ -6,14 +6,14 @@ enum Floor: Int {
 }
 
 protocol SwitchableFloorDelegate: class {
-    func selectFloor(_ floor: Floor)
+    func didSwipeToFloor(_ floor: Floor, on viewController: LiftNavigationController)
+    func didNavigateToFloor(_ floor: Floor, on viewController: RoomIndicatorController)
 }
 
 extension SwitchableFloorDelegate where Self: SwitchableFloor {
-
-    func selectFloor(_ floor: Floor) {
-        self.setCurrentFloor(floor)
-    }
+    // make the methods optional
+    func didSwipeToFloor(_ floor: Floor, on viewController: LiftNavigationController) {}
+    func didNavigateToFloor(_ floor: Floor, on viewController: RoomIndicatorController) {}
 }
 
 protocol SwitchableFloor: class {
@@ -35,6 +35,5 @@ extension SwitchableFloor {
             self.moveToBottom()
         }
         self.currentFloor = floor
-        self.switchableFloorDelegate?.selectFloor(floor)
     }
 }
