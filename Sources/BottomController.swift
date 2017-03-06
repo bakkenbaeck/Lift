@@ -25,6 +25,13 @@ class BottomController: UIViewController {
         return scrollView
     }()
 
+    lazy var contentView: UIView = {
+        let view = UIView(withAutoLayout: true)
+        view.backgroundColor = .clear
+
+        return view
+    }()
+
     init(parentController: UIViewController) {
         self.parentController = parentController
         super.init(nibName: nil, bundle: nil)
@@ -36,15 +43,21 @@ class BottomController: UIViewController {
 
     func addBottomViewControllersAndConstraints(_ bottomViewControllers: [UIViewController]) {
         self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.contentView)
 
         self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: self.view.bounds.width).isActive = true
         self.scrollView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+
+        self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+        self.contentView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor).isActive = true
+        self.contentView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
 
         for (index, viewController) in bottomViewControllers.enumerated() {
             viewController.view.translatesAutoresizingMaskIntoConstraints = false
-            self.scrollView.addSubview(viewController.view)
+            self.contentView.addSubview(viewController.view)
 
             let isFirstViewController = index == 0
             let isLastViewController = index == bottomViewControllers.count - 1

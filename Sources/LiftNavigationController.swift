@@ -94,7 +94,7 @@ open class LiftNavigationController: UIViewController {
 
         self.bottomController.view.topAnchor.constraint(equalTo: self.roomIndicatorController.roomCollectionView.bottomAnchor).isActive = true
         self.bottomController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.bottomController.view.widthAnchor.constraint(greaterThanOrEqualTo: self.view.widthAnchor).isActive = true
+        self.bottomController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.bottomController.view.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
         self.bottomController.view.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
     }
