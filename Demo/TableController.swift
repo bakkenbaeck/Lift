@@ -47,7 +47,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < 50 {
+        if scrollView.contentOffset.y < -170 {
             self.bottomContentViewControllerDelegate?.requestToSwitchToTop(from: self)
         }
     }

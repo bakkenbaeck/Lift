@@ -29,6 +29,8 @@ protocol SwitchableFloor: class {
 extension SwitchableFloor {
 
     func setCurrentFloor(_ floor: Floor) {
+        guard self.currentFloor != floor else { return }
+
         if floor == .top {
             self.moveToTop()
         } else if floor == .bottom {
