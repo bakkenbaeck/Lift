@@ -10,7 +10,6 @@ class RoomIndicatorCell: UICollectionViewCell {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
 
         return label
     }()
