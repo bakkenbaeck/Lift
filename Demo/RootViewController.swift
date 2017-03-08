@@ -23,13 +23,13 @@ class RootViewController: LiftNavigationController {
         secondViewController.view.layer.borderWidth = 5.0
         secondViewController.view.layer.borderColor = UIColor.liftBlue().cgColor
 
-        let thirdViewController = BottomContentViewController()
+        let thirdViewController = BottomController()
         thirdViewController.title = "Third"
         thirdViewController.view.backgroundColor = .white
         thirdViewController.view.layer.borderWidth = 5.0
         thirdViewController.view.layer.borderColor = UIColor.liftPink().cgColor
 
-        let fourthViewController = BottomContentViewController()
+        let fourthViewController = BottomController()
         fourthViewController.title = "Fourth"
         fourthViewController.view.backgroundColor = .white
         fourthViewController.view.layer.borderWidth = 5.0

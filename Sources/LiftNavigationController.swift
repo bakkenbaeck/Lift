@@ -2,21 +2,24 @@ import UIKit
 
 open class LiftNavigationController: UIViewController {
     public static let navigationBarHeight = CGFloat(64.0)
-    weak var switchableFloorDelegate: SwitchableFloorDelegate?
+    weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
+
+    open var navigationBarFont: UIFont?
+    open var barButtonImage: UIImage?
 
     open var topViewController = UIViewController() {
         didSet {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    open var bottomViewControllers = [BottomContentViewController]() {
+    open var bottomViewControllers = [BottomController]() {
         didSet {
-            self.bottomController.bottomViewControllers = bottomViewControllers
-            self.roomIndicatorController.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? "" }
+            self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
+            self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.title ?? "" }
         }
     }
 
-    var currentFloor: Floor = .top
+    var verticalPosition: VerticalPosition = .top
     var shouldEvaluatePageChange = false
 
     lazy var scrollView: UIScrollView = {
@@ -32,20 +35,23 @@ open class LiftNavigationController: UIViewController {
         return scrollView
     }()
 
-    lazy var bottomController: BottomController = {
-        let controller = BottomController(parentController: self)
+    lazy var bottomScrollViewController: BottomScrollViewController = {
+        let controller = BottomScrollViewController(parentController: self)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         controller.view.backgroundColor = .white
-        controller.switchableFloorDelegate = self
+        controller.verticallySwitchableDelegate = self
 
         return controller
     }()
 
-    lazy var roomIndicatorController: RoomIndicatorController = {
-        let roomIndicatorController = RoomIndicatorController()
-        roomIndicatorController.switchableFloorDelegate = self
+    lazy var navigationBarController: NavigationBarController = {
+        let navigationBarController = NavigationBarController()
+        navigationBarController.verticallySwitchableDelegate = self
 
-        return roomIndicatorController
+        navigationBarController.font = self.navigationBarFont
+        navigationBarController.buttonImage = self.barButtonImage
+
+        return navigationBarController
     }()
 
     lazy var contentView: UIView = {
@@ -58,10 +64,10 @@ open class LiftNavigationController: UIViewController {
     public init() {
         super.init(nibName: nil, bundle: nil)
 
-        self.switchableFloorDelegate = self.roomIndicatorController
+        self.verticallySwitchableDelegate = self.navigationBarController
 
-        self.roomIndicatorController.switchableRoomDelegate = self.bottomController
-        self.bottomController.scrollableRoomDelegate = self.roomIndicatorController
+        self.navigationBarController.horizontallySwitchableDelegate = self.bottomScrollViewController
+        self.bottomScrollViewController.horizontallyScrollableDelegate = self.navigationBarController
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -84,8 +90,8 @@ open class LiftNavigationController: UIViewController {
         self.scrollView.addSubview(self.contentView)
 
         self.contentView.addSubview(self.topViewController.view)
-        self.contentView.addSubview(self.roomIndicatorController.view)
-        self.contentView.addSubview(self.bottomController.view)
+        self.contentView.addSubview(self.navigationBarController.view)
+        self.contentView.addSubview(self.bottomScrollViewController.view)
 
         self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -104,16 +110,16 @@ open class LiftNavigationController: UIViewController {
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.roomIndicatorController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
-        self.roomIndicatorController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.roomIndicatorController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.roomIndicatorController.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
+        self.navigationBarController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
+        self.navigationBarController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.navigationBarController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.navigationBarController.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.bottomController.view.topAnchor.constraint(equalTo: self.roomIndicatorController.roomCollectionView.bottomAnchor).isActive = true
-        self.bottomController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.bottomController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.bottomController.view.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
-        self.bottomController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+        self.bottomScrollViewController.view.topAnchor.constraint(equalTo: self.navigationBarController.navigationLabelCollectionView.bottomAnchor).isActive = true
+        self.bottomScrollViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.bottomScrollViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.bottomScrollViewController.view.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
+        self.bottomScrollViewController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
     }
 }
 
@@ -132,14 +138,14 @@ extension LiftNavigationController: UIScrollViewDelegate {
             let pageHeight = self.view.bounds.height
             let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
 
-            guard let floorType = Floor(rawValue: index), floorType != self.currentFloor else { return }
-            self.setCurrentFloor(floorType)
-            self.switchableFloorDelegate?.didSwipeToFloor(floorType, on: self)
+            guard let verticalPosition = VerticalPosition(rawValue: index), verticalPosition != self.verticalPosition else { return }
+            self.setVerticalPosition(verticalPosition)
+            self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
         }
     }
 }
 
-extension LiftNavigationController: SwitchableFloor, SwitchableFloorDelegate {
+extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDelegate {
 
     func moveToTop() {
         var origin = self.view.bounds.origin
@@ -153,7 +159,7 @@ extension LiftNavigationController: SwitchableFloor, SwitchableFloorDelegate {
         scrollView.setContentOffset(origin, animated: true)
     }
 
-    func didNavigateToFloor(_ floor: Floor, on viewController: UIViewController) {
-        self.setCurrentFloor(floor)
+    func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
+        self.setVerticalPosition(position)
     }
 }

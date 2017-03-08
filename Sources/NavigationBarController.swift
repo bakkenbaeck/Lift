@@ -1,25 +1,30 @@
 import UIKit
 
-protocol ScrollableRoomDelegate: class {
+protocol HorizontallyScrollableDelegate: class {
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint)
 }
 
-class RoomIndicatorController: UIViewController {
+class NavigationBarController: UIViewController {
     static let itemWidth = CGFloat(100.0)
     static let buttonWidth = CGFloat(64.0)
 
-    weak var switchableFloorDelegate: SwitchableFloorDelegate?
-    weak var switchableRoomDelegate: SwitchableRoomDelegate?
+    weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
+    weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
 
-    var currentFloor = Floor.top
-    var currentRoom = 0
+    var verticalPosition = VerticalPosition.top
+    var horizontalPosition = 0
 
-    var roomTitles = [String]()
+    var navigationLabels = [String]()
+
+    var font: UIFont?
+    var buttonImage: UIImage?
 
     var switchButtonWidthAnchor: NSLayoutConstraint?
 
     lazy var switchButton: UIButton = {
-        let button = UIButton(type: .contactAdd)
+        let button = UIButton()
+
+        button.setImage(self.buttonImage, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
@@ -29,10 +34,10 @@ class RoomIndicatorController: UIViewController {
         return button
     }()
 
-    lazy var roomCollectionView: UICollectionView = {
+    lazy var navigationLabelCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: RoomIndicatorController.itemWidth, height: LiftNavigationController.navigationBarHeight)
+        layout.itemSize = CGSize(width: NavigationBarController.itemWidth, height: LiftNavigationController.navigationBarHeight)
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
         layout.minimumLineSpacing = 0.0
 
@@ -74,11 +79,11 @@ class RoomIndicatorController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
 
-        self.roomCollectionView.delegate = self
-        self.roomCollectionView.dataSource = self
-        self.roomCollectionView.register(RoomIndicatorCell.self, forCellWithReuseIdentifier: RoomIndicatorCell.identifier)
+        self.navigationLabelCollectionView.delegate = self
+        self.navigationLabelCollectionView.dataSource = self
+        self.navigationLabelCollectionView.register(NavigationLabelCell.self, forCellWithReuseIdentifier: NavigationLabelCell.identifier)
 
-        self.setCurrentRoomNumber(0)
+        self.setCurrentHorizontalPosition(0)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -96,7 +101,7 @@ class RoomIndicatorController: UIViewController {
 
     func addSubViewsAndConstraints() {
         self.view.addSubview(self.switchButton)
-        self.view.addSubview(self.roomCollectionView)
+        self.view.addSubview(self.navigationLabelCollectionView)
 
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
@@ -107,39 +112,40 @@ class RoomIndicatorController: UIViewController {
         self.switchButtonWidthAnchor = self.switchButton.widthAnchor.constraint(equalToConstant: self.view.bounds.width)
         self.switchButtonWidthAnchor?.isActive = true
 
-        self.roomCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.roomCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: RoomIndicatorController.buttonWidth).isActive = true
-        self.roomCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - RoomIndicatorController.buttonWidth).isActive = true
-        self.roomCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.navigationLabelCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: NavigationBarController.buttonWidth).isActive = true
+        self.navigationLabelCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - NavigationBarController.buttonWidth).isActive = true
+        self.navigationLabelCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
     }
 
     func didSelectSwitchButton() {
-        self.setCurrentFloor(self.currentFloor == .top ? .bottom : .top)
-        self.switchableFloorDelegate?.didNavigateToFloor(self.currentFloor, on: self)
+        self.setVerticalPosition(self.verticalPosition == .top ? .bottom : .top)
+        self.verticallySwitchableDelegate?.didSwitchToPosition(self.verticalPosition, on: self)
     }
 
     func didSwipeRight() {
-        guard self.currentRoom > 0 else { return }
-        self.setCurrentRoomNumber(self.currentRoom - 1)
+        guard self.horizontalPosition > 0 else { return }
+        self.setCurrentHorizontalPosition(self.horizontalPosition - 1)
     }
 
     func didSwipeLeft() {
-        guard self.currentRoom < (self.roomTitles.count - 1) else { return }
-        self.setCurrentRoomNumber(self.currentRoom + 1)
+        guard self.horizontalPosition < (self.navigationLabels.count - 1) else { return }
+        self.setCurrentHorizontalPosition(self.horizontalPosition + 1)
     }
 }
 
-extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return roomTitles.count
+        return navigationLabels.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NavigationLabelCell.identifier, for: indexPath) as! NavigationLabelCell
 
-        cell.titleLabel.text = self.roomTitles[indexPath.row]
-        if indexPath.row == self.currentRoom {
+        cell.titleLabel.text = self.navigationLabels[indexPath.row]
+        cell.titleLabel.font = self.font ?? UIFont.systemFont(ofSize: 18)
+        if indexPath.row == self.horizontalPosition {
             cell.titleLabel.textColor = .black
         } else {
             cell.titleLabel.textColor = .gray
@@ -149,21 +155,21 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.setCurrentRoomNumber(indexPath.row)
+        self.setCurrentHorizontalPosition(indexPath.row)
     }
 
-    func setCurrentRoomNumber(_ room: Int) {
-        self.currentRoom = room
-        self.roomCollectionView.setContentOffset(CGPoint(x: RoomIndicatorController.itemWidth * CGFloat(room), y: 0), animated: true)
-        self.roomCollectionView.reloadData()
-        self.switchableRoomDelegate?.viewController(self, didSelectRoom: room)
+    func setCurrentHorizontalPosition(_ position: Int) {
+        self.horizontalPosition = position
+        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position), y: 0), animated: true)
+        self.navigationLabelCollectionView.reloadData()
+        self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
 }
 
-extension RoomIndicatorController: SwitchableFloor, SwitchableFloorDelegate {
+extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDelegate {
 
     func moveToTop() {
-        self.roomCollectionView.isUserInteractionEnabled = false
+        self.navigationLabelCollectionView.isUserInteractionEnabled = false
         self.swipeLeftRecognizer.isEnabled = false
         self.swipeRightRecognizer.isEnabled = false
 
@@ -172,37 +178,37 @@ extension RoomIndicatorController: SwitchableFloor, SwitchableFloorDelegate {
     }
 
     func moveToBottom() {
-        self.roomCollectionView.isUserInteractionEnabled = true
+        self.navigationLabelCollectionView.isUserInteractionEnabled = true
         self.swipeLeftRecognizer.isEnabled = true
         self.swipeRightRecognizer.isEnabled = true
 
-        self.switchButtonWidthAnchor?.constant = RoomIndicatorController.buttonWidth
+        self.switchButtonWidthAnchor?.constant = NavigationBarController.buttonWidth
         self.view.setNeedsLayout()
     }
 
-    func didSwipeToFloor(_ floor: Floor, on viewController: UIViewController) {
-        self.setCurrentFloor(floor)
+    func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
+        self.setVerticalPosition(position)
     }
 }
 
-extension RoomIndicatorController: ScrollableRoomDelegate {
+extension NavigationBarController: HorizontallyScrollableDelegate {
 
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
-        guard let bottomController = viewController as? BottomController else { return }
+        guard let bottomController = viewController as? BottomScrollViewController else { return }
         guard contentOffset.x >= 0 else { return }
 
         let scrollPercentage = bottomController.scrollView.contentSize.width / contentOffset.x
-        let xOffsetForRoomIndicatorController = self.roomCollectionView.contentSize.width / scrollPercentage
+        let xOffsetForRoomIndicatorController = self.navigationLabelCollectionView.contentSize.width / scrollPercentage
         let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController, y: 0)
 
-        var scrollBounds = self.roomCollectionView.bounds
+        var scrollBounds = self.navigationLabelCollectionView.bounds
         scrollBounds.origin = newContentOffset
 
-        self.currentRoom = self.roomCollectionView.indexPathForItem(at: newContentOffset)?.row ?? self.currentRoom
+        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: newContentOffset)?.row ?? self.horizontalPosition
         UIView.animate(withDuration: 0.2, animations: {
-            self.roomCollectionView.bounds = scrollBounds
+            self.navigationLabelCollectionView.bounds = scrollBounds
         }, completion: { b in
-            self.roomCollectionView.reloadData()
+            self.navigationLabelCollectionView.reloadData()
         })
     }
 }
