@@ -1,7 +1,7 @@
 import UIKit
 import Lift
 
-class TableController: BottomContentViewController {
+class TableController: BottomController {
     var cellIdentifier: String {
         return String(describing: UITableViewCell.self)
     }
@@ -48,7 +48,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < -(UIScreen.main.bounds.height/4) {
-            self.bottomContentViewControllerDelegate?.requestToSwitchToTop(from: self)
+            self.bottomControllerDelegate?.requestToSwitchToTop(from: self)
         }
     }
 }

@@ -1,11 +1,11 @@
 import UIKit
 
-protocol SwitchableRoomDelegate: class {
-    func viewController(_ viewController: UIViewController, didSelectRoom room: Int)
+protocol HorizontallySwitchableDelegate: class {
+    func viewController(_ viewController: UIViewController, didSelectPosition position: Int)
 }
 
-class RoomIndicatorCell: UICollectionViewCell {
-    static let identifier = "roomIndicatorCellIdentifier"
+class NavigationLabelCell: UICollectionViewCell {
+    static let identifier = "navigationLabelCellIdentifier"
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
