@@ -6,7 +6,7 @@ protocol ScrollableRoomDelegate: class {
 
 class RoomIndicatorController: UIViewController {
     static let itemWidth = CGFloat(100.0)
-    static let buttonWidth = CGFloat(44.0)
+    static let buttonWidth = CGFloat(64.0)
 
     weak var switchableFloorDelegate: SwitchableFloorDelegate?
     weak var switchableRoomDelegate: SwitchableRoomDelegate?
@@ -47,7 +47,6 @@ class RoomIndicatorController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
-        collectionView.contentInset = UIEdgeInsetsMake(0, RoomIndicatorController.buttonWidth, 0, 0)
 
         collectionView.isUserInteractionEnabled = false
 
@@ -181,7 +180,7 @@ extension RoomIndicatorController: SwitchableFloor, SwitchableFloorDelegate {
         self.view.setNeedsLayout()
     }
 
-    func didSwipeToFloor(_ floor: Floor, on viewController: LiftNavigationController) {
+    func didSwipeToFloor(_ floor: Floor, on viewController: UIViewController) {
         self.setCurrentFloor(floor)
     }
 }

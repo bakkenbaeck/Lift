@@ -9,7 +9,7 @@ open class LiftNavigationController: UIViewController {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    open var bottomViewControllers = [UIViewController]() {
+    open var bottomViewControllers = [BottomContentViewController]() {
         didSet {
             self.bottomController.bottomViewControllers = bottomViewControllers
             self.roomIndicatorController.roomTitles = self.bottomViewControllers.map { controller in controller.title ?? "" }
@@ -36,6 +36,7 @@ open class LiftNavigationController: UIViewController {
         let controller = BottomController(parentController: self)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         controller.view.backgroundColor = .white
+        controller.switchableFloorDelegate = self
 
         return controller
     }()
@@ -152,7 +153,7 @@ extension LiftNavigationController: SwitchableFloor, SwitchableFloorDelegate {
         scrollView.setContentOffset(origin, animated: true)
     }
 
-    func didNavigateToFloor(_ floor: Floor, on viewController: RoomIndicatorController) {
+    func didNavigateToFloor(_ floor: Floor, on viewController: UIViewController) {
         self.setCurrentFloor(floor)
     }
 }

@@ -2,11 +2,13 @@ import UIKit
 
 class BottomController: UIViewController {
     weak var scrollableRoomDelegate: ScrollableRoomDelegate?
+    weak var switchableFloorDelegate: SwitchableFloorDelegate?
+
     var currentRoom = 0
 
     fileprivate unowned var parentController: UIViewController
 
-    var bottomViewControllers: [UIViewController]? {
+    var bottomViewControllers: [BottomContentViewController]? {
         didSet {
             guard let bottomViewControllers = self.bottomViewControllers else { return }
             self.addBottomViewControllersAndConstraints(bottomViewControllers)
@@ -41,7 +43,7 @@ class BottomController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addBottomViewControllersAndConstraints(_ bottomViewControllers: [UIViewController]) {
+    func addBottomViewControllersAndConstraints(_ bottomViewControllers: [BottomContentViewController]) {
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
 
@@ -58,6 +60,7 @@ class BottomController: UIViewController {
         self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor).isActive = true
 
         for (index, viewController) in bottomViewControllers.enumerated() {
+            viewController.bottomContentViewControllerDelegate = self
             viewController.view.translatesAutoresizingMaskIntoConstraints = false
             self.contentView.addSubview(viewController.view)
 
@@ -157,5 +160,12 @@ extension BottomController: SwitchableRoomDelegate {
                 self.loadScrollViewWithPage(room + 1)
             }
         })
+    }
+}
+
+
+extension BottomController: BottomContentViewControllerDelegate {
+    func requestToSwitchToTop(from bottomContentViewController: BottomContentViewController) {
+      self.switchableFloorDelegate?.didNavigateToFloor(.top, on: self)
     }
 }
