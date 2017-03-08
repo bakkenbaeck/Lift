@@ -1,4 +1,5 @@
 import UIKit
+import QuartzCore
 
 protocol HorizontallyScrollableDelegate: class {
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint)
@@ -17,14 +18,16 @@ class NavigationBarController: UIViewController {
     var navigationLabels = [String]()
 
     var font: UIFont?
-    var buttonImage: UIImage?
+    var topButtonImage: UIImage?
+    var bottomButtonImage: UIImage?
 
     var switchButtonWidthAnchor: NSLayoutConstraint?
 
     lazy var switchButton: UIButton = {
         let button = UIButton()
 
-        button.setImage(self.buttonImage, for: .normal)
+        button.setImage(self.topButtonImage, for: .normal)
+        button.imageEdgeInsets = UIEdgeInsetsMake((button.bounds.height - self.topButtonImage!.size.height)/2, (button.bounds.width - self.topButtonImage!.size.width)/2, (button.bounds.height - self.topButtonImage!.size.height)/2, (button.bounds.width - self.topButtonImage!.size.width)/2)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
@@ -172,8 +175,10 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
         self.navigationLabelCollectionView.isUserInteractionEnabled = false
         self.swipeLeftRecognizer.isEnabled = false
         self.swipeRightRecognizer.isEnabled = false
-
         self.switchButtonWidthAnchor?.constant = self.view.bounds.width
+
+        self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
+
         self.view.setNeedsLayout()
     }
 
@@ -183,6 +188,9 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
         self.swipeRightRecognizer.isEnabled = true
 
         self.switchButtonWidthAnchor?.constant = NavigationBarController.buttonWidth
+
+        self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
+
         self.view.setNeedsLayout()
     }
 
@@ -210,5 +218,17 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
         }, completion: { b in
             self.navigationLabelCollectionView.reloadData()
         })
+    }
+}
+
+extension NavigationBarController: CAAnimationDelegate{
+
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if self.verticalPosition == .top {
+            self.switchButton.setImage(self.topButtonImage, for: .normal)
+        }
+        if self.verticalPosition == .bottom {
+            self.switchButton.setImage(self.bottomButtonImage, for: .normal)
+        }
     }
 }
