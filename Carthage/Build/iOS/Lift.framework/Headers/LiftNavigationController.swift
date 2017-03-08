@@ -7,6 +7,7 @@ public class LiftNavigationController: UIViewController {
         case top
         case bottom
     }
+
     public var topViewController: UIViewController
 
     var shouldEvaluatePageChange = false
@@ -25,7 +26,7 @@ public class LiftNavigationController: UIViewController {
     }
 
     lazy var scrollView: UIScrollView = {
-       let scrollView = UIScrollView()
+        let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true
         scrollView.scrollsToTop = false
@@ -53,7 +54,7 @@ public class LiftNavigationController: UIViewController {
 
         return button
     }()
-    
+
     lazy var navigationBar: RoomIndicatorView = {
 
         let navigationBar = RoomIndicatorView()
@@ -70,7 +71,7 @@ public class LiftNavigationController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         self.bottomScrollView.bottomViewControllers = bottomViewControllers
-        self.navigationBar.roomTitles = bottomViewControllers.map{ controller in controller.title ?? ""}
+        self.navigationBar.roomTitles = bottomViewControllers.map { controller in controller.title ?? "" }
 
         self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -128,6 +129,7 @@ public class LiftNavigationController: UIViewController {
 }
 
 extension LiftNavigationController: UIScrollViewDelegate {
+
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.shouldEvaluatePageChange = true
     }
@@ -146,13 +148,15 @@ extension LiftNavigationController: UIScrollViewDelegate {
 }
 
 extension LiftNavigationController: RoomIndicatorViewDelegate {
+
     func selectItemAt(_ index: Int, onNavigationBar navigationBar: RoomIndicatorView) {
-       self.bottomScrollView.showPage(at: index)
+        self.bottomScrollView.showPage(at: index)
     }
 }
 
 extension LiftNavigationController: PaginatedScrollViewDelegate {
+
     func didMove(from fromIndex: Int, to toIndex: Int, on bottomScrollView: BottomScrollView) {
-        self.navigationBar.highLightIndex(index: toIndex )
+        self.navigationBar.highLightIndex(index: toIndex)
     }
 }
