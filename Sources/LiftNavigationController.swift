@@ -4,6 +4,9 @@ open class LiftNavigationController: UIViewController {
     public static let navigationBarHeight = CGFloat(64.0)
     weak var switchableFloorDelegate: SwitchableFloorDelegate?
 
+    open var navigationBarFont: UIFont?
+    open var barButtonImage: UIImage?
+
     open var topViewController = UIViewController() {
         didSet {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -44,6 +47,9 @@ open class LiftNavigationController: UIViewController {
     lazy var roomIndicatorController: RoomIndicatorController = {
         let roomIndicatorController = RoomIndicatorController()
         roomIndicatorController.switchableFloorDelegate = self
+
+        roomIndicatorController.font = self.navigationBarFont
+        roomIndicatorController.buttonImage = self.barButtonImage
 
         return roomIndicatorController
     }()

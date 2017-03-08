@@ -16,10 +16,15 @@ class RoomIndicatorController: UIViewController {
 
     var roomTitles = [String]()
 
+    var font: UIFont?
+    var buttonImage: UIImage?
+
     var switchButtonWidthAnchor: NSLayoutConstraint?
 
     lazy var switchButton: UIButton = {
-        let button = UIButton(type: .contactAdd)
+        let button = UIButton()
+
+        button.setImage(self.buttonImage, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
@@ -139,6 +144,7 @@ extension RoomIndicatorController: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RoomIndicatorCell.identifier, for: indexPath) as! RoomIndicatorCell
 
         cell.titleLabel.text = self.roomTitles[indexPath.row]
+        cell.titleLabel.font = self.font ?? UIFont.systemFont(ofSize: 18)
         if indexPath.row == self.currentRoom {
             cell.titleLabel.textColor = .black
         } else {
