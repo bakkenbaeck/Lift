@@ -5,19 +5,15 @@ open class LiftNavigationController: UIViewController {
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
     open var navigationBarFont: UIFont?
-    open var barButtonImage: UIImage?
+    open var topBarButtonImage: UIImage?
+    open var bottomBarButtonImage: UIImage?
 
     open var topViewController = UIViewController() {
         didSet {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    open var bottomViewControllers = [BottomController]() {
-        didSet {
-            self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
-            self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.title ?? "" }
-        }
-    }
+    open var bottomViewControllers = [BottomController]()
 
     var verticalPosition: VerticalPosition = .top
     var shouldEvaluatePageChange = false
@@ -49,7 +45,8 @@ open class LiftNavigationController: UIViewController {
         navigationBarController.verticallySwitchableDelegate = self
 
         navigationBarController.font = self.navigationBarFont
-        navigationBarController.buttonImage = self.barButtonImage
+        navigationBarController.topButtonImage = self.topBarButtonImage
+        navigationBarController.bottomButtonImage = self.bottomBarButtonImage
 
         return navigationBarController
     }()
@@ -61,21 +58,16 @@ open class LiftNavigationController: UIViewController {
         return view
     }()
 
-    public init() {
-        super.init(nibName: nil, bundle: nil)
+    open override func viewDidLoad() {
+        super.viewDidLoad()
 
         self.verticallySwitchableDelegate = self.navigationBarController
 
         self.navigationBarController.horizontallySwitchableDelegate = self.bottomScrollViewController
         self.bottomScrollViewController.horizontallyScrollableDelegate = self.navigationBarController
-    }
 
-    public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    open override func viewDidLoad() {
-        super.viewDidLoad()
+        self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
+        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.title ?? "" }
 
         self.addSubviewsAndConstraints()
     }
@@ -150,13 +142,17 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     func moveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
-        scrollView.setContentOffset(origin, animated: true)
+        UIView.animate(withDuration: 0.2) {
+            self.scrollView.setContentOffset(origin, animated: false)
+        }
     }
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
-        scrollView.setContentOffset(origin, animated: true)
+        UIView.animate(withDuration: 0.2) {
+            self.scrollView.setContentOffset(origin, animated: false)
+        }
     }
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
