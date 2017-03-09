@@ -157,5 +157,6 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
         self.setVerticalPosition(position)
+        self.verticallySwitchableDelegate?.didSwipeToPosition(position, on: self)
     }
 }

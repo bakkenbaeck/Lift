@@ -27,7 +27,7 @@ class NavigationBarController: UIViewController {
         let button = UIButton()
 
         button.setImage(self.topButtonImage, for: .normal)
-        button.imageEdgeInsets = UIEdgeInsetsMake((button.bounds.height - self.topButtonImage!.size.height)/2, (button.bounds.width - self.topButtonImage!.size.width)/2, (button.bounds.height - self.topButtonImage!.size.height)/2, (button.bounds.width - self.topButtonImage!.size.width)/2)
+        button.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 0, 0)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
