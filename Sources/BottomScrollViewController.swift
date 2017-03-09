@@ -16,7 +16,8 @@ class BottomScrollViewController: UIViewController {
     }
 
     lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView(withAutoLayout: true)
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true
         scrollView.scrollsToTop = false
         scrollView.showsHorizontalScrollIndicator = false
@@ -28,7 +29,8 @@ class BottomScrollViewController: UIViewController {
     }()
 
     lazy var contentView: UIView = {
-        let view = UIView(withAutoLayout: true)
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
 
         return view

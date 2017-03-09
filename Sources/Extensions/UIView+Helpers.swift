@@ -2,11 +2,6 @@ import UIKit
 
 extension UIView {
 
-    public convenience init(withAutoLayout autoLayout: Bool) {
-        self.init()
-        self.translatesAutoresizingMaskIntoConstraints = !autoLayout
-    }
-
     func rotate180Degrees(duration: CFTimeInterval = 4.0, completionDelegate: CAAnimationDelegate? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.fromValue = 0.0

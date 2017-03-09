@@ -52,7 +52,8 @@ open class LiftNavigationController: UIViewController {
     }()
 
     lazy var contentView: UIView = {
-        let view = UIView(withAutoLayout: true)
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
 
         return view
