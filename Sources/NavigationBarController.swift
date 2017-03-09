@@ -1,5 +1,4 @@
 import UIKit
-import QuartzCore
 
 protocol HorizontallyScrollableDelegate: class {
     func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint)
@@ -40,9 +39,9 @@ class NavigationBarController: UIViewController {
     lazy var navigationLabelCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: NavigationBarController.itemWidth, height: LiftNavigationController.navigationBarHeight)
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        layout.minimumLineSpacing = 0.0
+        layout.minimumInteritemSpacing = 40.0
+        layout.minimumLineSpacing = 40.0
 
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
 
@@ -137,17 +136,19 @@ class NavigationBarController: UIViewController {
     }
 }
 
-extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return navigationLabels.count
     }
+
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NavigationLabelCell.identifier, for: indexPath) as! NavigationLabelCell
 
         cell.titleLabel.text = self.navigationLabels[indexPath.row]
         cell.titleLabel.font = self.font ?? UIFont.systemFont(ofSize: 18)
+        cell.titleLabel.textAlignment = .center
         if indexPath.row == self.horizontalPosition {
             cell.titleLabel.textColor = .black
         } else {
@@ -166,6 +167,24 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
         self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position), y: 0), animated: true)
         self.navigationLabelCollectionView.reloadData()
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var width = NavigationBarController.itemWidth
+        let padding = CGFloat(10.0)
+        width = estimateFrameForText(text: self.navigationLabels[indexPath.item]).width + (padding * 2)
+
+        return CGSize(width: width, height: self.view.frame.height)
+    }
+
+    func estimateFrameForText(text: String) -> CGRect {
+        let width = CGFloat.greatestFiniteMagnitude
+
+        let size = CGSize(width: width, height: self.view.frame.height)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let attributes = [NSFontAttributeName: self.font ?? UIFont.systemFont(ofSize: 18)]
+
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: attributes, context: nil)
     }
 }
 
