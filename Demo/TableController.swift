@@ -1,7 +1,9 @@
 import UIKit
 import Lift
 
-class TableController: BottomController {
+class TableController: UIViewController, BottomControllable {
+    weak var bottomControllerDelegate: BottomControllerDelegate?
+
     var cellIdentifier: String {
         return String(describing: UITableViewCell.self)
     }
@@ -40,7 +42,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
         cell.textLabel?.text = "Hi there"
 
         return cell

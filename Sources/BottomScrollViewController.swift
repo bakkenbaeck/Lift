@@ -8,7 +8,7 @@ class BottomScrollViewController: UIViewController {
 
     fileprivate unowned var parentController: UIViewController
 
-    var bottomViewControllers: [BottomController]? {
+    var bottomViewControllers: [BottomControllable]? {
         didSet {
             guard let bottomViewControllers = self.bottomViewControllers else { return }
             self.addBottomViewControllersAndConstraints(bottomViewControllers)
@@ -45,7 +45,7 @@ class BottomScrollViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addBottomViewControllersAndConstraints(_ bottomViewControllers: [BottomController]) {
+    func addBottomViewControllersAndConstraints(_ bottomViewControllers: [BottomControllable]) {
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
 
@@ -63,31 +63,31 @@ class BottomScrollViewController: UIViewController {
 
         for (index, viewController) in bottomViewControllers.enumerated() {
             viewController.bottomControllerDelegate = self
-            viewController.view.translatesAutoresizingMaskIntoConstraints = false
-            self.contentView.addSubview(viewController.view)
+            viewController.defaultView.translatesAutoresizingMaskIntoConstraints = false
+            self.contentView.addSubview(viewController.defaultView)
 
             let isFirstViewController = index == 0
             let isLastViewController = index == bottomViewControllers.count - 1
             let isMiddleViewController = !isFirstViewController && !isLastViewController
 
-            viewController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
-            viewController.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-            viewController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+            viewController.defaultView.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+            viewController.defaultView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
+            viewController.defaultView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 
             if isFirstViewController {
-                viewController.view.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
+                viewController.defaultView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
             }
 
             if isMiddleViewController {
                 let priorViewController = bottomViewControllers[index - 1]
-                viewController.view.leftAnchor.constraint(equalTo: priorViewController.view.rightAnchor).isActive = true
+                viewController.defaultView.leftAnchor.constraint(equalTo: priorViewController.defaultView.rightAnchor).isActive = true
             }
 
             if isLastViewController {
                 let priorViewController = bottomViewControllers[index - 1]
-                viewController.view.leftAnchor.constraint(equalTo: priorViewController.view.rightAnchor).isActive = true
+                viewController.defaultView.leftAnchor.constraint(equalTo: priorViewController.defaultView.rightAnchor).isActive = true
 
-                viewController.view.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
+                viewController.defaultView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
             }
         }
     }
@@ -114,7 +114,7 @@ class BottomScrollViewController: UIViewController {
             return
         }
 
-        if let controller = self.bottomViewControllers?[page], controller.view.superview == nil {
+        if let controller = self.bottomViewControllers?[page] as? UIViewController, controller.view.superview == nil {
             self.parentController.addChildViewController(controller)
             self.scrollView.addSubview(controller.view)
             controller.didMove(toParentViewController: parentController)
@@ -169,7 +169,7 @@ extension BottomScrollViewController: HorizontallySwitchableDelegate {
 
 
 extension BottomScrollViewController: BottomControllerDelegate {
-    func requestToSwitchToTop(from bottomContentViewController: BottomController) {
+    func requestToSwitchToTop(from bottomContentViewController: BottomControllable) {
       self.verticallySwitchableDelegate?.didSwitchToPosition(.top, on: self)
     }
 }

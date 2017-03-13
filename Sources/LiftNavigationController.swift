@@ -13,7 +13,7 @@ open class LiftNavigationController: UIViewController {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    open var bottomViewControllers = [BottomController]()
+    open var bottomViewControllers = [BottomControllable]()
 
     var verticalPosition: VerticalPosition = .top
     var shouldEvaluatePageChange = false
@@ -68,7 +68,7 @@ open class LiftNavigationController: UIViewController {
         self.bottomScrollViewController.horizontallyScrollableDelegate = self.navigationBarController
 
         self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
-        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.title ?? "" }
+        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.controllerTitle ?? ""}
 
         self.addSubviewsAndConstraints()
     }

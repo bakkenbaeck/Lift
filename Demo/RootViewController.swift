@@ -18,18 +18,18 @@ class RootViewController: LiftNavigationController {
         firstViewController.view.layer.borderColor = UIColor.liftRed().cgColor
 
         let secondViewController = TableController()
-        secondViewController.title = "Second" 
+        secondViewController.title = "Second"
         secondViewController.view.backgroundColor = .white
         secondViewController.view.layer.borderWidth = 5.0
         secondViewController.view.layer.borderColor = UIColor.liftBlue().cgColor
 
-        let thirdViewController = BottomController()
+        let thirdViewController = TableController()
         thirdViewController.title = "Third"
         thirdViewController.view.backgroundColor = .white
         thirdViewController.view.layer.borderWidth = 5.0
         thirdViewController.view.layer.borderColor = UIColor.liftPink().cgColor
 
-        let fourthViewController = BottomController()
+        let fourthViewController = TableController()
         fourthViewController.title = "Fourth"
         fourthViewController.view.backgroundColor = .white
         fourthViewController.view.layer.borderWidth = 5.0
