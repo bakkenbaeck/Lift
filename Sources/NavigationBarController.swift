@@ -7,6 +7,7 @@ protocol HorizontallyScrollableDelegate: class {
 class NavigationBarController: UIViewController {
     static let itemWidth = CGFloat(100.0)
     static let buttonWidth = CGFloat(64.0)
+    static let itemMargin = CGFloat(40.0)
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
     weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
@@ -40,8 +41,8 @@ class NavigationBarController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        layout.minimumInteritemSpacing = 40.0
-        layout.minimumLineSpacing = 40.0
+        layout.minimumInteritemSpacing = NavigationBarController.itemMargin
+        layout.minimumLineSpacing = NavigationBarController.itemMargin
 
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
 
@@ -55,7 +56,7 @@ class NavigationBarController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
 
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 64, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: NavigationBarController.buttonWidth, bottom: 0, right: 0)
 
         collectionView.isUserInteractionEnabled = false
 
@@ -166,7 +167,7 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
 
     func setCurrentHorizontalPosition(_ position: Int) {
         self.horizontalPosition = position
-        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position) - 64, y: 0), animated: true)
+        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position) - NavigationBarController.buttonWidth, y: 0), animated: true)
         self.navigationLabelCollectionView.reloadData()
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
@@ -228,12 +229,12 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
 
         let scrollPercentage = bottomController.scrollView.contentSize.width / contentOffset.x
         let xOffsetForRoomIndicatorController = self.navigationLabelCollectionView.contentSize.width / scrollPercentage
-        let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController, y: 0)
+        let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController - NavigationBarController.buttonWidth, y: 0)
 
         var scrollBounds = self.navigationLabelCollectionView.bounds
         scrollBounds.origin = newContentOffset
 
-        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: newContentOffset)?.row ?? self.horizontalPosition
+        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: CGPoint(x: xOffsetForRoomIndicatorController + NavigationBarController.itemMargin, y: 0) )?.row ?? self.horizontalPosition
         UIView.animate(withDuration: 0.2, animations: {
             self.navigationLabelCollectionView.bounds = scrollBounds
         }, completion: { b in
