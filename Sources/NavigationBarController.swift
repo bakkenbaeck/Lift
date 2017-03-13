@@ -55,6 +55,8 @@ class NavigationBarController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
 
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 64, bottom: 0, right: 0)
+
         collectionView.isUserInteractionEnabled = false
 
         return collectionView
@@ -102,22 +104,22 @@ class NavigationBarController: UIViewController {
     }
 
     func addSubViewsAndConstraints() {
-        self.view.addSubview(self.switchButton)
         self.view.addSubview(self.navigationLabelCollectionView)
+        self.view.addSubview(self.switchButton)
 
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
+
+        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.navigationLabelCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.navigationLabelCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width).isActive = true
+        self.navigationLabelCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
 
         self.switchButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.switchButton.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
         self.switchButtonWidthAnchor = self.switchButton.widthAnchor.constraint(equalToConstant: self.view.bounds.width)
         self.switchButtonWidthAnchor?.isActive = true
-
-        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.navigationLabelCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: NavigationBarController.buttonWidth).isActive = true
-        self.navigationLabelCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width - NavigationBarController.buttonWidth).isActive = true
-        self.navigationLabelCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
     }
 
     func didSelectSwitchButton() {
@@ -164,7 +166,7 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
 
     func setCurrentHorizontalPosition(_ position: Int) {
         self.horizontalPosition = position
-        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position), y: 0), animated: true)
+        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position) - 64, y: 0), animated: true)
         self.navigationLabelCollectionView.reloadData()
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
