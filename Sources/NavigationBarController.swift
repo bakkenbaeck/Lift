@@ -180,17 +180,29 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
 
     func setCurrentHorizontalPosition(_ position: Int) {
         self.horizontalPosition = position
-        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: NavigationBarController.itemWidth * CGFloat(position) - NavigationBarController.buttonWidth, y: 0), animated: true)
+
+        var width = -NavigationBarController.buttonWidth
+        if self.navigationLabels.count > 0 {
+            for index in 0 ... position {
+                width = width + self.widthForItem(atIndex: index)                                     
+            }
+
+            width = width - self.widthForItem(atIndex: position)
+        }
+
+        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: width + (self.style.spacing * CGFloat(position)), y: 0), animated: true)
         self.navigationLabelCollectionView.reloadData()
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var width = NavigationBarController.itemWidth
-        let padding = CGFloat(10.0)
-        width = estimateFrameForText(text: self.navigationLabels[indexPath.item]).width + (padding * 2)
+        return CGSize(width: self.widthForItem(atIndex: indexPath.item), height: self.view.frame.height)
+    }
 
-        return CGSize(width: width, height: self.view.frame.height)
+    func widthForItem(atIndex index: Int) -> CGFloat {
+        let padding = CGFloat(10.0)
+
+        return estimateFrameForText(text: self.navigationLabels[index]).width + (padding * 2)
     }
 
     func estimateFrameForText(text: String) -> CGRect {
