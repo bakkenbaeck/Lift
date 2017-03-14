@@ -1,7 +1,9 @@
 import UIKit
 
 open class LiftNavigationController: UIViewController {
+    public static let switchAnimationDuration = 0.2
     public static let navigationBarHeight = CGFloat(64.0)
+
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
     var navigationBarStyle: NavigationBarStyle
@@ -146,17 +148,19 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     func moveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
-        UIView.animate(withDuration: 0.2) {
+
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState ], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }
+        }, completion: { b in })
     }
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
-        UIView.animate(withDuration: 0.2) {
+
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState ], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }
+        }, completion: { b in })
     }
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
