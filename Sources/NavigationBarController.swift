@@ -7,7 +7,6 @@ protocol HorizontallyScrollableDelegate: class {
 class NavigationBarController: UIViewController {
     static let itemWidth = CGFloat(100.0)
     static let buttonWidth = CGFloat(64.0)
-    static let itemMargin = CGFloat(40.0)
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
     weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
@@ -16,17 +15,16 @@ class NavigationBarController: UIViewController {
     var horizontalPosition = 0
 
     var navigationLabels = [String]()
-
-    var font: UIFont?
-    var topButtonImage: UIImage?
-    var bottomButtonImage: UIImage?
+    var style: NavigationBarStyle
 
     var switchButtonWidthAnchor: NSLayoutConstraint?
 
     lazy var switchButton: UIButton = {
         let button = UIButton()
 
-        button.setImage(self.topButtonImage, for: .normal)
+        if let topImage = self.style.topImage {
+            button.setImage(topImage, for: .normal)
+        }
         button.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 0, 0)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
@@ -41,8 +39,8 @@ class NavigationBarController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        layout.minimumInteritemSpacing = NavigationBarController.itemMargin
-        layout.minimumLineSpacing = NavigationBarController.itemMargin
+        layout.minimumInteritemSpacing = self.style.spacing
+        layout.minimumLineSpacing = self.style.spacing
 
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
 
@@ -81,7 +79,8 @@ class NavigationBarController: UIViewController {
         return gestureRecognizer
     }()
 
-    init() {
+    init(style: NavigationBarStyle) {
+        self.style = style
         super.init(nibName: nil, bundle: nil)
 
         self.navigationLabelCollectionView.delegate = self
@@ -150,12 +149,12 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NavigationLabelCell.identifier, for: indexPath) as! NavigationLabelCell
 
         cell.titleLabel.text = self.navigationLabels[indexPath.row]
-        cell.titleLabel.font = self.font ?? UIFont.systemFont(ofSize: 18)
+        cell.titleLabel.font = self.style.font
         cell.titleLabel.textAlignment = .center
         if indexPath.row == self.horizontalPosition {
-            cell.titleLabel.textColor = .black
+            cell.titleLabel.textColor = self.style.activeTextColor
         } else {
-            cell.titleLabel.textColor = .gray
+            cell.titleLabel.textColor = self.style.inactiveTextColor
         }
 
         return cell
@@ -185,7 +184,7 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
 
         let size = CGSize(width: width, height: self.view.frame.height)
         let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-        let attributes = [NSFontAttributeName: self.font ?? UIFont.systemFont(ofSize: 18)]
+        let attributes = [NSFontAttributeName: self.style.font]
 
         return NSString(string: text).boundingRect(with: size, options: options, attributes: attributes, context: nil)
     }
@@ -234,7 +233,7 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
         var scrollBounds = self.navigationLabelCollectionView.bounds
         scrollBounds.origin = newContentOffset
 
-        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: CGPoint(x: xOffsetForRoomIndicatorController + NavigationBarController.itemMargin, y: 0) )?.row ?? self.horizontalPosition
+        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: CGPoint(x: xOffsetForRoomIndicatorController + self.style.spacing, y: 0) )?.row ?? self.horizontalPosition
         UIView.animate(withDuration: 0.2, animations: {
             self.navigationLabelCollectionView.bounds = scrollBounds
         }, completion: { b in
@@ -247,10 +246,14 @@ extension NavigationBarController: CAAnimationDelegate{
 
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if self.verticalPosition == .top {
-            self.switchButton.setImage(self.topButtonImage, for: .normal)
+            if let topImage = self.style.topImage {
+                self.switchButton.setImage(topImage, for: .normal)
+            }
         }
         if self.verticalPosition == .bottom {
-            self.switchButton.setImage(self.bottomButtonImage, for: .normal)
+            if let bottomImage = self.style.bottomImage {
+                self.switchButton.setImage(bottomImage, for: .normal)
+            }
         }
     }
 }

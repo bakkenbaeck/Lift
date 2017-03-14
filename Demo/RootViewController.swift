@@ -4,7 +4,9 @@ import Lift
 class RootViewController: LiftNavigationController {
 
     public init() {
-        super.init(nibName: nil, bundle: nil)
+        let style = NavigationBarStyle(bottomImage: UIImage(named: "switch-button-down")!, topImage: UIImage(named: "switch-button-up")!, font: UIFont.systemFont(ofSize: 18), activeTextColor: .liftBlue(), inactiveTextColor: .lightGray, spacing: 20)
+
+        super.init()
 
         let topViewController = UIViewController()
         topViewController.view.backgroundColor = .white
@@ -34,10 +36,6 @@ class RootViewController: LiftNavigationController {
         fourthViewController.view.backgroundColor = .white
         fourthViewController.view.layer.borderWidth = 5.0
         fourthViewController.view.layer.borderColor = UIColor.liftBrightGreen().cgColor
-
-        self.navigationBarFont = UIFont.systemFont(ofSize: 18)
-        self.topBarButtonImage = UIImage(named: "switch-button-down")
-        self.bottomBarButtonImage = UIImage(named: "switch-button-up")
 
         self.topViewController = topViewController
         self.bottomViewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]

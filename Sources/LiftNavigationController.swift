@@ -4,9 +4,7 @@ open class LiftNavigationController: UIViewController {
     public static let navigationBarHeight = CGFloat(64.0)
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
-    open var navigationBarFont: UIFont?
-    open var topBarButtonImage: UIImage?
-    open var bottomBarButtonImage: UIImage?
+    var navigationBarStyle: NavigationBarStyle
 
     open var topViewController = UIViewController() {
         didSet {
@@ -41,12 +39,8 @@ open class LiftNavigationController: UIViewController {
     }()
 
     lazy var navigationBarController: NavigationBarController = {
-        let navigationBarController = NavigationBarController()
+        let navigationBarController = NavigationBarController(style: self.navigationBarStyle)
         navigationBarController.verticallySwitchableDelegate = self
-
-        navigationBarController.font = self.navigationBarFont
-        navigationBarController.topButtonImage = self.topBarButtonImage
-        navigationBarController.bottomButtonImage = self.bottomBarButtonImage
 
         return navigationBarController
     }()
@@ -58,6 +52,15 @@ open class LiftNavigationController: UIViewController {
 
         return view
     }()
+
+    public init(navigationBarStyle: NavigationBarStyle = NavigationBarStyle()) {
+        self.navigationBarStyle = navigationBarStyle
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     open override func viewDidLoad() {
         super.viewDidLoad()
