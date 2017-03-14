@@ -61,6 +61,14 @@ class NavigationBarController: UIViewController {
         return collectionView
     }()
 
+    lazy var line: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor.lightGray
+
+        return line
+    }()
+    
     lazy var swipeLeftRecognizer: UISwipeGestureRecognizer = {
         let gestureRecognizer = UISwipeGestureRecognizer()
         gestureRecognizer.direction = .left
@@ -106,6 +114,7 @@ class NavigationBarController: UIViewController {
     func addSubViewsAndConstraints() {
         self.view.addSubview(self.navigationLabelCollectionView)
         self.view.addSubview(self.switchButton)
+        self.view.addSubview(self.line)
 
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
@@ -120,6 +129,11 @@ class NavigationBarController: UIViewController {
         self.switchButton.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
         self.switchButtonWidthAnchor = self.switchButton.widthAnchor.constraint(equalToConstant: self.view.bounds.width)
         self.switchButtonWidthAnchor?.isActive = true
+
+        self.line.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        self.line.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.line.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.line.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
     }
 
     func didSelectSwitchButton() {

@@ -6,7 +6,7 @@ class RootViewController: LiftNavigationController {
     public init() {
         let style = NavigationBarStyle(bottomImage: UIImage(named: "switch-button-down")!, topImage: UIImage(named: "switch-button-up")!, font: UIFont.systemFont(ofSize: 18), activeTextColor: .liftBlue(), inactiveTextColor: .lightGray, spacing: 20)
 
-        super.init()
+        super.init(navigationBarStyle: style)
 
         let topViewController = UIViewController()
         topViewController.view.backgroundColor = .white
@@ -15,9 +15,6 @@ class RootViewController: LiftNavigationController {
 
         let firstViewController = TableController()
         firstViewController.title = "First"
-        firstViewController.view.backgroundColor = .white
-        firstViewController.view.layer.borderWidth = 5.0
-        firstViewController.view.layer.borderColor = UIColor.liftRed().cgColor
 
         let secondViewController = TableController()
         secondViewController.title = "Second"
