@@ -151,7 +151,7 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
 
         UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState ], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }, completion: { b in })
+        }, completion: { _ in })
     }
 
     func moveToBottom() {
@@ -160,7 +160,7 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
 
         UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState ], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }, completion: { b in })
+        }, completion: { _ in })
     }
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {

@@ -153,12 +153,11 @@ class NavigationBarController: UIViewController {
     }
 }
 
-extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension NavigationBarController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return navigationLabels.count
     }
-
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NavigationLabelCell.identifier, for: indexPath) as! NavigationLabelCell
@@ -174,6 +173,9 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
 
         return cell
     }
+}
+
+extension NavigationBarController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.setCurrentHorizontalPosition(indexPath.row)
@@ -185,7 +187,7 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
         var width = -NavigationBarController.buttonWidth
         if self.navigationLabels.count > 0 {
             for index in 0 ... position {
-                width = width + self.widthForItem(atIndex: index)                                     
+                width = width + self.widthForItem(atIndex: index)
             }
 
             width = width - self.widthForItem(atIndex: position)
@@ -195,6 +197,9 @@ extension NavigationBarController: UICollectionViewDelegate, UICollectionViewDat
         self.navigationLabelCollectionView.reloadData()
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
+}
+
+extension NavigationBarController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.widthForItem(atIndex: indexPath.item), height: self.view.frame.height)
