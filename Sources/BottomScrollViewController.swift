@@ -167,9 +167,9 @@ extension BottomScrollViewController: HorizontallySwitchableDelegate {
     }
 }
 
-
 extension BottomScrollViewController: BottomControllerDelegate {
+
     func requestToSwitchToTop(from bottomContentViewController: BottomControllable) {
-      self.verticallySwitchableDelegate?.didSwitchToPosition(.top, on: self)
+        self.verticallySwitchableDelegate?.didSwitchToPosition(.top, on: self)
     }
 }

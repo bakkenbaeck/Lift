@@ -37,6 +37,7 @@ class TableController: UIViewController, BottomControllable {
 }
 
 extension TableController: UITableViewDelegate, UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 40
     }
@@ -49,7 +50,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -(UIScreen.main.bounds.height/4) {
+        if scrollView.contentOffset.y < -(UIScreen.main.bounds.height / 4) {
             self.bottomControllerDelegate?.requestToSwitchToTop(from: self)
         }
     }

@@ -15,6 +15,7 @@ extension UIView {
         self.layer.add(rotateAnimation, forKey: nil)
     }
 }
+
 extension UILabel {
 
     public func width() -> CGFloat {

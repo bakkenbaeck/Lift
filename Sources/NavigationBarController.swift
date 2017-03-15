@@ -69,7 +69,7 @@ class NavigationBarController: UIViewController {
 
         return line
     }()
-    
+
     lazy var swipeLeftRecognizer: UISwipeGestureRecognizer = {
         let gestureRecognizer = UISwipeGestureRecognizer()
         gestureRecognizer.direction = .left
@@ -273,9 +273,9 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
         var scrollBounds = self.navigationLabelCollectionView.bounds
         scrollBounds.origin = newContentOffset
 
-        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: CGPoint(x: xOffsetForRoomIndicatorController + self.style.spacing, y: 0) )?.row ?? self.horizontalPosition
-        
-        UIView.animate(withDuration: 0.2, delay: 0, options: [UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.beginFromCurrentState ], animations: {
+        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: CGPoint(x: xOffsetForRoomIndicatorController + self.style.spacing, y: 0))?.row ?? self.horizontalPosition
+
+        UIView.animate(withDuration: 0.2, delay: 0, options: [UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.navigationLabelCollectionView.bounds = scrollBounds
         }, completion: { b in
             self.navigationLabelCollectionView.reloadData()
@@ -283,7 +283,7 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
     }
 }
 
-extension NavigationBarController: CAAnimationDelegate{
+extension NavigationBarController: CAAnimationDelegate {
 
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if self.verticalPosition == .top {

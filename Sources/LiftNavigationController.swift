@@ -73,7 +73,7 @@ open class LiftNavigationController: UIViewController {
         self.bottomScrollViewController.horizontallyScrollableDelegate = self.navigationBarController
 
         self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
-        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.controllerTitle ?? ""}
+        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.controllerTitle ?? "" }
 
         self.addSubviewsAndConstraints()
     }
@@ -149,7 +149,7 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
         var origin = self.view.bounds.origin
         origin.y = 0
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState ], animations: {
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
         }, completion: { _ in })
     }
@@ -158,7 +158,7 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState ], animations: {
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
         }, completion: { _ in })
     }
