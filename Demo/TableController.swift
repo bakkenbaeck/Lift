@@ -1,8 +1,10 @@
 import UIKit
 import Lift
 
-class TableController: UIViewController, BottomControllable {
+class TableController: UIViewController {
     weak var bottomControllerDelegate: BottomControllerDelegate?
+    var onTopOfScrollView = false
+    var lastContentOffsetY = CGFloat(0.0)
 
     var cellIdentifier: String {
         return String(describing: UITableViewCell.self)
@@ -36,22 +38,38 @@ class TableController: UIViewController, BottomControllable {
     }
 }
 
-extension TableController: UITableViewDelegate, UITableViewDataSource {
+extension TableController: BottomControllable {
+    func enableScrollView() {
+        self.tableView.isUserInteractionEnabled = true
+    }
+}
 
+extension TableController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 40
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as! UITableViewCell
         cell.textLabel?.text = "Hi there"
 
         return cell
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -(UIScreen.main.bounds.height / 4) {
-            self.bottomControllerDelegate?.requestToSwitchToTop(from: self)
+        let scrollingUp = self.lastContentOffsetY > scrollView.contentOffset.y
+
+        let scrollingUpFromTop = self.onTopOfScrollView && scrollingUp
+
+        if scrollingUpFromTop {
+            scrollView.isUserInteractionEnabled = false
+            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         }
+
+        self.lastContentOffsetY = scrollView.contentOffset.y
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.onTopOfScrollView = scrollView.contentOffset.y <= 0
     }
 }
