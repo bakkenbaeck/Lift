@@ -63,7 +63,6 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
 
         if scrollingUpFromTop {
             scrollView.isUserInteractionEnabled = false
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
             self.bottomControllerDelegate?.requestToScrollOnTop(toYOffset: scrollView.contentOffset.y, from: self)
         }
 
