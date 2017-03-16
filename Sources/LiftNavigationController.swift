@@ -1,19 +1,19 @@
 import UIKit
 
 open class LiftNavigationController: UIViewController {
+    public static let switchAnimationDuration = 0.2
     public static let navigationBarHeight = CGFloat(64.0)
+
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
-    open var navigationBarFont: UIFont?
-    open var topBarButtonImage: UIImage?
-    open var bottomBarButtonImage: UIImage?
+    var navigationBarStyle: NavigationBarStyle
 
     open var topViewController = UIViewController() {
         didSet {
             self.topViewController.view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    open var bottomViewControllers = [BottomController]()
+    open var bottomViewControllers = [BottomControllable]()
 
     var verticalPosition: VerticalPosition = .top
     var shouldEvaluatePageChange = false
@@ -41,22 +41,28 @@ open class LiftNavigationController: UIViewController {
     }()
 
     lazy var navigationBarController: NavigationBarController = {
-        let navigationBarController = NavigationBarController()
+        let navigationBarController = NavigationBarController(style: self.navigationBarStyle)
         navigationBarController.verticallySwitchableDelegate = self
-
-        navigationBarController.font = self.navigationBarFont
-        navigationBarController.topButtonImage = self.topBarButtonImage
-        navigationBarController.bottomButtonImage = self.bottomBarButtonImage
 
         return navigationBarController
     }()
 
     lazy var contentView: UIView = {
-        let view = UIView(withAutoLayout: true)
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
 
         return view
     }()
+
+    public init(navigationBarStyle: NavigationBarStyle = NavigationBarStyle()) {
+        self.navigationBarStyle = navigationBarStyle
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +73,7 @@ open class LiftNavigationController: UIViewController {
         self.bottomScrollViewController.horizontallyScrollableDelegate = self.navigationBarController
 
         self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
-        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.title ?? "" }
+        self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.controllerTitle ?? "" }
 
         self.addSubviewsAndConstraints()
     }
@@ -142,17 +148,19 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     func moveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
-        UIView.animate(withDuration: 0.2) {
+
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }
+        }, completion: { _ in })
     }
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
-        UIView.animate(withDuration: 0.2) {
+
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }
+        }, completion: { _ in })
     }
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {

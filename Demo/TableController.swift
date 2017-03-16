@@ -1,7 +1,9 @@
 import UIKit
 import Lift
 
-class TableController: BottomController {
+class TableController: UIViewController, BottomControllable {
+    weak var bottomControllerDelegate: BottomControllerDelegate?
+
     var cellIdentifier: String {
         return String(describing: UITableViewCell.self)
     }
@@ -35,19 +37,20 @@ class TableController: BottomController {
 }
 
 extension TableController: UITableViewDelegate, UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 40
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
         cell.textLabel?.text = "Hi there"
 
         return cell
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -(UIScreen.main.bounds.height/4) {
+        if scrollView.contentOffset.y < -(UIScreen.main.bounds.height / 4) {
             self.bottomControllerDelegate?.requestToSwitchToTop(from: self)
         }
     }
