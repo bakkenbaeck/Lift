@@ -175,6 +175,6 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     }
 
     func didScrollToYOffset(_ yOffset: CGFloat, on viewController: UIViewController) {
-        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollView.contentOffset.y + yOffset), animated: false)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 603 + yOffset), animated: false)
     }
 }
