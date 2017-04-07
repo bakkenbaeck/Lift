@@ -106,7 +106,7 @@ open class LiftNavigationController: UIViewController {
         self.topViewController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         self.topViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.navigationBarHeight).isActive = true
+        self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - 44).isActive = true
 
         self.navigationBarController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
         self.navigationBarController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true

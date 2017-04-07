@@ -57,7 +57,6 @@ class NavigationBarController: UIViewController {
         collectionView.contentInset = UIEdgeInsets(top: 0, left: NavigationBarController.buttonWidth, bottom: 0, right: 0)
 
         collectionView.isUserInteractionEnabled = false
-        collectionView.alpha = 0
 
         return collectionView
     }()
@@ -232,10 +231,6 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
         self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
 
-        UIView.animate(withDuration: 0.2) {
-            self.navigationLabelCollectionView.alpha = 0
-        }
-
         self.view.setNeedsLayout()
     }
 
@@ -247,10 +242,6 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
         self.switchButtonWidthAnchor?.constant = NavigationBarController.buttonWidth
 
         self.switchButton.imageView?.rotate180Degrees(duration: LiftNavigationController.switchAnimationDuration, completionDelegate: self)
-
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration) {
-            self.navigationLabelCollectionView.alpha = 1
-        }
 
         self.view.setNeedsLayout()
     }
