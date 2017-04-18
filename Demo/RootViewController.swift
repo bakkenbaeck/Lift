@@ -35,7 +35,7 @@ class RootViewController: LiftNavigationController {
         fourthViewController.view.layer.borderColor = UIColor.liftBrightGreen().cgColor
 
         self.topViewController = topViewController
-        self.bottomViewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
+        self.bottomViewControllers = [firstViewController]
 
         self.view.translatesAutoresizingMaskIntoConstraints = false
     }
