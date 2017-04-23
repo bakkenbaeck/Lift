@@ -111,6 +111,13 @@ class NavigationBarController: UIViewController {
         self.addSubViewsAndConstraints()
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+        self.navigationLabelCollectionView.reloadData()
+    }
+
+
     func addSubViewsAndConstraints() {
         self.view.addSubview(self.navigationLabelCollectionView)
         self.view.addSubview(self.switchButton)
@@ -164,7 +171,8 @@ extension NavigationBarController: UICollectionViewDataSource {
         cell.titleLabel.text = self.navigationLabels[indexPath.row]
         cell.titleLabel.font = self.style.font
         cell.titleLabel.textAlignment = .center
-        if indexPath.row == self.horizontalPosition {
+        
+        if indexPath.row == self.horizontalPosition && self.verticalPosition == .bottom {
             cell.titleLabel.textColor = self.style.activeTextColor
         } else {
             cell.titleLabel.textColor = self.style.inactiveTextColor
