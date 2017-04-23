@@ -156,7 +156,7 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
-        origin.y = self.view.bounds.height - LiftNavigationController.navigationBarHeight
+        origin.y = self.view.bounds.height - 44
 
         UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
