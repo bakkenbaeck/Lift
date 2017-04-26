@@ -91,7 +91,6 @@ class BottomScrollViewController: UIViewController {
                 let priorViewController = bottomViewControllers[index - 1]
                 viewController.defaultView.leftAnchor.constraint(equalTo: priorViewController.defaultView.rightAnchor).isActive = true
             }
-
         }
     }
 

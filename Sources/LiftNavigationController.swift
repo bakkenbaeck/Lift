@@ -3,6 +3,7 @@ import UIKit
 open class LiftNavigationController: UIViewController {
     public static let switchAnimationDuration = 0.2
     public static let navigationBarHeight = CGFloat(64.0)
+    public static let hiddenNavigationBarHeight = CGFloat(44.0)
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
@@ -106,7 +107,7 @@ open class LiftNavigationController: UIViewController {
         self.topViewController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         self.topViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.topViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - 44).isActive = true
+        self.topViewController.view.heightAnchor.constraint(equalToConstant: self.view.bounds.height - LiftNavigationController.hiddenNavigationBarHeight).isActive = true
 
         self.navigationBarController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
         self.navigationBarController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -156,7 +157,7 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
-        origin.y = self.view.bounds.height - 44
+        origin.y = self.view.bounds.height - LiftNavigationController.hiddenNavigationBarHeight
 
         UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
