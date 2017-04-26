@@ -78,16 +78,18 @@ class BottomScrollViewController: UIViewController {
                 viewController.defaultView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
             }
 
+            if isLastViewController {
+                if !isFirstViewController {
+                    let priorViewController = bottomViewControllers[index - 1]
+                    viewController.defaultView.leftAnchor.constraint(equalTo: priorViewController.defaultView.rightAnchor).isActive = true
+                }
+
+                viewController.defaultView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
+            }
+
             if isMiddleViewController {
                 let priorViewController = bottomViewControllers[index - 1]
                 viewController.defaultView.leftAnchor.constraint(equalTo: priorViewController.defaultView.rightAnchor).isActive = true
-            }
-
-            if isLastViewController {
-                let priorViewController = bottomViewControllers[index - 1]
-                viewController.defaultView.leftAnchor.constraint(equalTo: priorViewController.defaultView.rightAnchor).isActive = true
-
-                viewController.defaultView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
             }
         }
     }

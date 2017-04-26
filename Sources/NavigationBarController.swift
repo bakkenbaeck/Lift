@@ -57,7 +57,6 @@ class NavigationBarController: UIViewController {
         collectionView.contentInset = UIEdgeInsets(top: 0, left: NavigationBarController.buttonWidth, bottom: 0, right: 0)
 
         collectionView.isUserInteractionEnabled = false
-        collectionView.alpha = 0
 
         return collectionView
     }()
@@ -110,6 +109,12 @@ class NavigationBarController: UIViewController {
         self.view.backgroundColor = .white
 
         self.addSubViewsAndConstraints()
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+        self.navigationLabelCollectionView.reloadData()
     }
 
     func addSubViewsAndConstraints() {
@@ -165,7 +170,8 @@ extension NavigationBarController: UICollectionViewDataSource {
         cell.titleLabel.text = self.navigationLabels[indexPath.row]
         cell.titleLabel.font = self.style.font
         cell.titleLabel.textAlignment = .center
-        if indexPath.row == self.horizontalPosition {
+
+        if indexPath.row == self.horizontalPosition && self.verticalPosition == .bottom {
             cell.titleLabel.textColor = self.style.activeTextColor
         } else {
             cell.titleLabel.textColor = self.style.inactiveTextColor
@@ -232,10 +238,6 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
         self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
 
-        UIView.animate(withDuration: 0.2) {
-            self.navigationLabelCollectionView.alpha = 0
-        }
-
         self.view.setNeedsLayout()
     }
 
@@ -247,10 +249,6 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
         self.switchButtonWidthAnchor?.constant = NavigationBarController.buttonWidth
 
         self.switchButton.imageView?.rotate180Degrees(duration: LiftNavigationController.switchAnimationDuration, completionDelegate: self)
-
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration) {
-            self.navigationLabelCollectionView.alpha = 1
-        }
 
         self.view.setNeedsLayout()
     }
