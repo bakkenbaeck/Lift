@@ -122,6 +122,13 @@ class BottomScrollViewController: UIViewController {
             controller.didMove(toParentViewController: parentController)
         }
     }
+
+    func enableScrollViews() {
+        print("enable all the ScrollViews!")
+        for bottomViewController in self.bottomViewControllers ?? [] {
+           bottomViewController.enableScrollView()
+        }
+    }
 }
 
 extension BottomScrollViewController: UIScrollViewDelegate {
@@ -153,17 +160,12 @@ extension BottomScrollViewController: HorizontallySwitchableDelegate {
         UIView.animate(withDuration: 0.2, animations: {
             self.scrollView.bounds = scrollBounds
         }, completion: { b in
+            if position != self.horizontalPosition {
+                self.horizontalPosition = position
 
-            // WARNING: look into this, can't i just use the horizontalPosition formt he delegate here?
-            let pageWidth = UIScreen.main.bounds.width
-            let horizontalPosition = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
-
-            if horizontalPosition != self.horizontalPosition {
-                self.horizontalPosition = horizontalPosition
-
-                self.loadScrollViewWithPage(horizontalPosition - 1)
-                self.loadScrollViewWithPage(horizontalPosition)
-                self.loadScrollViewWithPage(horizontalPosition + 1)
+                self.loadScrollViewWithPage(position - 1)
+                self.loadScrollViewWithPage(position)
+                self.loadScrollViewWithPage(position + 1)
             }
         })
     }
@@ -173,5 +175,9 @@ extension BottomScrollViewController: BottomControllerDelegate {
 
     func requestToSwitchToTop(from bottomContentViewController: BottomControllable) {
         self.verticallySwitchableDelegate?.didSwitchToPosition(.top, on: self)
+    }
+
+    func requestToScrollOnTop(toYOffset yOffset: CGFloat, from bottomController: BottomControllable) {
+        self.verticallySwitchableDelegate?.didScrollToYOffset(yOffset, on: self)
     }
 }

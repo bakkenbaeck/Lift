@@ -8,12 +8,14 @@ enum VerticalPosition: Int {
 protocol VerticallySwitchableDelegate: class {
     func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController)
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController)
+    func didScrollToYOffset(_ yOffset: CGFloat, on viewController: UIViewController)
 }
 
 extension VerticallySwitchableDelegate where Self: VerticallySwitchable {
     // make the methods optional
     func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController) {}
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {}
+    func didScrollToYOffset(_ yOffset: CGFloat, on viewController: UIViewController) {}
 }
 
 protocol VerticallySwitchable: class {

@@ -132,6 +132,12 @@ extension LiftNavigationController: UIScrollViewDelegate {
         self.shouldEvaluatePageChange = false
     }
 
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("scrollViewDidEndDragging")
+        self.bottomScrollViewController.enableScrollViews()
+    }
+
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if shouldEvaluatePageChange {
             let pageHeight = self.view.bounds.height
@@ -167,5 +173,9 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
         self.setVerticalPosition(position)
         self.verticallySwitchableDelegate?.didSwipeToPosition(position, on: self)
+    }
+
+    func didScrollToYOffset(_ yOffset: CGFloat, on viewController: UIViewController) {
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 603 + yOffset), animated: false)
     }
 }
