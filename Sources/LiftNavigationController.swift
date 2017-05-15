@@ -2,7 +2,7 @@ import UIKit
 
 open class LiftNavigationController: UIViewController {
     public static let switchAnimationDuration = 0.2
-    public static let navigationBarHeight = CGFloat(64.0)
+    public static let navigationBarHeight = CGFloat(90.0)
     public static let hiddenNavigationBarHeight = CGFloat(44.0)
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
