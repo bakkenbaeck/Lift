@@ -36,8 +36,6 @@ class RootViewController: LiftNavigationController {
 
         self.topViewController = topViewController
         self.bottomViewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
-
-        self.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     public required init?(coder aDecoder: NSCoder) {

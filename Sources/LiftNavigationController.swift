@@ -2,7 +2,7 @@ import UIKit
 
 open class LiftNavigationController: UIViewController {
     public static let switchAnimationDuration = 0.2
-    public static let navigationBarHeight = CGFloat(64.0)
+    public static let navigationBarHeight = CGFloat(90.0)
     public static let hiddenNavigationBarHeight = CGFloat(44.0)
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
@@ -76,15 +76,11 @@ open class LiftNavigationController: UIViewController {
         self.bottomScrollViewController.bottomViewControllers = bottomViewControllers
         self.navigationBarController.navigationLabels = self.bottomViewControllers.map { controller in controller.controllerTitle ?? "" }
 
+        self.automaticallyAdjustsScrollViewInsets = false
         self.addSubviewsAndConstraints()
     }
 
     func addSubviewsAndConstraints() {
-        self.view.translatesAutoresizingMaskIntoConstraints = false
-
-        self.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        self.view.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
-
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
 
