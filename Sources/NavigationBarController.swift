@@ -19,6 +19,8 @@ class NavigationBarController: UIViewController {
 
     fileprivate var navigationLabelsTopAnchor: NSLayoutConstraint?
     fileprivate var navigationLabelsBottomAnchor: NSLayoutConstraint?
+    fileprivate var switchButtonTopAnchor: NSLayoutConstraint?
+    fileprivate var switchButtonBottomAnchor: NSLayoutConstraint?
 
     lazy var switchButton: UIButton = {
         let button = UIButton()
@@ -126,16 +128,18 @@ class NavigationBarController: UIViewController {
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
 
-        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive  = true
-        self.navigationLabelCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive  = true
+        self.navigationLabelsTopAnchor = self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        self.navigationLabelsTopAnchor?.isActive = true
+        self.navigationLabelsBottomAnchor = self.navigationLabelCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30)
+        self.navigationLabelsBottomAnchor?.isActive = true
 
         self.navigationLabelCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.navigationLabelCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width).isActive = true
-        self.navigationLabelCollectionView.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
-        self.switchButton.topAnchor.constraint(equalTo: self.view.topAnchor).isActive  = true
-        self.switchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive  = true
-        self.switchButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.switchButtonTopAnchor = self.switchButton.topAnchor.constraint(equalTo: self.view.topAnchor)
+        self.switchButtonTopAnchor?.isActive = true
+        self.switchButtonBottomAnchor = self.switchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30)
+        self.switchButtonBottomAnchor?.isActive = true
 
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.switchButton.widthAnchor.constraint(equalToConstant: NavigationBarController.buttonWidth)
@@ -241,7 +245,15 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
         self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
 
-        self.view.setNeedsLayout()
+        self.navigationLabelsTopAnchor?.constant = 0
+        self.navigationLabelsBottomAnchor?.constant = -30
+        self.switchButtonTopAnchor?.constant = 0
+        self.switchButtonBottomAnchor?.constant = -30
+
+
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
     }
 
     func moveToBottom() {
@@ -251,7 +263,14 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
         self.switchButton.imageView?.rotate180Degrees(duration: LiftNavigationController.switchAnimationDuration, completionDelegate: self)
 
-        self.view.setNeedsLayout()
+        self.navigationLabelsTopAnchor?.constant = 30
+        self.navigationLabelsBottomAnchor?.constant = 0
+        self.switchButtonTopAnchor?.constant = 30
+        self.switchButtonBottomAnchor?.constant = 0
+
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
     }
 
     func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
