@@ -1,7 +1,7 @@
 import UIKit
 
 protocol HorizontallyScrollableDelegate: class {
-    func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint)
+    func viewController(_ viewController: UIViewController, didScrollTo horizontalPosition: Int)
 }
 
 class NavigationBarController: UIViewController {
@@ -260,26 +260,17 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
 extension NavigationBarController: HorizontallyScrollableDelegate {
 
-    func viewController(_ viewController: UIViewController, didScrollTo contentOffset: CGPoint) {
-        guard let bottomController = viewController as? BottomScrollViewController else { return }
-        guard contentOffset.x >= 0 else { return }
-
-        let scrollPercentage = bottomController.scrollView.contentSize.width / contentOffset.x
-        let xOffsetForRoomIndicatorController = self.navigationLabelCollectionView.contentSize.width / scrollPercentage
-        let newContentOffset = CGPoint(x: xOffsetForRoomIndicatorController - NavigationBarController.buttonWidth, y: 0)
-
-        var scrollBounds = self.navigationLabelCollectionView.bounds
-        scrollBounds.origin = newContentOffset
-
-        self.horizontalPosition = self.navigationLabelCollectionView.indexPathForItem(at: CGPoint(x: xOffsetForRoomIndicatorController + self.style.spacing, y: 0))?.row ?? self.horizontalPosition
-
-        UIView.animate(withDuration: 0.2, delay: 0, options: [UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.beginFromCurrentState], animations: {
-            self.navigationLabelCollectionView.bounds = scrollBounds
-        }, completion: { b in
-            self.navigationLabelCollectionView.reloadData()
-        })
+    func viewController(_ viewController: UIViewController, didScrollTo horizontalPosition: Int) {
+        if self.horizontalPosition != horizontalPosition {
+            UIView.animate(withDuration: 0.2, delay: 0, options: [UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.beginFromCurrentState], animations: {
+                self.setCurrentHorizontalPosition(horizontalPosition)
+            }, completion: { b in
+                self.navigationLabelCollectionView.reloadData()
+            })
+        }
     }
 }
+
 
 extension NavigationBarController: CAAnimationDelegate {
 
