@@ -31,11 +31,13 @@ extension VerticallySwitchable {
     func setVerticalPosition(_ position: VerticalPosition) {
         guard self.verticalPosition != position else { return }
 
-        if position == .top {
+        switch position {
+        case .top:
             self.moveToTop()
-        } else if position == .bottom {
+        case .bottom:
             self.moveToBottom()
         }
+        
         self.verticalPosition = position
     }
 }
