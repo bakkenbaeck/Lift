@@ -17,7 +17,8 @@ class NavigationBarController: UIViewController {
     var navigationLabels = [String]()
     var style: NavigationBarStyle
 
-    var switchButtonWidthAnchor: NSLayoutConstraint?
+    fileprivate var navigationLabelsTopAnchor: NSLayoutConstraint?
+    fileprivate var navigationLabelsBottomAnchor: NSLayoutConstraint?
 
     lazy var switchButton: UIButton = {
         let button = UIButton()
@@ -30,7 +31,7 @@ class NavigationBarController: UIViewController {
         button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
         button.backgroundColor = .clear
-        button.contentEdgeInsets = UIEdgeInsetsMake(10, 20, 0, 0)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 5, 0)
 
         return button
     }()
@@ -125,16 +126,19 @@ class NavigationBarController: UIViewController {
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
 
-        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive  = true
+        self.navigationLabelCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive  = true
+
         self.navigationLabelCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.navigationLabelCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width).isActive = true
-        self.navigationLabelCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        self.navigationLabelCollectionView.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
-        self.switchButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        self.switchButton.topAnchor.constraint(equalTo: self.view.topAnchor).isActive  = true
+        self.switchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive  = true
+        self.switchButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.switchButton.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
-        self.switchButtonWidthAnchor = self.switchButton.widthAnchor.constraint(equalToConstant: self.view.bounds.width)
-        self.switchButtonWidthAnchor?.isActive = true
+        self.switchButton.widthAnchor.constraint(equalToConstant: NavigationBarController.buttonWidth)
 
         self.line.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         self.line.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -208,7 +212,7 @@ extension NavigationBarController: UICollectionViewDelegate {
 extension NavigationBarController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.widthForItem(atIndex: indexPath.item), height: self.view.frame.height)
+        return CGSize(width: self.widthForItem(atIndex: indexPath.item), height: 60)
     }
 
     func widthForItem(atIndex index: Int) -> CGFloat {
@@ -234,7 +238,6 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
         self.navigationLabelCollectionView.isUserInteractionEnabled = false
         self.swipeLeftRecognizer.isEnabled = false
         self.swipeRightRecognizer.isEnabled = false
-        self.switchButtonWidthAnchor?.constant = self.view.bounds.width
 
         self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
 
@@ -245,8 +248,6 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
         self.navigationLabelCollectionView.isUserInteractionEnabled = true
         self.swipeLeftRecognizer.isEnabled = true
         self.swipeRightRecognizer.isEnabled = true
-
-        self.switchButtonWidthAnchor?.constant = NavigationBarController.buttonWidth
 
         self.switchButton.imageView?.rotate180Degrees(duration: LiftNavigationController.switchAnimationDuration, completionDelegate: self)
 
@@ -270,7 +271,6 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
         }
     }
 }
-
 
 extension NavigationBarController: CAAnimationDelegate {
 
