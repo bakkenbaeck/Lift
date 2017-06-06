@@ -37,7 +37,7 @@ extension VerticallySwitchable {
         case .bottom:
             self.moveToBottom()
         }
-        
+
         self.verticalPosition = position
     }
 }

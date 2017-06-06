@@ -17,7 +17,6 @@ open class LiftNavigationController: UIViewController {
     open var bottomViewControllers = [BottomControllable]()
 
     var verticalPosition: VerticalPosition = .top
-    var shouldEvaluatePageChange = false
 
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -120,23 +119,13 @@ open class LiftNavigationController: UIViewController {
 
 extension LiftNavigationController: UIScrollViewDelegate {
 
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.shouldEvaluatePageChange = true
-    }
-
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.shouldEvaluatePageChange = false
-    }
+        let pageHeight = self.view.bounds.height
+        let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if shouldEvaluatePageChange {
-            let pageHeight = self.view.bounds.height
-            let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
-
-            guard let verticalPosition = VerticalPosition(rawValue: index), verticalPosition != self.verticalPosition else { return }
-            self.setVerticalPosition(verticalPosition)
-            self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
-        }
+        guard let verticalPosition = VerticalPosition(rawValue: index), verticalPosition != self.verticalPosition else { return }
+        self.setVerticalPosition(verticalPosition)
+        self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
     }
 }
 
