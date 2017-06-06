@@ -6,7 +6,7 @@ protocol HorizontallyScrollableDelegate: class {
 
 class NavigationBarController: UIViewController {
     static let itemWidth = CGFloat(100.0)
-    static let buttonWidth = CGFloat(64.0)
+    static let buttonWidth = CGFloat(48.0)
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
     weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
