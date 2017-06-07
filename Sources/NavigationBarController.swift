@@ -6,7 +6,6 @@ protocol HorizontallyScrollableDelegate: class {
 
 class NavigationBarController: UIViewController {
 
-    fileprivate let buttonWidth: CGFloat = 48.0
     fileprivate let navigationLabelCollectionViewOffset: CGFloat = 14
     fileprivate let switchButtonOffsetBottom: CGFloat = 30
     fileprivate let switchButtonOffsetTop: CGFloat = 26
@@ -56,7 +55,7 @@ class NavigationBarController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
 
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: self.buttonWidth, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: self.style.spacing, bottom: 0, right: 0)
 
         collectionView.isUserInteractionEnabled = false
 
@@ -111,12 +110,14 @@ class NavigationBarController: UIViewController {
         self.view.backgroundColor = .white
 
         self.addSubViewsAndConstraints()
+
+        self.navigationLabelCollectionView.reloadData()
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
 
-        self.navigationLabelCollectionView.reloadData()
+        //self.navigationLabelCollectionView.reloadData()
     }
 
     func addSubViewsAndConstraints() {
@@ -137,7 +138,6 @@ class NavigationBarController: UIViewController {
         self.switchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.switchButton.widthAnchor.constraint(equalToConstant: self.buttonWidth)
 
         self.line.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         self.line.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -150,14 +150,18 @@ class NavigationBarController: UIViewController {
         self.verticallySwitchableDelegate?.didSwitchToPosition(self.verticalPosition, on: self)
     }
 
-    func didSwipeRight() {
-        guard self.horizontalPosition > 0 else { return }
-        self.setCurrentHorizontalPosition(self.horizontalPosition - 1)
+    func didSwipeRight(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            guard self.horizontalPosition > 0 else { return }
+            self.setCurrentHorizontalPosition(self.horizontalPosition - 1)
+        }
     }
 
-    func didSwipeLeft() {
-        guard self.horizontalPosition < (self.navigationLabels.count - 1) else { return }
-        self.setCurrentHorizontalPosition(self.horizontalPosition + 1)
+    func didSwipeLeft(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            guard self.horizontalPosition < (self.navigationLabels.count - 1) else { return }
+            self.setCurrentHorizontalPosition(self.horizontalPosition + 1)
+        }
     }
 }
 
@@ -191,19 +195,18 @@ extension NavigationBarController: UICollectionViewDelegate {
     }
 
     func setCurrentHorizontalPosition(_ position: Int) {
-        self.horizontalPosition = position
+        defer { self.horizontalPosition = position }
+        guard self.navigationLabelCollectionView.numberOfItems(inSection: 0) > 0 else { return }
 
-        var width = -self.buttonWidth
-        if self.navigationLabels.count > 0 {
-            for index in 0 ... position {
-                width = width + self.widthForItem(atIndex: index)
-            }
+        let indexPath = IndexPath(item: position, section: 0)
+        let cell = self.collectionView(self.navigationLabelCollectionView, cellForItemAt: indexPath)
 
-            width = width - self.widthForItem(atIndex: position)
-        }
+        let padding = self.style.spacing
+        let x = cell.frame.origin.x - padding
+        let y = self.navigationLabelCollectionView.contentOffset.y
+        let offset = CGPoint(x: x, y: y)
 
-        self.navigationLabelCollectionView.setContentOffset(CGPoint(x: width + (self.style.spacing * CGFloat(position)), y: 0), animated: true)
-        self.navigationLabelCollectionView.reloadData()
+        self.navigationLabelCollectionView.setContentOffset(offset, animated: true)
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
 }
@@ -216,9 +219,7 @@ extension NavigationBarController: UICollectionViewDelegateFlowLayout {
     }
 
     func widthForItem(atIndex index: Int) -> CGFloat {
-        let padding = CGFloat(10.0)
-
-        return self.estimateFrameForText(text: self.navigationLabels[index]).width + (padding * 2)
+        return self.estimateFrameForText(text: self.navigationLabels[index]).width + (self.style.spacing * 2)
     }
 
     func estimateFrameForText(text: String) -> CGRect {
@@ -274,7 +275,7 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
             UIView.animate(withDuration: 0.2, delay: 0, options: [UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.beginFromCurrentState], animations: {
                 self.setCurrentHorizontalPosition(horizontalPosition)
             }, completion: { b in
-                self.navigationLabelCollectionView.reloadData()
+                // self.navigationLabelCollectionView.reloadData()
             })
         }
     }
