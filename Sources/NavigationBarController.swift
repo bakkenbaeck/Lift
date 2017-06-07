@@ -5,8 +5,11 @@ protocol HorizontallyScrollableDelegate: class {
 }
 
 class NavigationBarController: UIViewController {
-    static let itemWidth = CGFloat(100.0)
-    static let buttonWidth = CGFloat(48.0)
+
+    fileprivate let buttonWidth: CGFloat = 48.0
+    fileprivate let navigationLabelCollectionViewOffset: CGFloat = 14
+    fileprivate let switchButtonOffsetBottom: CGFloat = 30
+    fileprivate let switchButtonOffsetTop: CGFloat = 26
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
     weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
@@ -17,23 +20,19 @@ class NavigationBarController: UIViewController {
     var navigationLabels = [String]()
     var style: NavigationBarStyle
 
-    fileprivate var navigationLabelsTopAnchor: NSLayoutConstraint?
-    fileprivate var navigationLabelsBottomAnchor: NSLayoutConstraint?
-    fileprivate var switchButtonTopAnchor: NSLayoutConstraint?
-    fileprivate var switchButtonBottomAnchor: NSLayoutConstraint?
-
     lazy var switchButton: UIButton = {
         let button = UIButton()
 
         if let topImage = self.style.topImage {
             button.setImage(topImage, for: .normal)
         }
-        button.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 0, 0)
+
+        button.imageEdgeInsets.top = self.switchButtonOffsetTop
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(didSelectSwitchButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
         button.backgroundColor = .clear
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 5, 0)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 5, right: 0)
 
         return button
     }()
@@ -41,11 +40,11 @@ class NavigationBarController: UIViewController {
     lazy var navigationLabelCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        layout.sectionInset = .zero
         layout.minimumInteritemSpacing = self.style.spacing
         layout.minimumLineSpacing = self.style.spacing
 
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +56,7 @@ class NavigationBarController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
 
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: NavigationBarController.buttonWidth, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: self.buttonWidth, bottom: 0, right: 0)
 
         collectionView.isUserInteractionEnabled = false
 
@@ -128,21 +127,17 @@ class NavigationBarController: UIViewController {
         self.view.addGestureRecognizer(self.swipeLeftRecognizer)
         self.view.addGestureRecognizer(self.swipeRightRecognizer)
 
-        self.navigationLabelsTopAnchor = self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor)
-        self.navigationLabelsTopAnchor?.isActive = true
-        self.navigationLabelsBottomAnchor = self.navigationLabelCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30)
-        self.navigationLabelsBottomAnchor?.isActive = true
+        self.navigationLabelCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.navigationLabelCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
         self.navigationLabelCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.navigationLabelCollectionView.widthAnchor.constraint(equalToConstant: self.view.bounds.width).isActive = true
+        self.navigationLabelCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
 
-        self.switchButtonTopAnchor = self.switchButton.topAnchor.constraint(equalTo: self.view.topAnchor)
-        self.switchButtonTopAnchor?.isActive = true
-        self.switchButtonBottomAnchor = self.switchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30)
-        self.switchButtonBottomAnchor?.isActive = true
+        self.switchButton.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.switchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
         self.switchButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.switchButton.widthAnchor.constraint(equalToConstant: NavigationBarController.buttonWidth)
+        self.switchButton.widthAnchor.constraint(equalToConstant: self.buttonWidth)
 
         self.line.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         self.line.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -169,7 +164,7 @@ class NavigationBarController: UIViewController {
 extension NavigationBarController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return navigationLabels.count
+        return self.navigationLabels.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -198,7 +193,7 @@ extension NavigationBarController: UICollectionViewDelegate {
     func setCurrentHorizontalPosition(_ position: Int) {
         self.horizontalPosition = position
 
-        var width = -NavigationBarController.buttonWidth
+        var width = -self.buttonWidth
         if self.navigationLabels.count > 0 {
             for index in 0 ... position {
                 width = width + self.widthForItem(atIndex: index)
@@ -216,13 +211,14 @@ extension NavigationBarController: UICollectionViewDelegate {
 extension NavigationBarController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.widthForItem(atIndex: indexPath.item), height: 60)
+
+        return CGSize(width: self.widthForItem(atIndex: indexPath.item), height: 44)
     }
 
     func widthForItem(atIndex index: Int) -> CGFloat {
         let padding = CGFloat(10.0)
 
-        return estimateFrameForText(text: self.navigationLabels[index]).width + (padding * 2)
+        return self.estimateFrameForText(text: self.navigationLabels[index]).width + (padding * 2)
     }
 
     func estimateFrameForText(text: String) -> CGRect {
@@ -245,14 +241,10 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
         self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
 
-        self.navigationLabelsTopAnchor?.constant = 0
-        self.navigationLabelsBottomAnchor?.constant = -30
-        self.switchButtonTopAnchor?.constant = 0
-        self.switchButtonBottomAnchor?.constant = -30
-
-
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.25) {
             self.view.layoutIfNeeded()
+            self.navigationLabelCollectionView.contentOffset.y = self.navigationLabelCollectionViewOffset
+            self.switchButton.imageEdgeInsets.top = -self.switchButtonOffsetTop
         }
     }
 
@@ -263,13 +255,10 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
         self.switchButton.imageView?.rotate180Degrees(duration: LiftNavigationController.switchAnimationDuration, completionDelegate: self)
 
-        self.navigationLabelsTopAnchor?.constant = 30
-        self.navigationLabelsBottomAnchor?.constant = 0
-        self.switchButtonTopAnchor?.constant = 30
-        self.switchButtonBottomAnchor?.constant = 0
-
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
+            self.navigationLabelCollectionView.contentOffset.y = -self.navigationLabelCollectionViewOffset
+            self.switchButton.imageEdgeInsets.top = self.switchButtonOffsetBottom
         }
     }
 

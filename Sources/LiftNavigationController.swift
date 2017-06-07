@@ -2,8 +2,8 @@ import UIKit
 
 open class LiftNavigationController: UIViewController {
     public static let switchAnimationDuration = 0.2
-    public static let navigationBarHeight = CGFloat(90.0)
-    public static let hiddenNavigationBarHeight = CGFloat(34.0)
+    public static let navigationBarHeight: CGFloat = 86.0
+    public static let hiddenNavigationBarHeight: CGFloat = 34.0
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
@@ -106,7 +106,7 @@ open class LiftNavigationController: UIViewController {
 
         self.navigationBarController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
         self.navigationBarController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.navigationBarController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.navigationBarController.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         self.navigationBarController.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
         self.bottomScrollViewController.view.topAnchor.constraint(equalTo: self.navigationBarController.view.bottomAnchor).isActive = true
