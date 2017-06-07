@@ -95,8 +95,6 @@ class NavigationBarController: UIViewController {
         self.navigationLabelCollectionView.delegate = self
         self.navigationLabelCollectionView.dataSource = self
         self.navigationLabelCollectionView.register(NavigationLabelCell.self, forCellWithReuseIdentifier: NavigationLabelCell.identifier)
-
-        self.setCurrentHorizontalPosition(0)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -112,12 +110,7 @@ class NavigationBarController: UIViewController {
         self.addSubViewsAndConstraints()
 
         self.navigationLabelCollectionView.reloadData()
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-
-        //self.navigationLabelCollectionView.reloadData()
+        self.setCurrentHorizontalPosition(0)
     }
 
     func addSubViewsAndConstraints() {
@@ -178,7 +171,7 @@ extension NavigationBarController: UICollectionViewDataSource {
         cell.titleLabel.font = self.style.font
         cell.titleLabel.textAlignment = .center
 
-        if indexPath.row == self.horizontalPosition && self.verticalPosition == .bottom {
+        if indexPath.row == self.horizontalPosition {
             cell.titleLabel.textColor = self.style.activeTextColor
         } else {
             cell.titleLabel.textColor = self.style.inactiveTextColor
@@ -195,11 +188,16 @@ extension NavigationBarController: UICollectionViewDelegate {
     }
 
     func setCurrentHorizontalPosition(_ position: Int) {
-        defer { self.horizontalPosition = position }
-        guard self.navigationLabelCollectionView.numberOfItems(inSection: 0) > 0 else { return }
+        defer {
+            self.horizontalPosition = position
+        }
+
+        guard self.navigationLabelCollectionView.numberOfItems(inSection: 0) > 0 else {
+            return
+        }
 
         let indexPath = IndexPath(item: position, section: 0)
-        let cell = self.collectionView(self.navigationLabelCollectionView, cellForItemAt: indexPath)
+        let cell = self.collectionView(self.navigationLabelCollectionView, cellForItemAt: indexPath) as! NavigationLabelCell
 
         let padding = self.style.spacing
         let x = cell.frame.origin.x - padding
@@ -207,6 +205,7 @@ extension NavigationBarController: UICollectionViewDelegate {
         let offset = CGPoint(x: x, y: y)
 
         self.navigationLabelCollectionView.setContentOffset(offset, animated: true)
+        self.navigationLabelCollectionView.reloadData()
         self.horizontallySwitchableDelegate?.viewController(self, didSelectPosition: position)
     }
 }
@@ -274,8 +273,8 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
         if self.horizontalPosition != horizontalPosition {
             UIView.animate(withDuration: 0.2, delay: 0, options: [UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.beginFromCurrentState], animations: {
                 self.setCurrentHorizontalPosition(horizontalPosition)
-            }, completion: { b in
-                // self.navigationLabelCollectionView.reloadData()
+            }, completion: { _ in
+
             })
         }
     }
