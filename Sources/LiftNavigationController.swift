@@ -79,6 +79,30 @@ open class LiftNavigationController: UIViewController {
         self.addSubviewsAndConstraints()
     }
 
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.navigationBarController.viewWillAppear(animated)
+    }
+
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.navigationBarController.viewDidAppear(animated)
+    }
+
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.navigationBarController.viewWillDisappear(animated)
+    }
+
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        self.navigationBarController.viewDidDisappear(animated)
+    }
+
     func addSubviewsAndConstraints() {
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)

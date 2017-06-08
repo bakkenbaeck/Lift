@@ -6,9 +6,11 @@ protocol HorizontallyScrollableDelegate: class {
 
 class NavigationBarController: UIViewController {
 
+    fileprivate let navigationLabelCollectionViewInset: CGFloat = -16
     fileprivate let navigationLabelCollectionViewOffset: CGFloat = 30
-    fileprivate let switchButtonOffsetBottom: CGFloat = 30
-    fileprivate let switchButtonOffsetTop: CGFloat = -26
+
+    fileprivate let switchButtonOffsetBottom: CGFloat = 36
+    fileprivate let switchButtonOffsetTop: CGFloat = -22
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
     weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
@@ -57,7 +59,6 @@ class NavigationBarController: UIViewController {
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
 
         collectionView.contentInset = UIEdgeInsets(top: 0, left: self.style.spacing, bottom: 0, right: 0)
-
         collectionView.isUserInteractionEnabled = false
 
         return collectionView
@@ -112,6 +113,12 @@ class NavigationBarController: UIViewController {
 
         self.navigationLabelCollectionView.reloadData()
         self.setCurrentHorizontalPosition(0)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.navigationLabelCollectionView.contentOffset.y = self.navigationLabelCollectionViewOffset + self.navigationLabelCollectionViewInset
     }
 
     func addSubViewsAndConstraints() {
@@ -236,7 +243,7 @@ extension NavigationBarController: UICollectionViewDelegateFlowLayout {
 extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDelegate {
 
     func positionDidUpdate(percentage: CGFloat) {
-        self.navigationLabelCollectionView.contentOffset.y = -16 + self.navigationLabelCollectionViewOffset * (1 - percentage)
+        self.navigationLabelCollectionView.contentOffset.y = self.navigationLabelCollectionViewInset + self.navigationLabelCollectionViewOffset * (1 - percentage)
         self.switchButton.imageView?.update180DegreesRotationAnimation(percentage: percentage)
 
         let percentOffset = (-self.switchButtonOffsetTop + self.switchButtonOffsetBottom) * percentage
