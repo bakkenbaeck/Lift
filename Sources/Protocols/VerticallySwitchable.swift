@@ -6,6 +6,8 @@ enum VerticalPosition: Int {
 }
 
 protocol VerticallySwitchableDelegate: class {
+    func positionDidUpdate(percentage: CGFloat)
+
     func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController)
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController)
 }

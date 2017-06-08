@@ -2,17 +2,27 @@ import UIKit
 
 extension UIView {
 
-    func rotate180Degrees(duration: CFTimeInterval = 4.0, completionDelegate: CAAnimationDelegate? = nil) {
+    private var rotationAnimation: CAAnimation? {
+        return self.layer.animation(forKey: "180DegreeRotationAnimation")
+    }
+
+    private func add180DegreesRotationAnimation() {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.fromValue = 0.0
-        rotateAnimation.toValue = 0.5 * .pi
-        rotateAnimation.duration = duration
+        rotateAnimation.toValue = Double.pi
+        rotateAnimation.duration = 1.0
+        rotateAnimation.isCumulative = true
 
-        if let delegate = completionDelegate {
-            rotateAnimation.delegate = delegate
+        self.layer.speed = 0
+        self.layer.add(rotateAnimation, forKey: "180DegreeRotationAnimation")
+    }
+
+    func update180DegreesRotationAnimation(percentage: CGFloat) {
+        if self.rotationAnimation == nil {
+            self.add180DegreesRotationAnimation()
         }
 
-        self.layer.add(rotateAnimation, forKey: nil)
+        self.layer.timeOffset = CFTimeInterval(max(0.0, percentage))
     }
 }
 

@@ -6,9 +6,9 @@ protocol HorizontallyScrollableDelegate: class {
 
 class NavigationBarController: UIViewController {
 
-    fileprivate let navigationLabelCollectionViewOffset: CGFloat = 14
+    fileprivate let navigationLabelCollectionViewOffset: CGFloat = 30
     fileprivate let switchButtonOffsetBottom: CGFloat = 30
-    fileprivate let switchButtonOffsetTop: CGFloat = 26
+    fileprivate let switchButtonOffsetTop: CGFloat = -26
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
     weak var horizontallySwitchableDelegate: HorizontallySwitchableDelegate?
@@ -22,8 +22,8 @@ class NavigationBarController: UIViewController {
     lazy var switchButton: UIButton = {
         let button = UIButton()
 
-        if let topImage = self.style.topImage {
-            button.setImage(topImage, for: .normal)
+        if let barImage = self.style.barImage {
+            button.setImage(barImage, for: .normal)
         }
 
         button.imageEdgeInsets.top = self.switchButtonOffsetTop
@@ -32,6 +32,7 @@ class NavigationBarController: UIViewController {
         button.contentHorizontalAlignment = .left
         button.backgroundColor = .clear
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 5, right: 0)
+        button.tintColor = UIColor.gray
 
         return button
     }()
@@ -234,32 +235,24 @@ extension NavigationBarController: UICollectionViewDelegateFlowLayout {
 
 extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDelegate {
 
+    func positionDidUpdate(percentage: CGFloat) {
+        self.navigationLabelCollectionView.contentOffset.y = -16 + self.navigationLabelCollectionViewOffset * (1 - percentage)
+        self.switchButton.imageView?.update180DegreesRotationAnimation(percentage: percentage)
+
+        let percentOffset = (-self.switchButtonOffsetTop + self.switchButtonOffsetBottom) * percentage
+        self.switchButton.imageEdgeInsets.top = self.switchButtonOffsetTop + percentOffset
+    }
+
     func moveToTop() {
         self.navigationLabelCollectionView.isUserInteractionEnabled = false
         self.swipeLeftRecognizer.isEnabled = false
         self.swipeRightRecognizer.isEnabled = false
-
-        self.switchButton.imageView?.rotate180Degrees(duration: 0.2, completionDelegate: self)
-
-        UIView.animate(withDuration: 0.25) {
-            self.view.layoutIfNeeded()
-            self.navigationLabelCollectionView.contentOffset.y = self.navigationLabelCollectionViewOffset
-            self.switchButton.imageEdgeInsets.top = -self.switchButtonOffsetTop
-        }
     }
 
     func moveToBottom() {
         self.navigationLabelCollectionView.isUserInteractionEnabled = true
         self.swipeLeftRecognizer.isEnabled = true
         self.swipeRightRecognizer.isEnabled = true
-
-        self.switchButton.imageView?.rotate180Degrees(duration: LiftNavigationController.switchAnimationDuration, completionDelegate: self)
-
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-            self.navigationLabelCollectionView.contentOffset.y = -self.navigationLabelCollectionViewOffset
-            self.switchButton.imageEdgeInsets.top = self.switchButtonOffsetBottom
-        }
     }
 
     func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
@@ -276,22 +269,6 @@ extension NavigationBarController: HorizontallyScrollableDelegate {
             }, completion: { _ in
 
             })
-        }
-    }
-}
-
-extension NavigationBarController: CAAnimationDelegate {
-
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if self.verticalPosition == .top {
-            if let topImage = self.style.topImage {
-                self.switchButton.setImage(topImage, for: .normal)
-            }
-        }
-        if self.verticalPosition == .bottom {
-            if let bottomImage = self.style.bottomImage {
-                self.switchButton.setImage(bottomImage, for: .normal)
-            }
         }
     }
 }

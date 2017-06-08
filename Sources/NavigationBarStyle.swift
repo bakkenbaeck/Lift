@@ -1,8 +1,7 @@
 import UIKit
 
 public struct NavigationBarStyle {
-    var bottomImage: UIImage?
-    var topImage: UIImage?
+    var barImage: UIImage?
     var font: UIFont
     var activeTextColor: UIColor
     var inactiveTextColor: UIColor
@@ -15,9 +14,8 @@ public struct NavigationBarStyle {
         self.spacing = CGFloat(40.0)
     }
 
-    public init(bottomImage: UIImage, topImage: UIImage, font: UIFont, activeTextColor: UIColor, inactiveTextColor: UIColor, spacing: CGFloat) {
-        self.bottomImage = bottomImage
-        self.topImage = topImage
+    public init(barImage: UIImage, font: UIFont, activeTextColor: UIColor, inactiveTextColor: UIColor, spacing: CGFloat) {
+        self.barImage = barImage
         self.font = font
         self.activeTextColor = activeTextColor
         self.inactiveTextColor = inactiveTextColor
