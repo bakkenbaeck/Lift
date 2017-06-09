@@ -108,6 +108,10 @@ class RotatingButton: UIButton {
         self.lightMask.layer.timeOffset = CFTimeInterval(max(0.0, percentage))
 
         self.darkMask.isHidden = percentage < 1.0
+
+        if percentage == 0.0 || percentage == 1.0 {
+            self.layoutSubviews()
+        }
     }
     
 }

@@ -31,7 +31,7 @@ class NavigationBarController: UIViewController {
         button.imageEdgeInsets.top = self.switchButtonOffsetTop
         button.addTarget(self, action: #selector(self.didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 5, right: 0)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 5, right: 0)
 
         button.backgroundColor = .clear
 
@@ -57,7 +57,7 @@ class NavigationBarController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
 
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: self.style.spacing, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: self.style.spacing + 10, bottom: 0, right: 0)
         collectionView.isUserInteractionEnabled = false
 
         return collectionView
