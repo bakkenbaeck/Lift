@@ -34,7 +34,6 @@ class NavigationBarController: UIViewController {
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 5, right: 0)
 
         button.backgroundColor = .clear
-        button.tintColor = UIColor.gray
 
         return button
     }()

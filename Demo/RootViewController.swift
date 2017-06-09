@@ -4,7 +4,7 @@ import Lift
 class RootViewController: LiftNavigationController {
 
     public init() {
-        let style = NavigationBarStyle(barImage: #imageLiteral(resourceName: "switch-button-down").withRenderingMode(.alwaysTemplate), font: UIFont.systemFont(ofSize: 24), activeTextColor: .liftBlue(), inactiveTextColor: .lightGray, spacing: 20)
+        let style = NavigationBarStyle(barImage: #imageLiteral(resourceName: "switch-button-down"), font: UIFont.systemFont(ofSize: 24), activeTextColor: .liftBlue(), inactiveTextColor: .lightGray, spacing: 20)
 
         super.init(navigationBarStyle: style)
 
