@@ -63,6 +63,7 @@ class BottomScrollViewController: UIViewController {
 
         for (index, viewController) in bottomViewControllers.enumerated() {
             viewController.bottomControllerDelegate = self
+            viewController.pullToNavigateDelegate = self.verticallySwitchableDelegate as? PullToNavigateUpDelegate
             viewController.defaultView.translatesAutoresizingMaskIntoConstraints = false
             self.contentView.addSubview(viewController.defaultView)
 

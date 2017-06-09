@@ -1,7 +1,7 @@
 import UIKit
 
 open class LiftNavigationController: UIViewController {
-    public static let switchAnimationDuration = 0.2
+    public static let switchAnimationDuration = 0.35
     public static let navigationBarHeight: CGFloat = 86.0
     public static let hiddenNavigationBarHeight: CGFloat = 34.0
 
@@ -159,6 +159,7 @@ extension LiftNavigationController: UIScrollViewDelegate {
         self.setVerticalPosition(verticalPosition)
 
         self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
+        self.verticallySwitchableDelegate?.positionDidUpdate(percentage: verticalPosition == .bottom ? 1.0 : 0.0)
     }
 }
 
@@ -172,24 +173,33 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
         var origin = self.view.bounds.origin
         origin.y = 0
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [.curveEaseOut, .beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }, completion: { _ in })
+        }, completion: { _ in
+            self.verticallySwitchableDelegate?.positionDidUpdate(percentage: 0.0)
+        })
     }
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.hiddenNavigationBarHeight
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [.curveEaseOut, .beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
         }, completion: { _ in
-            
+            self.verticallySwitchableDelegate?.positionDidUpdate(percentage: 1.0)
         })
     }
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
         self.setVerticalPosition(position)
         self.verticallySwitchableDelegate?.didSwipeToPosition(position, on: self)
+    }
+}
+
+extension LiftNavigationController: PullToNavigateUpDelegate {
+
+    public func didUpdatePullToNavigateUpThreshold(percentage: CGFloat) {
+        self.navigationBarController.switchButton.percentageFilled = percentage
     }
 }

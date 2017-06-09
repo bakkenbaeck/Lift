@@ -15,6 +15,7 @@
 		14E5B1591E51F4CE003417C1 /* Lift.h in Headers */ = {isa = PBXBuildFile; fileRef = 149D81811DBD2E8000A9EB1A /* Lift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14E5B15E1E51F5AF003417C1 /* LiftNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */; };
 		14E5B1601E51F5C0003417C1 /* LiftNavigationController.swift in Headers */ = {isa = PBXBuildFile; fileRef = E68A7D221E51D8ED00BBA847 /* LiftNavigationController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9F785ECD1EEA9A8F003A16B1 /* RotatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F785ECC1EEA9A8F003A16B1 /* RotatingButton.swift */; };
 		9F8DD4FB1EE8170F0019F332 /* RevealServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8DD4FA1EE8170F0019F332 /* RevealServer.framework */; };
 		9F8DD4FC1EE817230019F332 /* RevealServer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8DD4FA1EE8170F0019F332 /* RevealServer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D197B5BEB17C18B123574186 /* TableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B568B9088E9360587501 /* TableController.swift */; };
@@ -69,6 +70,7 @@
 		14E5B13B1E51F49E003417C1 /* Lift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Lift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		14F393951CC6512400616696 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		14F393961CC6517E00616696 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		9F785ECC1EEA9A8F003A16B1 /* RotatingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotatingButton.swift; sourceTree = "<group>"; };
 		9F8DD4FA1EE8170F0019F332 /* RevealServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RevealServer.framework; sourceTree = "<group>"; };
 		D197B100E69B6BD2E61A4B12 /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
 		D197B568B9088E9360587501 /* TableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				D197BE879B6CD014D6EB9A80 /* Extensions */,
 				D197B900F40652C6A94A88B2 /* BottomControllable.swift */,
 				D197BF33B8587CA2CD4A8E81 /* NavigationBarStyle.swift */,
+				9F785ECC1EEA9A8F003A16B1 /* RotatingButton.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				E6779F1D1E5310EF0083B1A1 /* BottomScrollViewController.swift in Sources */,
 				E685B5601E544650006A9CC3 /* NavigationBarController.swift in Sources */,
 				14E5B15E1E51F5AF003417C1 /* LiftNavigationController.swift in Sources */,
+				9F785ECD1EEA9A8F003A16B1 /* RotatingButton.swift in Sources */,
 				E685B5621E5464B7006A9CC3 /* NavigationLabelCell.swift in Sources */,
 				D197B671F34B9B9F5753F4F6 /* VerticallySwitchable.swift in Sources */,
 				D197B958C5E53B406D21A911 /* UIView+Helpers.swift in Sources */,

@@ -21,19 +21,19 @@ class NavigationBarController: UIViewController {
     var navigationLabels = [String]()
     var style: NavigationBarStyle
 
-    lazy var switchButton: UIButton = {
-        let button = UIButton()
+    lazy var switchButton: RotatingButton = {
+        let button = RotatingButton()
 
         if let barImage = self.style.barImage {
             button.setImage(barImage, for: .normal)
         }
 
         button.imageEdgeInsets.top = self.switchButtonOffsetTop
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(self.didSelectSwitchButton), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
-        button.backgroundColor = .clear
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 5, right: 0)
+
+        button.backgroundColor = .clear
         button.tintColor = UIColor.gray
 
         return button
@@ -244,7 +244,7 @@ extension NavigationBarController: VerticallySwitchable, VerticallySwitchableDel
 
     func positionDidUpdate(percentage: CGFloat) {
         self.navigationLabelCollectionView.contentOffset.y = self.navigationLabelCollectionViewInset + self.navigationLabelCollectionViewOffset * (1 - percentage)
-        self.switchButton.imageView?.update180DegreesRotationAnimation(percentage: percentage)
+        self.switchButton.update180DegreesRotationAnimation(percentage: percentage)
 
         let percentOffset = (-self.switchButtonOffsetTop + self.switchButtonOffsetBottom) * percentage
         self.switchButton.imageEdgeInsets.top = self.switchButtonOffsetTop + percentOffset
