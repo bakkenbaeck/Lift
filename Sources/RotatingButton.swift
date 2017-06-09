@@ -72,7 +72,6 @@ class RotatingButton: UIButton {
 
     private func updateFrames() {
         var newFrame = self.imageView!.frame
-        print(newFrame)
 
         newFrame.origin.y += 1
         newFrame.origin.x += 1
@@ -81,7 +80,7 @@ class RotatingButton: UIButton {
 
         self.lightMask.frame = newFrame
 
-        newFrame.origin.y += newFrame.size.height * 2
+        newFrame.origin.y += newFrame.size.height
         newFrame.size.height *= self.percentageFilled
         self.darkMask.frame = newFrame
     }
@@ -90,7 +89,7 @@ class RotatingButton: UIButton {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.fromValue = 0.0
         rotateAnimation.toValue = Double.pi
-        rotateAnimation.duration = 1
+        rotateAnimation.duration = 0.999999999999
         rotateAnimation.isCumulative = true
 
         self.imageView?.layer.speed = 0
