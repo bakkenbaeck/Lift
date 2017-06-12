@@ -22,6 +22,8 @@ public extension UIColor {
 
 class RotatingButton: UIButton {
 
+    typealias VoidBlock = (Void) -> Void
+
     private var rotationAnimation: CAAnimation? {
         return self.imageView?.layer.animation(forKey: "180DegreeRotationAnimation")
     }
@@ -49,6 +51,8 @@ class RotatingButton: UIButton {
         return view
     }()
 
+    private var rotationAnimator: UIViewPropertyAnimator!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -57,6 +61,13 @@ class RotatingButton: UIButton {
         if let imageView = self.imageView {
             self.insertSubview(self.lightMask, belowSubview: imageView)
             self.insertSubview(self.darkMask, belowSubview: imageView)
+        }
+
+        self.rotationAnimator = UIViewPropertyAnimator(duration: 1.0, curve: .easeInOut) {
+            let transform180 = CGAffineTransform(rotationAngle: .pi)
+
+            self.imageView?.transform = transform180
+            self.lightMask.transform = transform180
         }
     }
 
@@ -85,33 +96,8 @@ class RotatingButton: UIButton {
         self.darkMask.frame = newFrame
     }
 
-    private func add180DegreesRotationAnimation() {
-        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
-        rotateAnimation.fromValue = 0.0
-        rotateAnimation.toValue = Double.pi
-        rotateAnimation.duration = 0.999999999999
-        rotateAnimation.isCumulative = true
-
-        self.imageView?.layer.speed = 0
-        self.imageView?.layer.add(rotateAnimation, forKey: "180DegreeRotationAnimation")
-
-        self.lightMask.layer.speed = 0
-        self.lightMask.layer.add(rotateAnimation, forKey: "180DegreeRotationAnimation")
-    }
-
     func update180DegreesRotationAnimation(percentage: CGFloat) {
-        if self.rotationAnimation == nil {
-            self.add180DegreesRotationAnimation()
-        }
-
-        self.imageView?.layer.timeOffset = CFTimeInterval(max(0.0, percentage))
-        self.lightMask.layer.timeOffset = CFTimeInterval(max(0.0, percentage))
-
-        self.darkMask.isHidden = percentage < 1.0
-
-        if percentage == 0.0 || percentage == 1.0 {
-            self.layoutSubviews()
-        }
+        self.rotationAnimator.fractionComplete = percentage
     }
     
 }
