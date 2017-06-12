@@ -1,8 +1,8 @@
 import UIKit
 
-public extension UIColor {
+fileprivate extension UIColor {
 
-    public convenience init(hex: String) {
+    fileprivate convenience init(hex: String) {
         let noHashString = hex.replacingOccurrences(of: "#", with: "")
         let scanner = Scanner(string: noHashString)
         scanner.charactersToBeSkipped = CharacterSet.symbols
