@@ -1,9 +1,9 @@
 import UIKit
 
 open class LiftNavigationController: UIViewController {
-    public static let switchAnimationDuration = 0.2
-    public static let navigationBarHeight = CGFloat(90.0)
-    public static let hiddenNavigationBarHeight = CGFloat(44.0)
+    public static let switchAnimationDuration = 0.35
+    public static let navigationBarHeight: CGFloat = 86.0
+    public static let hiddenNavigationBarHeight: CGFloat = 34.0
 
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
@@ -17,7 +17,6 @@ open class LiftNavigationController: UIViewController {
     open var bottomViewControllers = [BottomControllable]()
 
     var verticalPosition: VerticalPosition = .top
-    var shouldEvaluatePageChange = false
 
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -80,6 +79,30 @@ open class LiftNavigationController: UIViewController {
         self.addSubviewsAndConstraints()
     }
 
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.navigationBarController.viewWillAppear(animated)
+    }
+
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.navigationBarController.viewDidAppear(animated)
+    }
+
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.navigationBarController.viewWillDisappear(animated)
+    }
+
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        self.navigationBarController.viewDidDisappear(animated)
+    }
+
     func addSubviewsAndConstraints() {
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentView)
@@ -107,10 +130,10 @@ open class LiftNavigationController: UIViewController {
 
         self.navigationBarController.view.topAnchor.constraint(equalTo: self.topViewController.view.bottomAnchor).isActive = true
         self.navigationBarController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.navigationBarController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.navigationBarController.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         self.navigationBarController.view.heightAnchor.constraint(equalToConstant: LiftNavigationController.navigationBarHeight).isActive = true
 
-        self.bottomScrollViewController.view.topAnchor.constraint(equalTo: self.navigationBarController.navigationLabelCollectionView.bottomAnchor).isActive = true
+        self.bottomScrollViewController.view.topAnchor.constraint(equalTo: self.navigationBarController.view.bottomAnchor).isActive = true
         self.bottomScrollViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.bottomScrollViewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         self.bottomScrollViewController.view.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: -LiftNavigationController.navigationBarHeight).isActive = true
@@ -120,48 +143,63 @@ open class LiftNavigationController: UIViewController {
 
 extension LiftNavigationController: UIScrollViewDelegate {
 
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.shouldEvaluatePageChange = true
+    /// This is only called when we're scrolling up/down between levels
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // self.verticallySwitchableDelegate?.scrollViewDidScroll(scrollView)
+        let total = scrollView.bounds.height - LiftNavigationController.hiddenNavigationBarHeight
+        let percentage = scrollView.contentOffset.y / total
+        self.verticallySwitchableDelegate?.positionDidUpdate(percentage: percentage)
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.shouldEvaluatePageChange = false
-    }
+        let pageHeight = self.view.bounds.height
+        let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if shouldEvaluatePageChange {
-            let pageHeight = self.view.bounds.height
-            let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
+        guard let verticalPosition = VerticalPosition(rawValue: index), verticalPosition != self.verticalPosition else { return }
+        self.setVerticalPosition(verticalPosition)
 
-            guard let verticalPosition = VerticalPosition(rawValue: index), verticalPosition != self.verticalPosition else { return }
-            self.setVerticalPosition(verticalPosition)
-            self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
-        }
+        self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
+        self.verticallySwitchableDelegate?.positionDidUpdate(percentage: verticalPosition == .bottom ? 1.0 : 0.0)
     }
 }
 
 extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDelegate {
 
+    func positionDidUpdate(percentage: CGFloat) {
+        
+    }
+
     func moveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [.curveEaseOut, .beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }, completion: { _ in })
+        }, completion: { _ in
+            self.verticallySwitchableDelegate?.positionDidUpdate(percentage: 0.0)
+        })
     }
 
     func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.hiddenNavigationBarHeight
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [UIViewAnimationOptions.curveEaseIn, UIViewAnimationOptions.beginFromCurrentState], animations: {
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [.curveEaseOut, .beginFromCurrentState], animations: {
             self.scrollView.setContentOffset(origin, animated: false)
-        }, completion: { _ in })
+        }, completion: { _ in
+            self.verticallySwitchableDelegate?.positionDidUpdate(percentage: 1.0)
+        })
     }
 
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController) {
         self.setVerticalPosition(position)
         self.verticallySwitchableDelegate?.didSwipeToPosition(position, on: self)
+    }
+}
+
+extension LiftNavigationController: PullToNavigateUpDelegate {
+
+    public func didUpdatePullToNavigateUpThreshold(percentage: CGFloat) {
+        self.navigationBarController.switchButton.percentageFilled = percentage
     }
 }

@@ -2,6 +2,9 @@ import UIKit
 import Lift
 
 class TableController: UIViewController, BottomControllable {
+    
+    weak var pullToNavigateDelegate: PullToNavigateUpDelegate?
+
     weak var bottomControllerDelegate: BottomControllerDelegate?
 
     var cellIdentifier: String {
@@ -50,8 +53,17 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -(UIScreen.main.bounds.height / 4) {
-            self.bottomControllerDelegate?.requestToSwitchToTop(from: self)
+        let offset = scrollView.contentOffset.y + scrollView.contentInset.top
+
+        if offset < 0.0 {
+            let startLoadingThreshold: CGFloat = 100.0
+            let fractionDragged = -offset / startLoadingThreshold
+
+            self.pullToNavigateDelegate?.didUpdatePullToNavigateUpThreshold(percentage: max(fractionDragged, CGFloat(0)))
+
+            if fractionDragged >= 1.0 {
+                self.bottomControllerDelegate?.requestToSwitchToTop(from: self)
+            }
         }
     }
 }

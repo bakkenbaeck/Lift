@@ -6,6 +6,8 @@ enum VerticalPosition: Int {
 }
 
 protocol VerticallySwitchableDelegate: class {
+    func positionDidUpdate(percentage: CGFloat)
+
     func didSwipeToPosition(_ position: VerticalPosition, on viewController: UIViewController)
     func didSwitchToPosition(_ position: VerticalPosition, on viewController: UIViewController)
 }
@@ -31,11 +33,13 @@ extension VerticallySwitchable {
     func setVerticalPosition(_ position: VerticalPosition) {
         guard self.verticalPosition != position else { return }
 
-        if position == .top {
+        switch position {
+        case .top:
             self.moveToTop()
-        } else if position == .bottom {
+        case .bottom:
             self.moveToBottom()
         }
+
         self.verticalPosition = position
     }
 }

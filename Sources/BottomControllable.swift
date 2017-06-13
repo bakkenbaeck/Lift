@@ -4,9 +4,17 @@ public protocol BottomControllerDelegate: class {
     func requestToSwitchToTop(from bottomController: BottomControllable)
 }
 
+public protocol PullToNavigateUpDelegate: class {
+    func didUpdatePullToNavigateUpThreshold(percentage: CGFloat)
+}
+
 public protocol BottomControllable: class {
     weak var bottomControllerDelegate: BottomControllerDelegate? { get set }
+
+    weak var pullToNavigateDelegate: PullToNavigateUpDelegate? { get set }
+
     var controllerTitle: String? { get set }
+
     var defaultView: UIView { get set }
 }
 

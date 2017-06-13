@@ -27,7 +27,7 @@ class NavigationLabelCell: UICollectionViewCell {
     func addSubviewsAndConstraints() {
         self.addSubview(self.titleLabel)
 
-        self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
+        self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.titleLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         self.titleLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         self.titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true

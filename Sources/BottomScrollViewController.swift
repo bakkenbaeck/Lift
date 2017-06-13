@@ -63,6 +63,7 @@ class BottomScrollViewController: UIViewController {
 
         for (index, viewController) in bottomViewControllers.enumerated() {
             viewController.bottomControllerDelegate = self
+            viewController.pullToNavigateDelegate = self.verticallySwitchableDelegate as? PullToNavigateUpDelegate
             viewController.defaultView.translatesAutoresizingMaskIntoConstraints = false
             self.contentView.addSubview(viewController.defaultView)
 
@@ -127,8 +128,6 @@ class BottomScrollViewController: UIViewController {
 extension BottomScrollViewController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.horizontallyScrollableDelegate?.viewController(self, didScrollTo: scrollView.contentOffset)
-
         let pageWidth = UIScreen.main.bounds.width
         let horizontalPosition = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
 
@@ -140,12 +139,18 @@ extension BottomScrollViewController: UIScrollViewDelegate {
             self.loadScrollViewWithPage(horizontalPosition + 1)
         }
     }
+
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.horizontallyScrollableDelegate?.viewController(self, didScrollTo: self.horizontalPosition)
+    }
+
 }
 
 extension BottomScrollViewController: HorizontallySwitchableDelegate {
 
     func viewController(_ viewController: UIViewController, didSelectPosition position: Int) {
         guard let _ = viewController as? NavigationBarController else { return }
+        guard position != self.horizontalPosition else { return }
 
         var scrollBounds = self.scrollView.bounds
         scrollBounds.origin.x = self.view.bounds.width * CGFloat(position)
@@ -153,17 +158,12 @@ extension BottomScrollViewController: HorizontallySwitchableDelegate {
         UIView.animate(withDuration: 0.2, animations: {
             self.scrollView.bounds = scrollBounds
         }, completion: { b in
+            if position != self.horizontalPosition {
+                self.horizontalPosition = position
 
-            // WARNING: look into this, can't i just use the horizontalPosition formt he delegate here?
-            let pageWidth = UIScreen.main.bounds.width
-            let horizontalPosition = Int(floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1)
-
-            if horizontalPosition != self.horizontalPosition {
-                self.horizontalPosition = horizontalPosition
-
-                self.loadScrollViewWithPage(horizontalPosition - 1)
-                self.loadScrollViewWithPage(horizontalPosition)
-                self.loadScrollViewWithPage(horizontalPosition + 1)
+                self.loadScrollViewWithPage(position - 1)
+                self.loadScrollViewWithPage(position)
+                self.loadScrollViewWithPage(position + 1)
             }
         })
     }
