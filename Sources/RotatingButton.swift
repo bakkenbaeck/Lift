@@ -28,9 +28,20 @@ class RotatingButton: UIButton {
         return self.imageView?.layer.animation(forKey: "180DegreeRotationAnimation")
     }
 
-    var percentageFilled: CGFloat = 0.0 {
-        didSet {
+    private var _percentageFilled: CGFloat = 0.0
+
+    var percentageFilled: CGFloat {
+        set {
+
+            // round to only 2 decimal spaces
+            // prevents visual glitch where black filling would show through during transitions.
+            self._percentageFilled = (round(100.0 * newValue) / 100.0 )
+
             self.updateFrames()
+        }
+
+        get {
+            return self._percentageFilled
         }
     }
 
@@ -83,11 +94,6 @@ class RotatingButton: UIButton {
 
     private func updateFrames() {
         var newFrame = self.imageView!.frame
-
-        newFrame.origin.y += 1
-        newFrame.origin.x += 1
-        newFrame.size.width -= 1
-        newFrame.size.height -= 1
 
         self.lightMask.frame = newFrame
 

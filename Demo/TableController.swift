@@ -2,9 +2,7 @@ import UIKit
 import Lift
 
 class TableController: UIViewController, BottomControllable {
-
-    var isTransitioning: Bool = false
-
+    
     weak var pullToNavigateDelegate: PullToNavigateUpDelegate?
 
     weak var bottomControllerDelegate: BottomControllerDelegate?
@@ -57,7 +55,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y + scrollView.contentInset.top
 
-        if offset < 0.0 && !self.isTransitioning {
+        if offset < 0.0 {
             let startLoadingThreshold: CGFloat = 100.0
             let fractionDragged = -offset / startLoadingThreshold
 
