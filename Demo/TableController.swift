@@ -55,7 +55,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y + scrollView.contentInset.top
 
-        if offset < 0.0 {
+        if offset <= 0.0 {
             let startLoadingThreshold: CGFloat = 100.0
             let fractionDragged = -offset / startLoadingThreshold
 

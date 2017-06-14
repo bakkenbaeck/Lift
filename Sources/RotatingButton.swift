@@ -35,7 +35,8 @@ class RotatingButton: UIButton {
 
             // round to only 2 decimal spaces
             // prevents visual glitch where black filling would show through during transitions.
-            self._percentageFilled = (round(100.0 * newValue) / 100.0 )
+            // max it to 1.0, min to 0.0
+            self._percentageFilled = max(0.0, min(1.0, (round(100.0 * newValue) / 100.0 )))
 
             self.updateFrames()
         }

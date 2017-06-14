@@ -5,6 +5,8 @@ open class LiftNavigationController: UIViewController {
     public static let navigationBarHeight: CGFloat = 86.0
     public static let hiddenNavigationBarHeight: CGFloat = 34.0
 
+    fileprivate let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+
     weak var verticallySwitchableDelegate: VerticallySwitchableDelegate?
 
     var navigationBarStyle: NavigationBarStyle
@@ -151,15 +153,14 @@ extension LiftNavigationController: UIScrollViewDelegate {
         self.verticallySwitchableDelegate?.positionDidUpdate(percentage: percentage)
     }
 
+
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageHeight = self.view.bounds.height
         let index = Int(floor((scrollView.contentOffset.y - pageHeight / 4) / pageHeight) + 1)
 
         guard let verticalPosition = VerticalPosition(rawValue: index), verticalPosition != self.verticalPosition else { return }
         self.setVerticalPosition(verticalPosition)
-
         self.verticallySwitchableDelegate?.didSwipeToPosition(verticalPosition, on: self)
-        self.verticallySwitchableDelegate?.positionDidUpdate(percentage: verticalPosition == .bottom ? 1.0 : 0.0)
     }
 }
 
@@ -172,8 +173,11 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     func moveToTop() {
         var origin = self.view.bounds.origin
         origin.y = 0
+        let options: UIViewAnimationOptions = [.curveEaseOut, .beginFromCurrentState]
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [.curveEaseOut, .beginFromCurrentState], animations: {
+        self.impactFeedbackGenerator.impactOccurred()
+
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: options, animations: {
             self.scrollView.setContentOffset(origin, animated: false)
         }, completion: { _ in
             self.verticallySwitchableDelegate?.positionDidUpdate(percentage: 0.0)
@@ -183,8 +187,11 @@ extension LiftNavigationController: VerticallySwitchable, VerticallySwitchableDe
     func moveToBottom() {
         var origin = self.view.bounds.origin
         origin.y = self.view.bounds.height - LiftNavigationController.hiddenNavigationBarHeight
+        let options: UIViewAnimationOptions = [.curveEaseOut, .beginFromCurrentState]
 
-        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: [.curveEaseOut, .beginFromCurrentState], animations: {
+        self.impactFeedbackGenerator.impactOccurred()
+
+        UIView.animate(withDuration: LiftNavigationController.switchAnimationDuration, delay: 0, options: options, animations: {
             self.scrollView.setContentOffset(origin, animated: false)
         }, completion: { _ in
             self.verticallySwitchableDelegate?.positionDidUpdate(percentage: 1.0)
